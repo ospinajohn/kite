@@ -2124,6 +2124,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "kite"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "directories",
+ "insta",
+ "leptos",
+ "leptos_router",
+ "once_cell",
+ "pretty_assertions",
+ "regex",
+ "rusqlite",
+ "rust_decimal",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tempfile",
+ "thiserror 1.0.69",
+ "uuid",
+]
+
+[[package]]
 name = "konst"
 version = "0.2.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2990,30 +3014,6 @@ dependencies = [
  "fdeflate",
  "flate2",
  "miniz_oxide 0.8.9",
-]
-
-[[package]]
-name = "pocketflow"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "directories",
- "insta",
- "leptos",
- "leptos_router",
- "once_cell",
- "pretty_assertions",
- "regex",
- "rusqlite",
- "rust_decimal",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tempfile",
- "thiserror 1.0.69",
- "uuid",
 ]
 
 [[package]]
