@@ -37,3 +37,9 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+# Others
+
+.agents/
+.opencode/
+.specify/
