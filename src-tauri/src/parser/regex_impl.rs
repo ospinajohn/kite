@@ -7,13 +7,15 @@ use std::sync::LazyLock;
 static PATTERNS: LazyLock<Vec<(Regex, MovementType)>> = LazyLock::new(|| {
     vec![
         // Gasto con "ayer" opcional: "gasté ayer 18 mil en almuerzo" o "gasté 18 mil en almuerzo"
-        (Regex::new(r"(?i)^\s*gast[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
+        // Soporta magnitudes con o sin espacio: "4 millones", "4millones", "4M", "4M"
+        // mill[oó]n(es)? = "millón" o "millones" (con o sin acento)
+        (Regex::new(r"(?i)^\s*gast[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n(es)?|m)?\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
         // Gasto simple con "ayer" opcional: "gasté ayer 12.000 en transporte"
         (Regex::new(r"(?i)^\s*gast[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
         // Ingreso con "ayer" opcional: "recibí ayer 1.500.000 de pago quincena"
-        (Regex::new(r"(?i)^\s*recib[ií]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+de\s+(?P<concepto>.+)$").unwrap(), MovementType::Ingreso),
+        (Regex::new(r"(?i)^\s*recib[ií]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n(es)?|m)?\s+de\s+(?P<concepto>.+)$").unwrap(), MovementType::Ingreso),
         // Préstamo con "ayer" opcional: "le presté ayer 50 mil a carlos"
-        (Regex::new(r"(?i)^\s*le?\s*prest[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+a\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
+        (Regex::new(r"(?i)^\s*le?\s*prest[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n(es)?|m)?\s+a\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
     ]
 });
 
@@ -23,7 +25,7 @@ fn parse_monto(raw: &str, mag: Option<&str>) -> Option<i64> {
     let mag_lower = mag.map(|s| s.to_lowercase());
     let mult = match mag_lower.as_deref() {
         Some("mil") | Some("k") => 1_000,
-        Some("millón") | Some("m") => 1_000_000,
+        Some("millón") | Some("millones") | Some("m") => 1_000_000,
         _ => 1,
     };
     Some(base * mult)
@@ -215,5 +217,56 @@ mod tests {
         assert_eq!(r.monto_centavos, 50_000);
         assert_eq!(r.concepto, "carlos");
         assert_eq!(r.fecha, Local::now().date_naive());
+    }
+
+    // --- Nuevos casos: plural "millones" y magnitudes sin espacio ---
+    #[test]
+    fn parse_millones_plural() {
+        let parser = RegexParser::new();
+        let r = parser.parse("gasté 4 millones en celulares").unwrap().unwrap();
+        assert_eq!(r.tipo, MovementType::Gasto);
+        assert_eq!(r.monto_centavos, 4_000_000);
+        assert_eq!(r.concepto, "celulares");
+    }
+
+    #[test]
+    fn parse_millones_plural_ingreso() {
+        let parser = RegexParser::new();
+        let r = parser.parse("recibí 2 millones de bono").unwrap().unwrap();
+        assert_eq!(r.tipo, MovementType::Ingreso);
+        assert_eq!(r.monto_centavos, 2_000_000);
+        assert_eq!(r.concepto, "bono");
+    }
+
+    #[test]
+    fn parse_magnitud_sin_espacio_millones() {
+        let parser = RegexParser::new();
+        let r = parser.parse("gasté 4millones en celulares").unwrap().unwrap();
+        assert_eq!(r.monto_centavos, 4_000_000);
+        assert_eq!(r.concepto, "celulares");
+    }
+
+    #[test]
+    fn parse_magnitud_sin_espacio_mil() {
+        let parser = RegexParser::new();
+        let r = parser.parse("gasté 18mil en almuerzo").unwrap().unwrap();
+        assert_eq!(r.monto_centavos, 18_000);
+        assert_eq!(r.concepto, "almuerzo");
+    }
+
+    #[test]
+    fn parse_magnitud_sin_espacio_k() {
+        let parser = RegexParser::new();
+        let r = parser.parse("gasté 5k en café").unwrap().unwrap();
+        assert_eq!(r.monto_centavos, 5_000);
+        assert_eq!(r.concepto, "café");
+    }
+
+    #[test]
+    fn parse_magnitud_sin_espacio_M() {
+        let parser = RegexParser::new();
+        let r = parser.parse("gasté 3M en casa").unwrap().unwrap();
+        assert_eq!(r.monto_centavos, 3_000_000);
+        assert_eq!(r.concepto, "casa");
     }
 }

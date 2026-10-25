@@ -155,5 +155,32 @@ mod contract_tests {
         assert_eq!(p.monto_centavos, 50_000);
         assert_eq!(p.concepto, "carlos");
         assert_eq!(p.fecha, today);
+
+        // Casos adicionales: plural "millones" y magnitudes sin espacio
+        let r = parser.parse("gasté 4 millones en celulares").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.monto_centavos, 4_000_000);
+        assert_eq!(p.concepto, "celulares");
+
+        let r = parser.parse("gasté 4millones en celulares").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.monto_centavos, 4_000_000);
+
+        let r = parser.parse("gasté 18mil en almuerzo").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.monto_centavos, 18_000);
+
+        let r = parser.parse("gasté 5k en café").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.monto_centavos, 5_000);
+
+        let r = parser.parse("gasté 3M en casa").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.monto_centavos, 3_000_000);
     }
 }
