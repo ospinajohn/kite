@@ -2227,9 +2227,62 @@
           </div>
           <div style="display: flex; justify-content: space-between;">
             <button class="btn-danger" id="btn-eliminar-tx" type="button">Eliminar registro</button>
+            <button class="btn-secondary" id="btn-editar-tx" type="button">Editar</button>
             <button class="btn-cancel" id="btn-cerrar-tx-view" type="button">Cerrar</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL DE EDICIÓN DE MOVIMIENTO
+         =================================================================== -->
+    <div class="modal-overlay" id="modal-editar-tx" aria-hidden="true">
+      <div class="modal-card" style="width: 420px;" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h3 class="modal-title" id="modal-editar-title">Editar Movimiento</h3>
+          <button class="modal-close" id="btn-cerrar-modal-editar" type="button">✕</button>
+        </div>
+        <form id="form-editar-tx">
+          <div class="modal-body">
+            <input type="hidden" id="edit-tx-id" />
+            
+            <div class="form-row">
+              <label for="edit-tx-tipo">Tipo</label>
+              <div id="edit-tx-tipo-display" style="padding: 8px 12px; background: var(--bg-secondary); border-radius: 8px; font-weight: 600; color: var(--text-primary);">
+                <!-- Se rellena por JS -->
+              </div>
+              <input type="hidden" id="edit-tx-tipo" />
+            </div>
+
+            <div class="form-row">
+              <label for="edit-tx-monto">Monto (COP)</label>
+              <input type="number" id="edit-tx-monto" placeholder="Ej. 25000" min="1" step="1" required />
+            </div>
+
+            <div class="form-row">
+              <label for="edit-tx-concepto">Concepto</label>
+              <input type="text" id="edit-tx-concepto" placeholder="Ej. Almuerzo en La Casona" maxlength="200" required />
+            </div>
+
+            <div class="form-row">
+              <label for="edit-tx-fecha">Fecha</label>
+              <input type="date" id="edit-tx-fecha" required />
+            </div>
+
+            <div class="form-row">
+              <label for="edit-tx-origen">Origen</label>
+              <div id="edit-tx-origen-display" style="padding: 8px 12px; background: var(--bg-secondary); border-radius: 8px; font-size: 12px; color: var(--text-secondary);">
+                <!-- Se rellena por JS -->
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+              <button type="button" class="btn-cancel" id="btn-cancelar-editar">Cancelar</button>
+              <button type="submit" class="btn-submit" id="btn-guardar-editar">Guardar cambios</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -2788,6 +2841,61 @@
           cargarHistorial();
           cargarResumen();
         } catch (e) {}
+      });
+
+      // EDITAR MOVIMIENTO
+      function abrirEditarTx() {
+        if (!movimientoSeleccionado) return;
+        const m = movimientoSeleccionado;
+        const isIncome = m.tipo === "ingreso";
+
+        // Cerrar modal detalle y abrir modal editar
+        cerrarDetalleTx();
+
+        // Llenar formulario
+        $("edit-tx-id").value = m.id;
+        $("edit-tx-tipo").value = m.tipo;
+        $("edit-tx-tipo-display").textContent = isIncome ? "Ingreso" : "Gasto";
+        $("edit-tx-tipo-display").style.color = isIncome ? "var(--color-income)" : "var(--color-expense)";
+        $("edit-tx-monto").value = m.monto_centavos;
+        $("edit-tx-concepto").value = m.concepto;
+        $("edit-tx-fecha").value = m.fecha;
+        $("edit-tx-origen-display").textContent = m.origen === 'mensaje' ? 'Registro rápido (NLP)' : 'Formulario';
+
+        $("modal-editar-tx").classList.add("open");
+        document.body.classList.add("modal-open");
+      }
+
+      function cerrarEditarTx() {
+        $("modal-editar-tx").classList.remove("open");
+        document.body.classList.remove("modal-open");
+      }
+
+      $("btn-editar-tx").addEventListener("click", abrirEditarTx);
+      $("btn-cerrar-modal-editar").addEventListener("click", cerrarEditarTx);
+      $("btn-cancelar-editar").addEventListener("click", cerrarEditarTx);
+
+      $("form-editar-tx").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = $("edit-tx-id").value;
+        const monto = parseInt($("edit-tx-monto").value, 10);
+        const concepto = $("edit-tx-concepto").value.trim();
+        const fecha = $("edit-tx-fecha").value;
+
+        if (!monto || monto <= 0 || !concepto || !fecha) {
+          toast("Completa todos los campos correctamente");
+          return;
+        }
+
+        try {
+          await invoke("edit_movement", { id, monto_centavos: monto, concepto, fecha });
+          toast("Movimiento actualizado");
+          cerrarEditarTx();
+          cargarHistorial();
+          cargarResumen();
+        } catch (err) {
+          toast("Error al actualizar");
+        }
       });
 
       // RESUMEN SQLITE
