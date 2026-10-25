@@ -1,4 +1,4 @@
-use pocketflow::models::{Movement, MovementType, MovementOrigin, MovementError};
+use kite::models::{Movement, MovementType, MovementOrigin, MovementError};
 use chrono::{Local, NaiveDate};
 
 #[test]

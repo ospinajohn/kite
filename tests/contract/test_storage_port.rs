@@ -1,5 +1,5 @@
-use pocketflow::models::{Movement, MovementType, MovementOrigin};
-use pocketflow::storage::port::{StoragePort, PeriodSummary};
+use kite::models::{Movement, MovementType, MovementOrigin};
+use kite::storage::port::{StoragePort, PeriodSummary};
 use chrono::{Local, NaiveDate};
 use uuid::Uuid;
 
@@ -63,7 +63,7 @@ pub fn test_storage_port<S: StoragePort>(storage: &S) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pocketflow::storage::sqlite_impl::SqliteStorage;
+    use kite::storage::sqlite_impl::SqliteStorage;
     use tempfile::tempdir;
 
     #[test]

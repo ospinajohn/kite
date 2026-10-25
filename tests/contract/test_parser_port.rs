@@ -1,5 +1,5 @@
-use pocketflow::models::{MovementType, MovementOrigin};
-use pocketflow::parser::port::{ParserPort, ParsedProposal};
+use kite::models::{MovementType, MovementOrigin};
+use kite::parser::port::{ParserPort, ParsedProposal};
 use chrono::{Local, NaiveDate};
 
 pub fn test_parser_port<P: ParserPort>(parser: &P) {
@@ -81,7 +81,7 @@ pub fn test_parser_edge_cases<P: ParserPort>(parser: &P) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pocketflow::parser::regex_impl::RegexParser;
+    use kite::parser::regex_impl::RegexParser;
 
     #[test]
     fn regex_parser_passes_contract() {

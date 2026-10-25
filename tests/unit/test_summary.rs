@@ -1,4 +1,4 @@
-use pocketflow::models::summary::PeriodSummary;
+use kite::models::summary::PeriodSummary;
 use chrono::NaiveDate;
 
 #[test]

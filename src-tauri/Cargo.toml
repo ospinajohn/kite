@@ -1,14 +1,14 @@
 [package]
-name = "pocketflow"
+name = "kite"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "pocketflow"
+name = "kite"
 path = "src/lib.rs"
 
 [[bin]]
-name = "pocketflow"
+name = "kite"
 path = "src/main.rs"
 
 [dependencies]

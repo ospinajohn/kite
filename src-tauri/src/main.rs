@@ -1,6 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use pocketflow::AppState;
+use kite::AppState;
 use tauri::Manager;
 
 fn main() {
@@ -16,18 +16,18 @@ fn main() {
         })
         .manage(app_state)
         .invoke_handler(tauri::generate_handler![
-            pocketflow::app::register_expense,
-            pocketflow::app::register_income,
-            pocketflow::app::parse_message,
-            pocketflow::app::confirm_proposal,
-            pocketflow::app::cancel_proposal,
-            pocketflow::app::get_history,
-            pocketflow::app::get_summary,
-            pocketflow::app::edit_movement,
-            pocketflow::app::delete_movement,
-            pocketflow::app::minimize_window,
-            pocketflow::app::toggle_maximize_window,
-            pocketflow::app::close_window,
+            kite::app::register_expense,
+            kite::app::register_income,
+            kite::app::parse_message,
+            kite::app::confirm_proposal,
+            kite::app::cancel_proposal,
+            kite::app::get_history,
+            kite::app::get_summary,
+            kite::app::edit_movement,
+            kite::app::delete_movement,
+            kite::app::minimize_window,
+            kite::app::toggle_maximize_window,
+            kite::app::close_window,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

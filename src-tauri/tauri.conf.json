@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "PocketFlow",
+  "productName": "Kite",
   "version": "0.1.0",
-  "identifier": "com.pocketflow.desktop",
+  "identifier": "com.kite.desktop",
   "build": {
     "beforeDevCommand": "",
     "beforeBuildCommand": "",
@@ -12,11 +12,11 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "PocketFlow",
-        "width": 900,
-        "height": 650,
-        "minWidth": 700,
-        "minHeight": 500,
+        "title": "Kite",
+        "width": 1120,
+        "height": 740,
+        "minWidth": 800,
+        "minHeight": 560,
         "resizable": true,
         "fullscreen": false,
         "center": true,

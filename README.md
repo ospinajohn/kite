@@ -1,4 +1,4 @@
-# PocketFlow - Gestor de finanzas personales
+# Kite - Gestor de finanzas personales
 
 Aplicación de escritorio local para Windows que permite registrar ingresos y gastos, consultar historial y ver resúmenes de período.
 
@@ -23,7 +23,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 
 ## Uso
 
-1. Abrir PocketFlow
+1. Abrir Kite
 2. **Registro rápido (Ctrl+K o Ctrl+Space)**: Abrir el lanzador superpuesto y escribir un movimiento con una estructura concreta, por ejemplo:
    - `gasté 18 mil en almuerzo`
    - `recibí 1.500.000 de pago quincena`
@@ -48,8 +48,9 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 
 ## Datos
 
-Los datos se guardan en `%APPDATA%\PocketFlow\pocketflow.db` (SQLite).
+Los datos se guardan en `%APPDATA%\Kite\Kite.db` (SQLite).
 El archivo es portable - copiarlo respalda toda la información.
+Si existe una base `pocketflow.db` de la versión anterior, Kite la copia automáticamente a la nueva ubicación al arrancar (sin modificar la original).
 
 ## Desarrollo
 

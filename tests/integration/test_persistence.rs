@@ -1,12 +1,12 @@
-use pocketflow::models::{Movement, MovementType, MovementOrigin};
-use pocketflow::storage::port::StoragePort;
+use kite::models::{Movement, MovementType, MovementOrigin};
+use kite::storage::port::StoragePort;
 use chrono::{Local, NaiveDate};
 use tempfile::tempdir;
 
-fn create_test_storage() -> pocketflow::storage::sqlite_impl::SqliteStorage {
+fn create_test_storage() -> kite::storage::sqlite_impl::SqliteStorage {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("test.db");
-    pocketflow::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap()
+    kite::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap()
 }
 
 #[test]
@@ -44,7 +44,7 @@ fn test_save_multiple_reopen_query() {
     let db_path = storage.conn.path().unwrap().to_path_buf();
     drop(storage);
 
-    let storage2 = pocketflow::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
+    let storage2 = kite::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
     let all = storage2.query(None, None).unwrap();
 
     assert_eq!(all.len(), 3, "Deben persistir 3 movimientos tras reabrir");
@@ -81,7 +81,7 @@ fn test_crash_safety_transaccion_atomica() {
     let db_path = storage.conn.path().unwrap().to_path_buf();
     drop(storage);
 
-    let storage2 = pocketflow::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
+    let storage2 = kite::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
     let retrieved = storage2.get_by_id(m.id).unwrap().unwrap();
     assert_eq!(retrieved.monto_centavos, 18_000, "Datos deben persistir tras crash simulado");
 }
@@ -106,7 +106,7 @@ fn test_update_persiste_tras_reabrir() {
     let db_path = storage.conn.path().unwrap().to_path_buf();
     drop(storage);
 
-    let storage2 = pocketflow::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
+    let storage2 = kite::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
     let retrieved = storage2.get_by_id(m.id).unwrap().unwrap();
     assert_eq!(retrieved.monto_centavos, 19_000);
     assert_eq!(retrieved.concepto, "Almuerzo corregido");
@@ -130,7 +130,7 @@ fn test_delete_persiste_tras_reabrir() {
     let db_path = storage.conn.path().unwrap().to_path_buf();
     drop(storage);
 
-    let storage2 = pocketflow::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
+    let storage2 = kite::storage::sqlite_impl::SqliteStorage::new(&db_path).unwrap();
     let retrieved = storage2.get_by_id(m.id).unwrap();
     assert!(retrieved.is_none(), "Movimiento eliminado no debe reaparecer tras reabrir");
 }

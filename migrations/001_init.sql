@@ -1,4 +1,4 @@
--- PocketFlow Database Schema v1
+-- Kite Database Schema v1
 -- Esquema inicial para la tabla de movimientos
 
 CREATE TABLE IF NOT EXISTS movements (
