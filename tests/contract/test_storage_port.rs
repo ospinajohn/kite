@@ -138,6 +138,66 @@ pub fn test_storage_port_query_ranges<S: StoragePort>(storage: &S) {
     }
 }
 
+pub fn test_storage_port_edit_delete<S: StoragePort>(storage: &S) {
+    storage.migrate().expect("migrate ok");
+
+    let hoy = Local::now().date_naive();
+
+    // Crear movimiento inicial
+    let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo original".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let saved = storage.save(m).unwrap();
+    let id = saved.id;
+
+    // 1. Test update - cambiar monto, concepto, fecha
+    let nueva_fecha = hoy - chrono::Duration::days(1);
+    let updated = saved.update(19_000, "Almuerzo corregido".into(), nueva_fecha).unwrap();
+    let saved_updated = storage.update(updated).unwrap();
+
+    assert_eq!(saved_updated.monto_centavos, 19_000);
+    assert_eq!(saved_updated.concepto, "Almuerzo corregido");
+    assert_eq!(saved_updated.fecha, nueva_fecha);
+    // ID, tipo y origen no deben cambiar
+    assert_eq!(saved_updated.id, id);
+    assert_eq!(saved_updated.tipo, MovementType::Gasto);
+    assert_eq!(saved_updated.origen, MovementOrigin::Formulario);
+    // actualizado_en debe refrescarse
+    assert!(saved_updated.actualizado_en > saved.actualizado_en);
+
+    // Verificar que el resumen refleja el cambio
+    let summary = storage.summary(None, None).unwrap();
+    assert_eq!(summary.gastos_centavos, 19_000);
+
+    // 2. Test update sin cambiar datos (solo refresca actualizado_en)
+    let antes_actualizado = saved_updated.actualizado_en;
+    std::thread::sleep(std::time::Duration::from_millis(10)); // asegurar timestamp diferente
+    let updated_same = saved_updated.update(19_000, "Almuerzo corregido".into(), nueva_fecha).unwrap();
+    let saved_same = storage.update(updated_same).unwrap();
+    assert!(saved_same.actualizado_en > antes_actualizado);
+
+    // 3. Test delete existente
+    let deleted = storage.delete(id).unwrap();
+    assert!(deleted);
+    let after_delete = storage.query(None, None).unwrap();
+    assert_eq!(after_delete.len(), 0);
+
+    // 4. Test delete inexistente
+    let not_deleted = storage.delete(Uuid::nil()).unwrap();
+    assert!(!not_deleted);
+
+    // 5. Test editar último movimiento del período -> resumen ceros
+    let m2 = Movement::new(MovementType::Gasto, 10_000, "Último".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let saved2 = storage.save(m2).unwrap();
+    storage.delete(saved2.id).unwrap();
+    let summary_vacio = storage.summary(None, None).unwrap();
+    assert_eq!(summary_vacio.gastos_centavos, 0);
+    assert_eq!(summary_vacio.ingresos_centavos, 0);
+    assert_eq!(summary_vacio.diferencia_centavos, 0);
+
+    // 6. Test get_by_id después de delete
+    let retrieved = storage.get_by_id(id).unwrap();
+    assert!(retrieved.is_none());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -158,6 +218,14 @@ mod tests {
         let db_path = dir.path().join("test.db");
         let storage = SqliteStorage::new(&db_path).unwrap();
         test_storage_port_query_ranges(&storage);
+    }
+
+    #[test]
+    fn sqlite_storage_passes_edit_delete_contract() {
+        let dir = tempdir().unwrap();
+        let db_path = dir.path().join("test.db");
+        let storage = SqliteStorage::new(&db_path).unwrap();
+        test_storage_port_edit_delete(&storage);
     }
 }
 
