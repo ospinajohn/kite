@@ -2087,6 +2087,7 @@
                 <span>Hasta:</span>
                 <input type="date" id="filtro-hasta" />
                 <button class="btn-cancel" id="btn-filtrar-fechas" type="button">Filtrar</button>
+                <button class="btn-cancel" id="btn-limpiar-filtros" type="button">Limpiar</button>
               </div>
             </div>
 
@@ -2734,6 +2735,15 @@
 
       $("filtro-busqueda").addEventListener("input", renderHistorialFiltrado);
       $("btn-filtrar-fechas").addEventListener("click", cargarHistorial);
+      $("btn-limpiar-filtros").addEventListener("click", () => {
+        $("filtro-desde").value = "";
+        $("filtro-hasta").value = "";
+        $("filtro-busqueda").value = "";
+        filtroTipoActivo = "todos";
+        document.querySelectorAll(".pill-filter-btn").forEach(b => b.classList.toggle("active", b.dataset.type === "todos"));
+        document.querySelectorAll(".quick-pill-btn[data-range]").forEach(b => b.classList.toggle("active", b.dataset.range === "todo"));
+        cargarHistorial();
+      });
 
       // DETALLE Y ELIMINACIÓN
       let movimientoSeleccionado = null;
