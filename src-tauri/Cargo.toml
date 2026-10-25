@@ -34,6 +34,8 @@ tauri-build = { version = "2.0", features = [] }
 pretty_assertions = "1.4"
 insta = { version = "1.34", features = ["csv"] }
 tempfile = "3.3"
+lazy_static = "1.4"
+rand = "0.8"
 
 [features]
 default = []

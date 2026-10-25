@@ -129,5 +129,31 @@ mod contract_tests {
         assert!(parser.parse("Gasté 100 en café").unwrap().is_some());
 
         assert!(parser.parse("  gasté 100 en café  ").unwrap().is_some());
+
+        // ESC-09: "ayer" → hoy (v1 usa fecha actual)
+        let today = Local::now().date_naive();
+        let r = parser.parse("gasté ayer 18 mil en almuerzo").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.tipo, MovementType::Gasto);
+        assert_eq!(p.monto_centavos, 18_000);
+        assert_eq!(p.concepto, "almuerzo");
+        assert_eq!(p.fecha, today); // v1: "ayer" se trata como hoy
+
+        let r = parser.parse("recibí ayer 1.500.000 de pago quincena").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.tipo, MovementType::Ingreso);
+        assert_eq!(p.monto_centavos, 1_500_000);
+        assert_eq!(p.concepto, "pago quincena");
+        assert_eq!(p.fecha, today);
+
+        let r = parser.parse("le presté ayer 50 mil a carlos").expect("parse ok");
+        assert!(r.is_some());
+        let p = r.unwrap();
+        assert_eq!(p.tipo, MovementType::Gasto);
+        assert_eq!(p.monto_centavos, 50_000);
+        assert_eq!(p.concepto, "carlos");
+        assert_eq!(p.fecha, today);
     }
 }

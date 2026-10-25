@@ -6,10 +6,14 @@ use std::sync::LazyLock;
 
 static PATTERNS: LazyLock<Vec<(Regex, MovementType)>> = LazyLock::new(|| {
     vec![
-        (Regex::new(r"(?i)^\s*gast[ée]\s+(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
-        (Regex::new(r"(?i)^\s*gast[ée]\s+(?P<monto>[\d.,_]+)\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
-        (Regex::new(r"(?i)^\s*recib[ií]\s+(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+de\s+(?P<concepto>.+)$").unwrap(), MovementType::Ingreso),
-        (Regex::new(r"(?i)^\s*le?\s*prest[ée]\s+(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+a\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
+        // Gasto con "ayer" opcional: "gasté ayer 18 mil en almuerzo" o "gasté 18 mil en almuerzo"
+        (Regex::new(r"(?i)^\s*gast[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
+        // Gasto simple con "ayer" opcional: "gasté ayer 12.000 en transporte"
+        (Regex::new(r"(?i)^\s*gast[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s+en\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
+        // Ingreso con "ayer" opcional: "recibí ayer 1.500.000 de pago quincena"
+        (Regex::new(r"(?i)^\s*recib[ií]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+de\s+(?P<concepto>.+)$").unwrap(), MovementType::Ingreso),
+        // Préstamo con "ayer" opcional: "le presté ayer 50 mil a carlos"
+        (Regex::new(r"(?i)^\s*le?\s*prest[ée]\s+(?:ayer\s+)?(?P<monto>[\d.,_]+)\s*(?P<mag>mil|k|mill[oó]n|m)?\s+a\s+(?P<concepto>.+)$").unwrap(), MovementType::Gasto),
     ]
 });
 
@@ -181,5 +185,35 @@ mod tests {
     fn parse_espacios_extra() {
         let parser = RegexParser::new();
         assert!(parser.parse("  gasté 100 en café  ").unwrap().is_some());
+    }
+
+    #[test]
+    fn parse_con_ayer_gasto() {
+        let parser = RegexParser::new();
+        let r = parser.parse("gasté ayer 18 mil en almuerzo").unwrap().unwrap();
+        assert_eq!(r.tipo, MovementType::Gasto);
+        assert_eq!(r.monto_centavos, 18_000);
+        assert_eq!(r.concepto, "almuerzo");
+        assert_eq!(r.fecha, Local::now().date_naive());
+    }
+
+    #[test]
+    fn parse_con_ayer_ingreso() {
+        let parser = RegexParser::new();
+        let r = parser.parse("recibí ayer 1.500.000 de pago quincena").unwrap().unwrap();
+        assert_eq!(r.tipo, MovementType::Ingreso);
+        assert_eq!(r.monto_centavos, 1_500_000);
+        assert_eq!(r.concepto, "pago quincena");
+        assert_eq!(r.fecha, Local::now().date_naive());
+    }
+
+    #[test]
+    fn parse_con_ayer_prestamo() {
+        let parser = RegexParser::new();
+        let r = parser.parse("le presté ayer 50 mil a carlos").unwrap().unwrap();
+        assert_eq!(r.tipo, MovementType::Gasto);
+        assert_eq!(r.monto_centavos, 50_000);
+        assert_eq!(r.concepto, "carlos");
+        assert_eq!(r.fecha, Local::now().date_naive());
     }
 }
