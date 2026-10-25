@@ -24,7 +24,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 - `thiserror` / `anyhow` (errores)
 - `pretty_assertions` / `insta` (tests)
 
-**Storage**: **SQLite** (`pocketflow.db` en `%APPDATA%\PocketFlow\`; fallback: `%LOCALAPPDATA%\PocketFlow\` → `%USERPROFILE%\AppData\Local\PocketFlow\`) — research.md §2. Esquema versionado (`PRAGMA user_version`), migraciones numeradas.
+**Storage**: **SQLite** (`Kite.db` en `%APPDATA%\Kite\`; si el directorio de datos no está disponible, `Kite.db` en el directorio de trabajo) — research.md §2. Al arrancar, si no existe `Kite.db` y hay una base `pocketflow.db` de la versión anterior, se copia a la nueva ubicación sin modificar la original. Esquema versionado (`PRAGMA user_version`), migraciones numeradas.
 
 **Testing**: **`cargo test` nativo** + `cargo-llvm-cov` (cobertura) — research.md §4. Unit, integration, contract tests. Test-First Quality obligatorio.
 
@@ -142,7 +142,7 @@ src-tauri/
 Decisiones documentadas con rationale y alternativas:
 
 1. **Stack**: Tauri v2 + Rust + Leptos/WebView2 — binario nativo <10 MB, offline, testing nativo.
-2. **Storage**: SQLite (`rusqlite`) en `%APPDATA%\PocketFlow\pocketflow.db` — consultas por rango, ACID, migraciones versionadas.
+2. **Storage**: SQLite (`rusqlite`) en `%APPDATA%\Kite\Kite.db` — consultas por rango, ACID, migraciones versionadas.
 3. **Parser**: Regex simple (`regex` crate) — patrones reales del usuario, `confidence=1.0`, swap futuro sin breaking.
 4. **Testing**: `cargo test` + contract tests genéricos + headless UI + cobertura ≥80%.
 5. **Distribución**: `cargo-dist` → MSI + portable EXE, firmable, auto-update futuro.

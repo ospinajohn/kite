@@ -6,7 +6,7 @@
 
 **Status**: Draft — decisiones Q1–Q3 del contexto y 5 preguntas de la sesión de clarificación resueltas (2026-10-17); decisiones no bloqueantes listadas al final
 
-**Input**: User description: contexto inicial de PocketFlow. Objetivo inmediato: definir el núcleo de registro y consulta de movimientos de finanzas personales.
+**Input**: User description: contexto inicial de Kite. Objetivo inmediato: definir el núcleo de registro y consulta de movimientos de finanzas personales.
 
 ---
 
@@ -33,7 +33,7 @@
 
 ### Session 2026-10-17
 
-- Q: ¿Quieres que la primera versión de PocketFlow funcione con una sola moneda —pesos colombianos— o que desde el inicio pueda registrar movimientos en varias monedas configurables? → A: Solo pesos colombianos (COP); sin campo de moneda en los movimientos; la multi-moneda queda para una etapa futura.
+- Q: ¿Quieres que la primera versión de Kite funcione con una sola moneda —pesos colombianos— o que desde el inicio pueda registrar movimientos en varias monedas configurables? → A: Solo pesos colombianos (COP); sin campo de moneda en los movimientos; la multi-moneda queda para una etapa futura.
 - Q: ¿Cómo quieres manejar el dinero que ya tienes el día en que empiezas a usar la app, antes de tu primer registro —por ejemplo, lo que te sobra de la quincena anterior—? → A: Registrarlo como un ingreso normal (concepto «Saldo inicial» u otro); no existe un concepto especial de saldo inicial en el modelo.
 - Q: Cuando abras la app y entres al historial o al resumen sin elegir fechas, ¿qué periodo debería mostrarse por defecto? → A: Todo el historial, del más reciente al más antiguo; el rango de fechas es opcional para filtrar. El resumen muestra el total acumulado hasta hoy.
 - Q: Al registrar un movimiento con el formulario, ¿el concepto —«en qué gasté»— debe ser obligatorio o puede quedar vacío? → A: Obligatorio; no se guarda un movimiento sin concepto y el historial siempre muestra «en qué» fue.
@@ -209,7 +209,7 @@ Como usuario, quiero que mis movimientos se conserven al cerrar y volver a abrir
 **Exclusiones explícitas**
 
 - **FR-X1**: Esta caracterización NO incluye compromisos recurrentes, reservas para pagos futuros, dinero libre por quincena, metas de ahorro, evaluación de nuevas deudas, gestión de préstamos por cobrar, sincronización bancaria, múltiples cuentas y transferencias, presupuestos por categoría, gráficas avanzadas, reportes PDF ni un asistente financiero general. [APROBADO — fuera del MVP según el contexto]. Un pago recurrente (Netflix, arriendo) puede registrarse manualmente como gasto; lo que el MVP no hará es programarlo, repetirlo o reservar dinero.
-- **FR-X2**: NO se modifica Horizonte ni sus funcionalidades; PocketFlow es un proyecto independiente y NO debe copiar su arquitectura por defecto. [APROBADO — reglas de trabajo]
+- **FR-X2**: NO se modifica Horizonte ni sus funcionalidades; Kite es un proyecto independiente y NO debe copiar su arquitectura por defecto. [APROBADO — reglas de trabajo]
 - **FR-X3**: Esta especificación NO elige tecnologías, lenguajes ni plataformas; eso corresponde a una etapa posterior con aprobación previa. [APROBADO — reglas de trabajo]
 
 ### Key Entities *(include if feature involves data)*
@@ -248,7 +248,7 @@ Como usuario, quiero que mis movimientos se conserven al cerrar y volver a abrir
 ## Assumptions
 
 - Un solo usuario en esta versión: la app es de uso personal de una única persona, sin contraseña ni perfiles. [APROBADO — Clarifications 2026-10-17]
-- Los datos se consideran privados y personales; almacenamiento local en SQLite (`%APPDATA%\PocketFlow\pocketflow.db`) sin servicios externos. [APROBADO — research.md §2, plan.md Technical Context]
+- Los datos se consideran privados y personales; almacenamiento local en SQLite (`%APPDATA%\Kite\Kite.db`) sin servicios externos. [APROBADO — research.md §2, plan.md Technical Context]
 - Plataforma inicial preferida: aplicación de escritorio en Windows, uso local (7.1). Es una **preferencia expresada**, no una decisión cerrada; esta especificación no fija tecnología (ver FR-X3).
 - Moneda única aprobada: pesos colombianos (COP). No hay campo de moneda en los movimientos, no hay conversión de divisas y el historial y el resumen se muestran siempre en COP. La multi-moneda configurable (7.4) queda fuera hasta que se tome una decisión futura explícita. [APROBADO — Clarifications 2026-10-17]
 - No existe concepto especial de «saldo inicial»: el dinero de arranque se registra como un ingreso normal (concepto «Saldo inicial» u otro texto libre). [APROBADO — Clarifications 2026-10-17]
@@ -290,7 +290,7 @@ Contradicciones detectadas en el contexto original:
 | --- | --- | --- |
 | Implementación de la interpretación de mensajes (reglas simples vs. servicio de IA) | 7.2 | [APROBADO v1] Regex simple (patrones: 'gasté X en Y', 'recibí X de Y', 'le presté X a Z'); IA evaluación futura — comportamiento FR-013 inmutable |
 | Plataforma (confirmar escritorio Windows local) | 7.1 | [APROBADO] Tauri v2 + WebView2 (Windows 10/11 x64); portable .exe + .msi via cargo-dist |
-| Almacenamiento y privacidad (dónde se guardan los datos, multi-dispositivo, offline, sincronización, servicios externos) | 7.3 | [APROBADO] SQLite en `%APPDATA%\PocketFlow\pocketflow.db`; offline, sin sync, sin servicios externos; autenticación resuelta: usuario único sin contraseña |
+| Almacenamiento y privacidad (dónde se guardan los datos, multi-dispositivo, offline, sincronización, servicios externos) | 7.3 | [APROBADO] SQLite en `%APPDATA%\Kite\Kite.db`; offline, sin sync, sin servicios externos; autenticación resuelta: usuario único sin contraseña |
 | Nombre definitivo del resumen («balance registrado» u otro) | 6.5 | PENDIENTE |
 | Simplificación de datos del movimiento (sin categorías, comprobantes, notas, cuenta) | 6.2 | [APROBADO v1] Solo tipo, monto, concepto, fecha, origen; sin categorías, comprobantes, notas, cuenta/medio de pago |
 | Formato y comportamiento de respaldo (al retomarse el tema) | 6.6 / Q3: C | POSPUESTO |

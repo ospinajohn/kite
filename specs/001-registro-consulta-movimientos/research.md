@@ -32,7 +32,7 @@
 ## 2. Persistencia local: SQLite vs JSON Lines vs embedded KV
 
 ### Decision
-**SQLite (arquivo único `pocketflow.db` en `%APPDATA%\PocketFlow\`)** con esquema versionado (`PRAGMA user_version`). `rusqlite` (sync) para simplicidad v1; migración a `sqlx` si se necesita async en UI.
+**SQLite (archivo único `Kite.db` en `%APPDATA%\Kite\`)** con esquema versionado (`PRAGMA user_version`). Al arrancar, si no existe `Kite.db` y hay una base `pocketflow.db` de la versión anterior, se copia a la ubicación nueva (la base original no se modifica). `rusqlite` (sync) para simplicidad v1; migración a `sqlx` si se necesita async en UI.
 
 ### Rationale
 - **Consultas por rango + orden**: `WHERE fecha BETWEEN ? AND ? ORDER BY fecha DESC, creado_en DESC` — nativo, eficiente, índices simples.
@@ -220,4 +220,4 @@ cargo tauri build --release
 | Testing | `cargo test` + contract tests + headless UI | Test-First Quality; integration contracts en boundary real |
 | Distribución | `cargo-dist` → MSI + portable EXE | Offline-capable, sin deps externas, firmable |
 
-Todas las decisiones respetan: **offline**, **single-user**, **sin servicios externos**, **simplicidad**, **constitución PocketFlow**.
+Todas las decisiones respetan: **offline**, **single-user**, **sin servicios externos**, **simplicidad**, **constitución Kite**.

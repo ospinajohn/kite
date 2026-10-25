@@ -223,8 +223,8 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 - [ ] T056 **E6** Lint: `cargo clippy --workspace -- -D warnings` → 0 warnings
 - [ ] T057 **E6** Quickstart manual **en Windows limpio** (VM o máquina sin datos):
   - ESC-01 a ESC-10 todos pasan
-  - Offline verificado: `netstat -an | findstr pocketflow` → vacío
-  - Datos en `%APPDATA%\PocketFlow\pocketflow.db` (no en repo)
+  - Offline verificado: `netstat -an | findstr Kite` → vacío
+  - Datos en `%APPDATA%\Kite\Kite.db` (no en repo)
 - [ ] T057a **E6** Add edit/delete timing benchmark: `tests/bench/edit_delete_bench.rs` — mide tiempo editar/eliminar; aserta < 1 min (SC-005)
 - [ ] T057b **E6** Add adoption telemetry: en `AppCommand::handle_new_expense/income`, log `(fecha_gasto, fecha_registro)`; script `scripts/analyze_adoption.rs` calcula % mismo-día; aserta ≥80% en validación 1 semana (SC-006)
 - [ ] T058 [P] **E6** Update `README.md` con instalación, uso, arquitectura, troubleshooting

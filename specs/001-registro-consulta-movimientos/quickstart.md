@@ -13,8 +13,8 @@
 
 ```bash
 # Clonar y entrar al directorio del proyecto
-git clone <repo-url> pocketflow
-cd pocketflow
+git clone <repo-url> Kite
+cd Kite
 
 # Verificar toolchain
 rustc --version
@@ -36,8 +36,8 @@ cargo test --workspace
 cargo tauri build --release
 
 # El binario portable queda en:
-# src-tauri/target/release/bundle/msi/PocketFlow_<version>_x64_en-US.msi
-# src-tauri/target/release/pocketflow.exe (portable)
+# src-tauri/target/release/bundle/msi/Kite_<version>_x64_en-US.msi
+# src-tauri/target/release/Kite.exe (portable)
 ```
 
 ---
@@ -66,11 +66,11 @@ cargo check --workspace
 
 ## Escenarios de validación manual (mapean a Success Criteria SC-001..SC-007)
 
-> Ejecutar con el binario portable `pocketflow.exe` en Windows limpio (sin datos previos).
+> Ejecutar con el binario portable `Kite.exe` en Windows limpio (sin datos previos).
 
 ### ESC-01: Registrar gasto por formulario (< 30 s, ≤ 3 pasos) — **SC-001**
 
-1. Abrir `pocketflow.exe` → Ventana principal (pestaña **Registrar** activa)
+1. Abrir `Kite.exe` → Ventana principal (pestaña **Registrar** activa)
 2. Completar formulario **Gasto manual**:
    - Monto: `18000`
    - Concepto: `Almuerzo`
@@ -113,10 +113,10 @@ cargo check --workspace
 
 1. Registrar 3 movimientos (mix ingreso/gasto) via ESC-01/02/03
 2. Cerrar app completamente (click ✕ o `Ctrl+Q`)
-3. Reabrir `pocketflow.exe`
+3. Reabrir `Kite.exe`
 4. **Verificar**: Los 3 movimientos están en historial con datos idénticos (monto, concepto, fecha, tipo)
 
-**Extra**: Matar proceso (`taskkill /F /IM pocketflow.exe`) tras guardar → reabrir → datos intactos (escritura atómica).
+**Extra**: Matar proceso (`taskkill /F /IM Kite.exe`) tras guardar → reabrir → datos intactos (escritura atómica).
 
 ---
 
@@ -215,8 +215,8 @@ cargo check --workspace
 - [ ] Binario portable `.exe` generado y probado
 - [ ] Instalador `.msi` generado (opcional v1.0)
 - [ ] Documentación de usuario mínima (README + ayuda in-app)
-- [ ] Archivo de datos `pocketflow.db` en `%APPDATA%\PocketFlow\` (no en repo)
-- [ ] Sin dependencias de red al ejecutar (offline verificado con `netstat -an | findstr pocketflow` → vacío)
+- [ ] Archivo de datos `Kite.db` en `%APPDATA%\Kite\` (no en repo)
+- [ ] Sin dependencias de red al ejecutar (offline verificado con `netstat -an | findstr Kite` → vacío)
 
 ---
 
@@ -227,11 +227,11 @@ cargo check --workspace
 $env:RUST_LOG=debug; cargo tauri dev
 
 # Inspeccionar BD SQLite directamente
-sqlite3 "%APPDATA%\PocketFlow\pocketflow.db" ".schema"
-sqlite3 "%APPDATA%\PocketFlow\pocketflow.db" "SELECT * FROM movements;"
+sqlite3 "%APPDATA%\Kite\Kite.db" ".schema"
+sqlite3 "%APPDATA%\Kite\Kite.db" "SELECT * FROM movements;"
 
 # Resetear datos (borrar BD)
-del "%APPDATA%\PocketFlow\pocketflow.db"
+del "%APPDATA%\Kite\Kite.db"
 
 # Ejecutar solo tests de contrato
 cargo test --test contract_tests -- --nocapture
