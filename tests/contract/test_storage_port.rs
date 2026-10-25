@@ -198,6 +198,69 @@ pub fn test_storage_port_edit_delete<S: StoragePort>(storage: &S) {
     assert!(retrieved.is_none());
 }
 
+pub fn test_storage_port_summary<S: StoragePort>(storage: &S) {
+    storage.migrate().expect("migrate ok");
+
+    let hoy = Local::now().date_naive();
+    let ayer = hoy.pred_opt().unwrap();
+
+    // Crear movimientos de prueba
+    let m1 = Movement::new(MovementType::Ingreso, 1_500_000, "Pago quincena".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m2 = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m3 = Movement::new(MovementType::Gasto, 12_000, "Transporte".into(), ayer, MovementOrigin::Formulario).unwrap();
+    let m4 = Movement::new(MovementType::Ingreso, 500_000, "Freelance".into(), ayer, MovementOrigin::Mensaje).unwrap();
+
+    storage.save(m1).unwrap();
+    storage.save(m2).unwrap();
+    storage.save(m3).unwrap();
+    storage.save(m4).unwrap();
+
+    // 1. Summary sin rango -> totales acumulados
+    let total = storage.summary(None, None).unwrap();
+    assert_eq!(total.ingresos_centavos, 2_000_000, "Ingresos totales: 1.5M + 500k = 2M");
+    assert_eq!(total.gastos_centavos, 30_000, "Gastos totales: 18k + 12k = 30k");
+    assert_eq!(total.diferencia_centavos, 1_970_000, "Diferencia: 2M - 30k = 1.97M");
+
+    // 2. Summary con rango [hoy, hoy] -> solo movimientos de hoy
+    let solo_hoy = storage.summary(Some(hoy), Some(hoy)).unwrap();
+    assert_eq!(solo_hoy.ingresos_centavos, 1_500_000, "Solo ingreso de hoy");
+    assert_eq!(solo_hoy.gastos_centavos, 18_000, "Solo gasto de hoy");
+    assert_eq!(solo_hoy.diferencia_centavos, 1_482_000, "Diferencia de hoy");
+
+    // 3. Summary con rango [ayer, ayer] -> solo movimientos de ayer
+    let solo_ayer = storage.summary(Some(ayer), Some(ayer)).unwrap();
+    assert_eq!(solo_ayer.ingresos_centavos, 500_000);
+    assert_eq!(solo_ayer.gastos_centavos, 12_000);
+    assert_eq!(solo_ayer.diferencia_centavos, 488_000);
+
+    // 4. Summary rango [ayer, hoy] -> todos
+    let rango_completo = storage.summary(Some(ayer), Some(hoy)).unwrap();
+    assert_eq!(rango_completo.ingresos_centavos, 2_000_000);
+    assert_eq!(rango_completo.gastos_centavos, 30_000);
+    assert_eq!(rango_completo.diferencia_centavos, 1_970_000);
+
+    // 5. Summary rango futuro -> ceros
+    let futuro = hoy + chrono::Duration::days(30);
+    let rango_futuro = storage.summary(Some(futuro), Some(futuro + chrono::Duration::days(1))).unwrap();
+    assert_eq!(rango_futuro.ingresos_centavos, 0);
+    assert_eq!(rango_futuro.gastos_centavos, 0);
+    assert_eq!(rango_futuro.diferencia_centavos, 0);
+
+    // 6. Summary rango invertido (desde > hasta) -> no pánico, retorna ceros o auto-swap
+    let invertido = storage.summary(Some(hoy), Some(ayer)).unwrap();
+    // Aceptamos: ceros (sin swap) o totales completos (con auto-swap)
+    assert!(invertido.ingresos_centavos == 0 || invertido.ingresos_centavos == 2_000_000);
+
+    // 7. Verificar que diferencia puede ser negativa (más gastos que ingresos)
+    let m_gasto_grande = Movement::new(MovementType::Gasto, 3_000_000, "Compra grande".into(), hoy, MovementOrigin::Formulario).unwrap();
+    storage.save(m_gasto_grande).unwrap();
+
+    let con_negativo = storage.summary(Some(hoy), Some(hoy)).unwrap();
+    assert_eq!(con_negativo.ingresos_centavos, 1_500_000);
+    assert_eq!(con_negativo.gastos_centavos, 3_018_000); // 18k + 3M
+    assert_eq!(con_negativo.diferencia_centavos, -1_518_000, "Diferencia negativa cuando gastos > ingresos");
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
