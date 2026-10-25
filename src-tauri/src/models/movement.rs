@@ -135,7 +135,7 @@ impl Movement {
         }
         let sign = if self.tipo == MovementType::Ingreso { "+" } else { "−" };
         let abs = self.monto_centavos.abs();
-        let mut s = abs.to_string();
+        let s = abs.to_string();
         let mut result = String::new();
         for (i, ch) in s.chars().rev().enumerate() {
             if i > 0 && i % 3 == 0 {

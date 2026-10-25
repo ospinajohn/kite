@@ -53,7 +53,7 @@ pub trait ParserPort: Send + Sync {
 mod contract_tests {
     use super::*;
     use crate::models::MovementType;
-    use chrono::{Local, NaiveDate};
+    use chrono::Local;
 
     pub fn test_parser_port<P: ParserPort>(parser: &P) {
         let today = Local::now().date_naive();

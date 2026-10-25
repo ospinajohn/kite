@@ -1,14 +1,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use kite::AppState;
-use tauri::Manager;
 
 fn main() {
     let app_state = AppState::new().expect("Failed to initialize app state");
 
     tauri::Builder::default()
         .setup(|app| {
-            let handle = app.handle().clone();
+            let _handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
                 // App initialization logic here if needed
             });

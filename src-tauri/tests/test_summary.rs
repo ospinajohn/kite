@@ -1,6 +1,6 @@
 use kite::models::{Movement, MovementType, MovementOrigin};
 use kite::storage::port::StoragePort;
-use chrono::{Local, NaiveDate};
+use chrono::Local;
 use tempfile::tempdir;
 
 fn create_test_storage() -> kite::storage::sqlite_impl::SqliteStorage {

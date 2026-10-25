@@ -36,10 +36,10 @@ impl PeriodSummary {
         }
         let sign = if centavos >= 0 { "+" } else { "−" };
         let abs = centavos.abs();
-        let mut s = abs.to_string();
+        let s = abs.to_string();
         // Agregar separadores de miles
         let mut result = String::new();
-        let len = s.len();
+        let _len = s.len();
         for (i, ch) in s.chars().rev().enumerate() {
             if i > 0 && i % 3 == 0 {
                 result.push('.');

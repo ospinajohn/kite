@@ -1,8 +1,7 @@
-use crate::models::{Movement, MovementType};
+use crate::models::Movement;
 use crate::parser::port::ParsedProposal;
 use crate::models::summary::PeriodSummary;
 use chrono::NaiveDate;
-use std::error::Error;
 use uuid::Uuid;
 
 pub trait UiEventHandler: Send + Sync {
@@ -46,11 +45,11 @@ pub trait AppCommand: Send + Sync {
 #[cfg(test)]
 mod contract_tests {
     use super::*;
-    use crate::models::{Movement, MovementType, MovementOrigin};
+    use crate::models::{Movement, MovementType};
     use crate::models::summary::PeriodSummary;
     use chrono::{Local, NaiveDate};
-    use std::sync::{Arc, Mutex};
-    use uuid::Uuid;
+    use std::sync::Mutex;
+    
 
     #[derive(Default)]
     struct MockNotifier {

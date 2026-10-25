@@ -5,7 +5,7 @@ use kite::models::{Movement, MovementType, MovementOrigin};
 use kite::parser::regex_impl::RegexParser;
 use kite::parser::port::ParserPort;
 use kite::storage::port::StoragePort;
-use chrono::{Local, NaiveDate};
+use chrono::Local;
 use std::time::Instant;
 use tempfile::tempdir;
 
@@ -29,7 +29,7 @@ fn bench_registration_formulario_steps() {
     let storage = create_test_storage();
     storage.migrate().unwrap();
 
-    let steps = 0;
+    let _steps = 0;
     let mut paso = 0;
 
     // Paso 1: Preparar datos (simula completar formulario)

@@ -4,7 +4,6 @@
 use kite::models::MovementType;
 use kite::parser::regex_impl::RegexParser;
 use kite::parser::port::ParserPort;
-use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::sync::{Arc, Mutex};
 

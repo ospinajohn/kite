@@ -146,7 +146,7 @@ impl StoragePort for SqliteStorage {
     }
 
     fn delete(&self, id: Uuid) -> Result<bool, StorageError> {
-        let mut conn = self.conn.lock().unwrap();
+        let conn = self.conn.lock().unwrap();
         let rows = conn.execute(
             "DELETE FROM movements WHERE id = ?1",
             params![id.to_string()],
@@ -193,7 +193,7 @@ impl StoragePort for SqliteStorage {
 
         let mut stmt = conn.prepare(&sql)?;
         let param_refs: Vec<&dyn rusqlite::ToSql> = params_vec.iter().map(|s| s as &dyn rusqlite::ToSql).collect();
-        let rows = stmt.query_map(rusqlite::params_from_iter(param_refs), |row| SqliteStorage::row_to_movement(row))?;
+        let rows = stmt.query_map(rusqlite::params_from_iter(param_refs), SqliteStorage::row_to_movement)?;
 
         let mut movements = Vec::new();
         for row in rows {

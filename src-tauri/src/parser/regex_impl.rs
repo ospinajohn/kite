@@ -1,6 +1,5 @@
-use crate::models::{MovementType, MovementOrigin};
+use crate::models::MovementType;
 use crate::parser::port::{ParserPort, ParserError, ParsedProposal};
-use chrono::NaiveDate;
 use regex::Regex;
 use std::sync::LazyLock;
 
@@ -95,7 +94,7 @@ impl ParserPort for RegexParser {
 mod tests {
     use super::*;
     use crate::models::MovementType;
-    use chrono::{Local, NaiveDate};
+    use chrono::Local;
 
     #[test]
     fn parse_gasto_con_mil() {

@@ -1,7 +1,7 @@
-use crate::models::{Movement, MovementOrigin, MovementType, PeriodSummary};
+use crate::models::{Movement, MovementOrigin, MovementType};
 use crate::parser::port::{ParsedProposal, ParserPort};
 use crate::storage::port::StoragePort;
-use crate::ui::port::{AppCommand, UiNotifier};
+use crate::ui::port::AppCommand;
 use chrono::NaiveDate;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
@@ -245,7 +245,7 @@ impl AppCommand for AppState {
         concepto: String,
         fecha: NaiveDate,
     ) {
-        if let Ok(Some(mut movement)) = self.storage.get_by_id(id) {
+        if let Ok(Some(movement)) = self.storage.get_by_id(id) {
             match movement.update(monto_centavos, concepto, fecha) {
                 Ok(updated) => {
                     if let Err(e) = self.storage.update(updated.clone()) {

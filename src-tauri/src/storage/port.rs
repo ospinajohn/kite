@@ -1,7 +1,6 @@
 use crate::models::Movement;
 use crate::models::summary::PeriodSummary;
 use chrono::NaiveDate;
-use std::error::Error;
 use uuid::Uuid;
 
 #[derive(Debug, thiserror::Error)]
