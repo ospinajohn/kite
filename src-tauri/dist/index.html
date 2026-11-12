@@ -13,327 +13,201 @@
     />
     <style>
       /* ==========================================================================
-         DISEÑO Kite: ESTÉTICA FINTECH SUAVE Y CUIDADA
-         Inspirado en las referencias: Superficies claras, tarjeta oscura protagonista,
-         trío de tarjetas pastel, gráfica interactiva (barras/curva), y módulo de progreso oscuro.
+         Kite — sistema visual
+         Dirección: libreta de cuentas. Papel cálido, tinta, reglas finas.
+         Un acento (tinta azul) y los semánticos reservados a las cifras.
          ========================================================================== */
+
       :root {
-        /* Superficies y Lienzo */
-        --bg-canvas: #f7f8fa;
-        --bg-surface: #ffffff;
-        --bg-titlebar: #ffffff;
+        /* Espaciado: escala de 4px */
+        --s-1: 4px;
+        --s-2: 8px;
+        --s-3: 12px;
+        --s-4: 16px;
+        --s-5: 20px;
+        --s-6: 24px;
+        --s-8: 32px;
+        --s-10: 40px;
+        --s-12: 48px;
 
-        /* Paleta Específica de las Referencias */
-        --card-dark: #17151f;
-        --card-dark-hover: #1f1d2b;
-        --pastel-green: #edf8ef;
-        --pastel-green-text: #15803d;
-        --pastel-green-border: #dcf2df;
+        /* Tipografía */
+        --fs-meta: 12px;
+        --fs-sm: 13px;
+        --fs-base: 14px;
+        --fs-md: 15px;
+        --fs-lg: 16px;
+        --fs-title: 20px;
+        --fs-figure: 28px;
+        --fs-hero: 36px;
 
-        --pastel-peach: #fff0e7;
-        --pastel-peach-text: #c2410c;
-        --pastel-peach-border: #ffe2d1;
+        --lh-meta: 16px;
+        --lh-text: 20px;
+        --lh-title: 28px;
 
-        --pastel-blue: #eaf1fc;
-        --pastel-blue-text: #1d4ed8;
-        --pastel-blue-border: #d8e5f9;
+        /* Radios */
+        --r-xs: 4px;
+        --r-sm: 8px;
+        --r-btn: 10px;
+        --r-card: 16px;
+        --r-panel: 20px;
 
-        --surface-celeste: #eaf5f5;
-        --surface-celeste-text: #0f766e;
-        --surface-celeste-border: #d2e9e9;
+        /* Neutros: papel */
+        --canvas: #f6f5f2;
+        --surface: #ffffff;
+        --surface-2: #f0efeb;
+        --raised: #e9e7e2;
+        --line: rgba(26, 25, 23, 0.08);
+        --line-strong: rgba(26, 25, 23, 0.16);
+        --ink: #1a1917;
+        --ink-2: #5f5b53;
+        --ink-3: #8b877e;
+        --ink-invert: #ffffff;
 
-        /* Tipografía Manrope y Jerarquía */
+        /* Acento: tinta de bolígrafo */
+        --accent: #1d4ed8;
+        --accent-ink: #1e40af;
+        --accent-soft: #edf1fc;
+
+        /* Semánticos: solo cifras */
+        --income: #15803d;
+        --expense: #b42318;
+
+        /* Panel protagonista */
+        --hero-bg: #1a1917;
+        --hero-ink: #f7f6f3;
+        --hero-ink-2: rgba(247, 246, 243, 0.62);
+        --hero-line: rgba(247, 246, 243, 0.18);
+
+        /* Tarjetas de métrica */
+        --metric-income-bg: #f1f8f2;
+        --metric-expense-bg: #fdf3f0;
+        --metric-neutral-bg: #f2f4fa;
+
+        /* Gráfica */
+        --chart-bar: rgba(26, 25, 23, 0.16);
+
+        --shadow-sm: 0 1px 2px rgba(26, 25, 23, 0.06);
+        --shadow-md: 0 8px 24px rgba(26, 25, 23, 0.08);
+        --shadow-lg: 0 24px 48px -12px rgba(26, 25, 23, 0.22);
+
         --font-main: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        --font-mono: "Cascadia Code", "SF Mono", "Segoe UI Mono", Consolas, monospace;
+        --font-mono: "Cascadia Mono", "Cascadia Code", ui-monospace, Consolas, monospace;
 
-        --text-primary: #202127;
-        --text-secondary: #626873;
-        --text-tertiary: #9297a0;
-        --text-inverse: #ffffff;
-
-        /* Colores de Estado y Acción */
-        --color-primary: #17151f;
-        --color-accent: #2563eb;
-        --color-income: #16a34a;
-        --color-expense: #dc2626;
-
-        /* Líneas y Separadores */
-        --border-subtle: #eef0f4;
-        --border-medium: #e2e5eb;
-        --grid-line: rgba(32, 33, 39, 0.04);
-
-        /* Radios Generosos y Consistentes */
-        --radius-hero: 22px;
-        --radius-card: 18px;
-        --radius-sm: 12px;
-        --radius-pill: 9999px;
-        --radius-btn: 10px;
-
-        /* Sombras Selectivas Puntuales */
-        --shadow-subtle: 0 4px 20px -4px rgba(23, 21, 31, 0.05);
-        --shadow-hero: 0 16px 36px -10px rgba(23, 21, 31, 0.22);
-        --shadow-island: 0 12px 30px -8px rgba(23, 21, 31, 0.08);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        --t-fast: 150ms;
+        --t-base: 240ms;
       }
 
-      /* ==========================================================================
-         DARK MODE: PALETA OBSIDIAN CRAFT (REFERO-DESIGN / LINEAR STYLE)
-         - Neutrals: 90% escala carbón neutro (#09090b, #121215, #18181b)
-         - Sin tonos azules lavados que lucen como plantilla genérica
-         - Acento: Cobalto nítido (#3b82f6)
-         - Tarjetas pastel: Superficies carbón con borde y tipografía semántica refinada
-         ========================================================================== */
       :root[data-theme="dark"] {
-        /* Lienzo y superficies de carbón genuino */
-        --bg-canvas: #09090b;
-        --bg-surface: #121215;
-        --bg-titlebar: #0c0c0e;
+        --canvas: #0f0f12;
+        --surface: #17171c;
+        --surface-2: #1e1e24;
+        --raised: #26262d;
+        --line: rgba(242, 242, 243, 0.08);
+        --line-strong: rgba(242, 242, 243, 0.16);
+        --ink: #f2f2f3;
+        --ink-2: #a3a3ab;
+        --ink-3: #73737c;
+        --ink-invert: #0f0f12;
 
-        /* Tarjeta Hero Protagonista y widgets */
-        --card-dark: #18181b;
-        --card-dark-hover: #222227;
+        --accent: #93b0f8;
+        --accent-ink: #b9cbfb;
+        --accent-soft: #1b2337;
 
-        /* Tarjetas de métricas: elegancia oscura sin fondos saturados falsos */
-        --pastel-green: #101512;
-        --pastel-green-text: #22c55e;
-        --pastel-green-border: rgba(34, 197, 94, 0.2);
+        --income: #4ade80;
+        --expense: #f87171;
 
-        --pastel-peach: #181310;
-        --pastel-peach-text: #f97316;
-        --pastel-peach-border: rgba(249, 115, 22, 0.2);
+        --hero-bg: #1f1f27;
+        --hero-ink: #f5f5f6;
+        --hero-ink-2: rgba(245, 245, 246, 0.62);
+        --hero-line: rgba(245, 245, 246, 0.18);
 
-        --pastel-blue: #10141d;
-        --pastel-blue-text: #38bdf8;
-        --pastel-blue-border: rgba(56, 189, 248, 0.2);
+        --metric-income-bg: #17171c;
+        --metric-expense-bg: #17171c;
+        --metric-neutral-bg: #17171c;
 
-        --surface-celeste: #0e1616;
-        --surface-celeste-text: #14b8a6;
-        --surface-celeste-border: rgba(20, 184, 166, 0.2);
+        --chart-bar: rgba(242, 242, 243, 0.16);
 
-        /* Tipografía Manrope de alta pureza */
-        --text-primary: #f4f4f5;
-        --text-secondary: #a1a1aa;
-        --text-tertiary: #71717a;
-        --text-inverse: #09090b;
-
-        /* Bordes ultra-delgados con precisión de hairline */
-        --border-subtle: rgba(255, 255, 255, 0.08);
-        --border-medium: rgba(255, 255, 255, 0.14);
-        --grid-line: rgba(255, 255, 255, 0.03);
-
-        /* Acento y estados de saldo */
-        --color-primary: #ffffff;
-        --color-accent: #3b82f6;
-        --color-income: #22c55e;
-        --color-expense: #ef4444;
-
-        /* Sombras suaves y contenidas */
-        --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-        --shadow-hero: 0 12px 32px -8px rgba(0, 0, 0, 0.7);
-        --shadow-island: 0 8px 24px -4px rgba(0, 0, 0, 0.55);
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+        --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
       }
 
-      /* Ajustes específicos de componentes en Modo Oscuro */
-      :root[data-theme="dark"] .hero-dark-card {
-        background: #151518;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      }
-
-      :root[data-theme="dark"] .topbar-island {
-        background: rgba(18, 18, 21, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5);
-      }
-
-      :root[data-theme="dark"] .island-tabs {
-        background: #09090b;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-      }
-
-      :root[data-theme="dark"] .island-tab-btn.active {
-        background: #27272a;
-        color: #ffffff;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
-
-      :root[data-theme="dark"] .btn-quick-search {
-        background: #18181b;
-        border-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-secondary);
-      }
-
-      :root[data-theme="dark"] .btn-quick-search:hover {
-        background: #27272a;
-        border-color: rgba(255, 255, 255, 0.18);
-        color: #ffffff;
-      }
-
-      :root[data-theme="dark"] .btn-quick-search kbd {
-        background: #27272a;
-        color: #d4d4d8;
-      }
-
-      :root[data-theme="dark"] .win-btn:hover {
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      :root[data-theme="dark"] .btn-theme-toggle {
-        background: #18181b;
-        border-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-secondary);
-      }
-
-      :root[data-theme="dark"] .btn-theme-toggle:hover {
-        background: #27272a;
-        border-color: rgba(255, 255, 255, 0.18);
-        color: #ffffff;
-      }
-
-      :root[data-theme="dark"] .chart-mode-switch,
-      :root[data-theme="dark"] .pill-filter-btn:not(.active),
-      :root[data-theme="dark"] .quick-pill-btn:not(.active),
-      :root[data-theme="dark"] .modal-type-switch,
-      :root[data-theme="dark"] .chip-quick-date:not(.active),
-      :root[data-theme="dark"] .btn-cancel,
-      :root[data-theme="dark"] .modal-close {
-        background: #09090b;
-        color: var(--text-secondary);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      :root[data-theme="dark"] .mode-switch-btn.active {
-        background: #27272a;
-        color: #ffffff;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-      }
-
-      :root[data-theme="dark"] .pill-filter-btn.active,
-      :root[data-theme="dark"] .quick-pill-btn.active {
-        background: #ffffff;
-        color: #09090b;
-        font-weight: 700;
-        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
-      }
-
-      :root[data-theme="dark"] .chip-quick-date.active {
-        background: #27272a;
-        border-color: #3b82f6;
-        color: #ffffff;
-      }
-
-      :root[data-theme="dark"] .chart-bar-track {
-        background: rgba(255, 255, 255, 0.04);
-      }
-
-      :root[data-theme="dark"] .chart-bar-fill {
-        background: #3f3f46;
-      }
-
-      :root[data-theme="dark"] .chart-bar-fill.active {
-        background: #ffffff !important;
-        box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
-      }
-
-      :root[data-theme="dark"] .chart-week-col:hover .chart-bar-fill {
-        background: #52525b;
-      }
-
-      :root[data-theme="dark"] .progress-dark-widget {
-        background: #151518;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      :root[data-theme="dark"] .tx-icon-box {
-        background: rgba(255, 255, 255, 0.06);
-        color: var(--text-secondary);
-      }
-
-      :root[data-theme="dark"] .tx-row:hover {
-        background: rgba(255, 255, 255, 0.03);
-      }
-
-      :root[data-theme="dark"] .clean-table tr:hover td {
-        background: rgba(255, 255, 255, 0.03);
-      }
-
-      :root[data-theme="dark"] .form-row input,
-      :root[data-theme="dark"] .form-row select,
-      :root[data-theme="dark"] .search-input-box input,
-      :root[data-theme="dark"] .date-range-picker input {
-        background: #09090b;
-        border-color: rgba(255, 255, 255, 0.12);
-        color: var(--text-primary);
-      }
-
-      :root[data-theme="dark"] .form-row input:focus,
-      :root[data-theme="dark"] .form-row select:focus,
-      :root[data-theme="dark"] .search-input-box input:focus {
-        border-color: rgba(255, 255, 255, 0.35);
-        background: #121215;
-      }
-
-      :root[data-theme="dark"] .modal-card {
-        background: #121215;
-        border-color: rgba(255, 255, 255, 0.12);
-        box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85);
-      }
-
-      :root[data-theme="dark"] .celeste-card {
-        border: 1px solid var(--surface-celeste-border);
-      }
-
-      :root[data-theme="dark"] .celeste-body {
-        color: #2dd4bf;
-      }
-
-      :root[data-theme="dark"] .celeste-body strong {
-        color: #f4f4f5;
-      }
-
-      :root[data-theme="dark"] .command-palette-card {
-        background: #121215;
-        border-color: rgba(255, 255, 255, 0.12);
-        box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85);
-      }
-
-      :root[data-theme="dark"] .example-btn {
-        background: #18181b;
-        color: var(--text-secondary);
-        border-color: rgba(255, 255, 255, 0.08);
-      }
-
-      :root[data-theme="dark"] .example-btn:hover {
-        background: #27272a;
-        color: var(--text-primary);
-        border-color: rgba(255, 255, 255, 0.18);
-      }
-
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
 
-      html, body {
+      html,
+      body {
+        height: 100%;
         margin: 0;
         padding: 0;
-        height: 100%;
-        overflow: hidden;
-        color: var(--text-primary);
+      }
+
+      body {
+        background: var(--canvas);
+        color: var(--ink);
         font-family: var(--font-main);
+        font-size: var(--fs-base);
+        line-height: var(--lh-text);
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
       }
 
-      /* Fondo con cuadrícula técnica sutil de fondo */
-      body {
-        background-color: var(--bg-canvas);
-        background-image:
-          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-          linear-gradient(0deg, var(--grid-line) 1px, transparent 1px);
-        background-size: 28px 28px;
-        background-attachment: fixed;
+      button,
+      input,
+      select {
+        font: inherit;
+        color: inherit;
       }
 
-      /* Viewport acotado bajo la barra de ventana */
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      ::selection {
+        background: var(--accent-soft);
+        color: var(--accent-ink);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* Scrollbar discreto */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--line-strong) transparent;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--line-strong);
+        border-radius: var(--r-xs);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--ink-3);
+      }
+
+      ::-webkit-scrollbar-button {
+        display: none;
+      }
+
+      /* ==========================================================================
+         Barra de ventana nativa (Tauri frameless)
+         ========================================================================== */
       .app-scroll-viewport {
         position: absolute;
         top: 32px;
@@ -348,160 +222,6 @@
         overflow: hidden;
       }
 
-      /* Scrollbar minimalista y limpio */
-      * {
-        scrollbar-width: thin;
-        scrollbar-color: var(--border-medium) transparent;
-      }
-
-      ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #d4d8e0;
-        border-radius: var(--radius-pill);
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--text-tertiary);
-      }
-
-      ::-webkit-scrollbar-button {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-      }
-
-      ::selection {
-        background: var(--card-dark);
-        color: #ffffff;
-      }
-
-      button, input, select {
-        font: inherit;
-        color: inherit;
-      }
-
-      :focus-visible {
-        outline: 2px solid var(--color-accent);
-        outline-offset: 2px;
-      }
-
-      .hidden {
-        display: none !important;
-      }
-
-      /* ==========================================================================
-         ESTILIZADO ELEGANTE DE INPUTS DE FECHA (NO MÁS DATE PICKERS GENÉRICOS)
-         ========================================================================== */
-      input[type="date"] {
-        font-family: var(--font-main);
-        color-scheme: light;
-        accent-color: var(--card-dark);
-        background: #ffffff;
-        border: 1px solid var(--border-medium);
-        border-radius: var(--radius-btn);
-        padding: 7px 10px;
-        color: var(--text-primary);
-        font-weight: 600;
-        font-size: 12.5px;
-        cursor: pointer;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-        outline: none;
-      }
-
-      input[type="date"]:hover {
-        border-color: #cbd3e1;
-        background: #fafbfd;
-      }
-
-      input[type="date"]:focus {
-        border-color: var(--card-dark);
-        box-shadow: 0 0 0 2px rgba(23, 21, 31, 0.08);
-      }
-
-      input[type="date"]::-webkit-calendar-picker-indicator {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%23626873' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-        cursor: pointer;
-        opacity: 0.75;
-        padding: 2px;
-        border-radius: 4px;
-        transition: transform 0.15s ease, opacity 0.15s ease;
-      }
-
-      input[type="date"]:hover::-webkit-calendar-picker-indicator {
-        opacity: 1;
-        transform: scale(1.15);
-      }
-
-      /* Píldoras de rango rápido */
-      .quick-period-pills {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-
-      .quick-pill-btn {
-        background: #f1f3f7;
-        border: 1px solid transparent;
-        color: var(--text-secondary);
-        font-size: 11.5px;
-        font-weight: 600;
-        padding: 5px 11px;
-        border-radius: var(--radius-pill);
-        cursor: pointer;
-        transition: all 0.12s ease;
-      }
-
-      .quick-pill-btn:hover {
-        background: #e2e8f0;
-        color: var(--text-primary);
-      }
-
-      .quick-pill-btn.active {
-        background: var(--card-dark);
-        color: #ffffff;
-      }
-
-      /* Helper rápido de fecha en el modal */
-      .quick-date-selector {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .date-helper-chip {
-        background: #f1f3f7;
-        border: 1px solid transparent;
-        color: var(--text-secondary);
-        font-size: 12px;
-        font-weight: 600;
-        padding: 6px 12px;
-        border-radius: var(--radius-pill);
-        cursor: pointer;
-        transition: all 0.12s ease;
-      }
-
-      .date-helper-chip:hover {
-        background: #e2e8f0;
-        color: var(--text-primary);
-      }
-
-      .date-helper-chip.active {
-        background: var(--card-dark);
-        color: #ffffff;
-      }
-
-      /* ==========================================================================
-         BARRA DE VENTANA NATIVA (WINDOWS FRAMELESS)
-         ========================================================================== */
       .window-titlebar {
         position: fixed;
         top: 0;
@@ -512,8 +232,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: var(--bg-titlebar);
-        border-bottom: 1px solid var(--border-subtle);
+        background: var(--canvas);
+        border-bottom: 1px solid var(--line);
         user-select: none;
         -webkit-user-select: none;
       }
@@ -521,30 +241,31 @@
       .window-titlebar-drag {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--s-2);
         height: 100%;
         flex: 1;
-        padding-left: 14px;
+        padding-left: var(--s-3);
         cursor: default;
       }
 
       .window-icon {
-        width: 14px;
-        height: 14px;
-        background: var(--card-dark);
-        border-radius: 3px;
+        width: 18px;
+        height: 18px;
+        background: var(--ink);
+        border-radius: var(--r-xs);
         display: grid;
         place-items: center;
-        font-size: 8px;
-        font-weight: 800;
-        color: #ffffff;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--ink-invert);
+        line-height: 1;
       }
 
       .window-app-name {
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        letter-spacing: -0.1px;
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        color: var(--ink-3);
+        letter-spacing: 0;
       }
 
       .window-controls {
@@ -560,33 +281,33 @@
         height: 100%;
         border: 0;
         background: transparent;
-        color: var(--text-secondary);
+        color: var(--ink-3);
         cursor: pointer;
-        transition: background 0.12s ease, color 0.12s ease;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
       }
 
       .win-btn:hover {
-        background: rgba(0, 0, 0, 0.06);
-        color: var(--text-primary);
+        background: var(--surface-2);
+        color: var(--ink);
       }
 
       .win-btn.close:hover {
-        background: var(--color-expense);
+        background: var(--expense);
         color: #ffffff;
       }
 
       /* ==========================================================================
-         TOPBAR: ISLA FLOTANTE DE NAVEGACIÓN
+         Barra superior
          ========================================================================== */
       .topbar {
         position: sticky;
-        top: 14px;
+        top: var(--s-3);
         z-index: 1000;
         display: flex;
         justify-content: center;
-        padding: 0 20px;
+        padding: 0 var(--s-6);
         pointer-events: none;
-        margin-bottom: 22px;
+        margin-bottom: var(--s-4);
       }
 
       .topbar-island {
@@ -594,45 +315,42 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
+        gap: var(--s-4);
         width: min(1080px, 100%);
-        padding: 6px 12px 6px 16px;
-        border: 1px solid rgba(226, 232, 240, 0.9);
-        border-radius: var(--radius-pill);
-        background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        box-shadow: var(--shadow-island);
+        padding: var(--s-2) var(--s-2) var(--s-2) var(--s-4);
+        border: 1px solid var(--line);
+        border-radius: var(--r-btn);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
       }
 
       .brand {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--s-2);
         text-decoration: none;
-        color: var(--text-primary);
-        font-weight: 700;
-        font-size: 14px;
-        letter-spacing: -0.3px;
+        color: var(--ink);
+        font-weight: 600;
+        font-size: var(--fs-md);
+        letter-spacing: -0.01em;
         flex-shrink: 0;
       }
 
       .brand-dot {
         width: 8px;
         height: 8px;
-        background: var(--card-dark);
-        border-radius: 50%;
+        background: var(--accent);
+        border-radius: 2px;
       }
 
-      /* Pestañas de navegación en la isla */
       .island-tabs {
         position: relative;
         display: flex;
         align-items: center;
-        gap: 4px;
-        padding: 3px;
-        border-radius: var(--radius-pill);
-        background: #f1f3f7;
+        gap: 2px;
+        padding: 2px;
+        border-radius: var(--r-sm);
+        background: var(--surface-2);
       }
 
       .island-tab-btn {
@@ -640,60 +358,62 @@
         z-index: 1;
         border: 0;
         background: transparent;
-        color: var(--text-secondary);
-        padding: 6px 14px;
-        border-radius: var(--radius-pill);
-        font-size: 12.5px;
-        font-weight: 600;
+        color: var(--ink-2);
+        padding: var(--s-1) var(--s-3);
+        border-radius: 6px;
+        font-size: var(--fs-sm);
+        font-weight: 500;
         cursor: pointer;
-        transition: color 0.15s ease, background 0.15s ease;
+        transition: color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
       }
 
       .island-tab-btn:hover:not(.active) {
-        color: var(--text-primary);
+        color: var(--ink);
       }
 
       .island-tab-btn.active {
-        color: var(--text-primary);
-        background: #ffffff;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        color: var(--ink);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        font-weight: 600;
       }
 
-      /* Acciones rápidas en la isla */
       .island-actions {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--s-2);
         flex-shrink: 0;
       }
 
       .btn-quick-search {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        background: #f8fafc;
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-pill);
-        color: var(--text-secondary);
-        padding: 5px 12px;
-        font-size: 12px;
+        gap: var(--s-2);
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        color: var(--ink-2);
+        padding: 5px var(--s-3);
+        font-size: var(--fs-meta);
         font-weight: 500;
         cursor: pointer;
-        transition: all 0.12s ease;
+        transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
       }
 
       .btn-quick-search:hover {
-        background: #ffffff;
-        border-color: var(--border-medium);
-        color: var(--text-primary);
+        background: var(--surface-2);
+        border-color: var(--line-strong);
+        color: var(--ink);
       }
 
       .btn-quick-search kbd {
         font-family: var(--font-mono);
-        font-size: 10px;
-        background: #e2e8f0;
+        font-size: 11px;
+        color: var(--ink-3);
+        background: var(--surface-2);
         padding: 1px 5px;
-        border-radius: 4px;
+        border-radius: var(--r-xs);
+        line-height: 14px;
       }
 
       .btn-theme-toggle {
@@ -702,19 +422,17 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        background: #f8fafc;
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-pill);
-        color: var(--text-secondary);
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        color: var(--ink-2);
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
       }
 
       .btn-theme-toggle:hover {
-        background: #ffffff;
-        border-color: var(--border-medium);
-        color: var(--text-primary);
-        transform: translateY(-1px);
+        background: var(--surface-2);
+        color: var(--ink);
       }
 
       .btn-theme-toggle svg {
@@ -723,12 +441,12 @@
       }
 
       /* ==========================================================================
-         LAYOUT PRINCIPAL (COMPOSICIÓN A DOS COLUMNAS CON AIRE)
+         Layout
          ========================================================================== */
       .main-app {
         max-width: 1080px;
         margin: 0 auto;
-        padding: 0 20px 60px;
+        padding: 0 var(--s-6) var(--s-12);
       }
 
       .tab-content {
@@ -737,213 +455,217 @@
 
       .tab-content.active {
         display: block;
-        animation: fadeIn 0.2s ease-out;
+        animation: enter var(--t-base) var(--ease);
       }
 
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(4px); }
-        to { opacity: 1; transform: translateY(0); }
+      @keyframes enter {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
-      /* GRID PRINCIPAL DEL DASHBOARD (2 FILAS SIMÉTRICAS) */
       .dash-layout-grid {
         display: grid;
-        grid-template-columns: 1.25fr 1fr;
-        grid-template-rows: auto auto;
-        gap: 18px;
+        grid-template-columns: 1.3fr 1fr;
+        gap: var(--s-4);
         align-items: stretch;
       }
 
-      /* Fila 1: Tarjeta Principal Oscura + Trío Pastel a la izquierda; Movimientos recientes a la derecha */
-      .dash-area-top-left {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .dash-area-top-right {
-        display: flex;
-        flex-direction: column;
-      }
-
-      /* Fila 2: Gráfica a la izquierda; Progreso + Ritmo/Proyección a la derecha */
+      .dash-area-top-left,
+      .dash-area-top-right,
       .dash-area-bottom-left {
         display: flex;
         flex-direction: column;
       }
 
+      .dash-area-top-left {
+        gap: var(--s-4);
+      }
+
       .dash-area-bottom-right {
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        justify-content: space-between;
+        gap: var(--s-4);
       }
 
       /* ==========================================================================
-         1. TARJETA PROTAGONISTA OSCURA (#17151F - De la Referencia 1)
+         1. Panel protagonista
          ========================================================================== */
       .hero-dark-card {
-        background: var(--card-dark);
-        color: #ffffff;
-        border-radius: var(--radius-hero);
-        padding: 26px 28px;
-        box-shadow: var(--shadow-hero);
+        background: var(--hero-bg);
+        color: var(--hero-ink);
+        border: 1px solid var(--hero-line);
+        border-radius: var(--r-panel);
+        padding: var(--s-5) var(--s-6);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 180px;
-        position: relative;
-        overflow: hidden;
+        gap: var(--s-6);
+        min-height: 188px;
       }
 
       .hero-dark-top {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        gap: var(--s-4);
       }
 
       .hero-dark-title-wrap {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        align-items: baseline;
+        gap: var(--s-2);
+        flex-wrap: wrap;
       }
 
       .hero-dark-eyebrow {
-        font-size: 12.5px;
+        font-size: var(--fs-meta);
         font-weight: 500;
-        color: #94a3b8;
-        letter-spacing: -0.1px;
+        color: var(--hero-ink);
+        letter-spacing: 0.01em;
+      }
+
+      .hero-dark-period {
+        font-size: var(--fs-meta);
+        font-weight: 400;
+        color: var(--hero-ink-2);
       }
 
       .hero-cycle-badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: var(--s-2);
+        font-family: var(--font-mono);
         font-size: 11px;
-        font-weight: 600;
-        color: #cbd5e1;
-        background: rgba(255, 255, 255, 0.08);
-        padding: 4px 10px;
-        border-radius: var(--radius-pill);
+        font-weight: 400;
+        color: var(--hero-ink-2);
+        white-space: nowrap;
       }
 
       .hero-cycle-dot {
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: #34d399;
+        background: var(--hero-ink-2);
       }
 
       .hero-dark-amount-row {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        gap: 16px;
-        margin-top: 14px;
+        gap: var(--s-6);
         flex-wrap: wrap;
       }
 
+      /* Firma: doble regla de total bajo la cifra que manda */
       .hero-amount {
-        font-size: 34px;
-        font-weight: 800;
-        letter-spacing: -0.8px;
-        color: #ffffff;
+        display: inline-block;
+        font-size: var(--fs-hero);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: var(--hero-ink);
         font-variant-numeric: tabular-nums;
         line-height: 1.1;
+        padding-bottom: var(--s-2);
+        border-bottom: 1px solid var(--hero-ink-2);
+        box-shadow: 0 4px 0 -3px var(--hero-ink-2);
       }
 
       .hero-dark-sub {
-        font-size: 12px;
-        color: #94a3b8;
-        margin-top: 6px;
+        font-size: var(--fs-meta);
+        color: var(--hero-ink-2);
+        margin-top: var(--s-3);
+        font-variant-numeric: tabular-nums;
       }
 
       .hero-dark-sub strong {
-        color: #ffffff;
-        font-weight: 600;
+        color: var(--hero-ink);
+        font-weight: 500;
       }
 
       .hero-actions {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: var(--s-2);
       }
 
       .btn-hero-primary {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #ffffff;
-        color: #09090b !important;
+        background: var(--hero-ink);
+        color: var(--hero-bg);
         border: 0;
-        padding: 9px 16px;
-        border-radius: var(--radius-btn);
-        font-size: 12.5px;
-        font-weight: 700;
+        padding: var(--s-2) var(--s-4);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
+        font-weight: 600;
         cursor: pointer;
-        transition: background 0.15s ease, transform 0.12s ease;
+        transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
       }
 
       .btn-hero-primary:hover {
-        background: #f4f4f5;
-        transform: translateY(-1px);
+        opacity: 0.88;
+      }
+
+      .btn-hero-primary:active {
+        transform: scale(0.98);
       }
 
       .btn-hero-secondary {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        padding: 8px 14px;
-        border-radius: var(--radius-btn);
-        font-size: 12.5px;
-        font-weight: 600;
+        background: transparent;
+        color: var(--hero-ink);
+        border: 1px solid var(--hero-line);
+        padding: calc(var(--s-2) - 1px) calc(var(--s-4) - 1px);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
+        font-weight: 500;
         cursor: pointer;
-        transition: background 0.15s ease;
+        transition: background-color var(--t-fast) var(--ease);
       }
 
       .btn-hero-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
       }
 
       /* ==========================================================================
-         2. TRÍO DE TARJETAS PASTEL (De la Referencia 1)
+         2. Tarjetas de métrica
          ========================================================================== */
       .pastel-cards-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
+        gap: var(--s-3);
       }
 
       .pastel-card {
-        border-radius: var(--radius-card);
-        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: var(--r-card);
+        padding: var(--s-4);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        min-height: 115px;
-        transition: transform 0.15s ease;
-      }
-
-      .pastel-card:hover {
-        transform: translateY(-2px);
+        gap: var(--s-1);
+        min-height: 104px;
+        justify-content: center;
       }
 
       .pastel-card.green {
-        background: var(--pastel-green);
-        border: 1px solid var(--pastel-green-border);
+        background: var(--metric-income-bg);
       }
 
       .pastel-card.peach {
-        background: var(--pastel-peach);
-        border: 1px solid var(--pastel-peach-border);
+        background: var(--metric-expense-bg);
       }
 
       .pastel-card.blue {
-        background: var(--pastel-blue);
-        border: 1px solid var(--pastel-blue-border);
+        background: var(--metric-neutral-bg);
       }
 
       .pastel-card-top {
@@ -953,177 +675,204 @@
       }
 
       .pastel-card-title {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--text-secondary);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        color: var(--ink-2);
       }
 
       .pastel-card-icon {
-        width: 15px;
-        height: 15px;
+        width: 16px;
+        height: 16px;
+        color: var(--ink-3);
       }
-
-      .pastel-card.green .pastel-card-icon { color: var(--pastel-green-text); }
-      .pastel-card.peach .pastel-card-icon { color: var(--pastel-peach-text); }
-      .pastel-card.blue .pastel-card-icon { color: var(--pastel-blue-text); }
 
       .pastel-card-amount {
-        font-size: 21px;
-        font-weight: 800;
-        letter-spacing: -0.5px;
+        font-size: var(--fs-title);
+        font-weight: 600;
+        letter-spacing: -0.01em;
         font-variant-numeric: tabular-nums;
-        margin-top: 6px;
+        line-height: var(--lh-title);
+        color: var(--ink);
       }
 
-      .pastel-card.green .pastel-card-amount { color: var(--pastel-green-text); }
-      .pastel-card.peach .pastel-card-amount { color: var(--pastel-peach-text); }
-      .pastel-card.blue .pastel-card-amount { color: var(--pastel-blue-text); }
+      .pastel-card.green .pastel-card-amount {
+        color: var(--income);
+      }
+
+      .pastel-card.peach .pastel-card-amount {
+        color: var(--expense);
+      }
+
+      .pastel-card.blue .pastel-card-amount {
+        color: var(--accent-ink);
+      }
 
       .pastel-card-foot {
-        font-size: 11px;
-        font-weight: 600;
-        margin-top: 4px;
+        font-size: var(--fs-meta);
+        font-weight: 400;
+        color: var(--ink-3);
+        margin-top: var(--s-1);
       }
 
-      .pastel-card.green .pastel-card-foot { color: var(--pastel-green-text); opacity: 0.85; }
-      .pastel-card.peach .pastel-card-foot { color: var(--pastel-peach-text); opacity: 0.85; }
-      .pastel-card.blue .pastel-card-foot { color: var(--pastel-blue-text); opacity: 0.85; }
-
       /* ==========================================================================
-         3. GRÁFICA PRINCIPAL INTERACTIVA (Barras & Curva Continua con Tooltips)
+         3. Gráfica
          ========================================================================== */
       .chart-panel {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-card);
-        padding: 22px 24px;
-        box-shadow: var(--shadow-subtle);
-        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-card);
+        padding: var(--s-5) var(--s-6);
+        box-shadow: var(--shadow-sm);
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        gap: var(--s-4);
       }
 
       .chart-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 18px;
+        align-items: flex-start;
+        gap: var(--s-4);
         flex-wrap: wrap;
-        gap: 10px;
       }
 
       .chart-title {
-        font-size: 14.5px;
-        font-weight: 700;
-        color: var(--text-primary);
+        font-size: var(--fs-lg);
+        font-weight: 600;
+        color: var(--ink);
         margin: 0;
+        line-height: 24px;
+      }
+
+      .chart-sub {
+        font-size: var(--fs-meta);
+        color: var(--ink-3);
+        margin: var(--s-1) 0 0;
       }
 
       .chart-mode-switch {
         display: flex;
         gap: 2px;
         padding: 2px;
-        background: #f1f3f7;
-        border-radius: var(--radius-pill);
+        background: var(--surface-2);
+        border-radius: var(--r-sm);
       }
 
       .mode-switch-btn {
         border: 0;
         background: transparent;
-        color: var(--text-secondary);
-        font-size: 11px;
-        font-weight: 600;
-        padding: 4px 10px;
-        border-radius: var(--radius-pill);
+        color: var(--ink-2);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        padding: var(--s-1) var(--s-3);
+        border-radius: 6px;
         cursor: pointer;
-        transition: all 0.12s ease;
+        transition: color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
       }
 
       .mode-switch-btn.active {
-        background: #ffffff;
-        color: var(--text-primary);
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        color: var(--ink);
+        box-shadow: var(--shadow-sm);
       }
 
-      /* Contenedor interactivo del gráfico */
       .chart-interactive-stage {
         position: relative;
-        height: 180px;
+        height: 190px;
         width: 100%;
         overflow: hidden;
       }
 
-      /* Gráfica de Barras Interactivas */
       .chart-bars-wrap {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding-top: var(--s-3);
+      }
+
+      .chart-bars-row {
+        flex: 1;
+        min-height: 0;
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        height: 100%;
-        padding-top: 10px;
-        border-bottom: 1px solid var(--border-subtle);
-        gap: 16px;
+        gap: var(--s-4);
+        border-bottom: 1px solid var(--line);
       }
 
-      .chart-week-col {
+      .chart-bar-col {
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         height: 100%;
-        justify-content: flex-end;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
         cursor: pointer;
-        position: relative;
       }
 
       .chart-bar-track {
         width: 100%;
-        max-width: 44px;
+        max-width: 40px;
         height: 100%;
-        background: #f4f5f8;
-        border-radius: 8px 8px 0 0;
         display: flex;
         align-items: flex-end;
-        overflow: hidden;
+        background: transparent;
       }
 
       .chart-bar-fill {
         width: 100%;
-        background: #cbd3e1;
-        border-radius: 8px 8px 0 0;
-        transition: height 0.35s ease, background 0.15s ease, transform 0.15s ease;
+        background: var(--chart-bar);
+        border-radius: 2px 2px 0 0;
+        transition: background-color var(--t-fast) var(--ease);
       }
 
-      .chart-week-col:hover .chart-bar-fill {
-        background: #94a3b8;
-        transform: scaleY(1.02);
+      .chart-bar-col:hover .chart-bar-fill {
+        background: var(--ink-3);
       }
 
       .chart-bar-fill.active {
-        background: var(--card-dark) !important;
+        background: var(--accent);
+      }
+
+      .chart-bar-col:hover .chart-bar-fill.active {
+        background: var(--accent);
+        opacity: 0.82;
+      }
+
+      .chart-labels-row {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-4);
+        padding-top: var(--s-2);
+      }
+
+      .chart-label-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        cursor: pointer;
       }
 
       .chart-week-label {
-        font-size: 11.5px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        margin-top: 8px;
-        transition: color 0.15s ease;
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        color: var(--ink-2);
+        transition: color var(--t-fast) var(--ease);
       }
 
-      .chart-week-col:hover .chart-week-label {
-        color: var(--text-primary);
+      .chart-label-col:hover .chart-week-label {
+        color: var(--ink);
       }
 
       .chart-week-amount {
-        font-size: 11px;
         font-family: var(--font-mono);
-        color: var(--text-tertiary);
-        margin-top: 2px;
+        font-size: 11px;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
       }
 
-      /* Gráfica SVG de Curva Continua con Grilla y Ejes Claros */
       .chart-curve-svg-wrap {
         position: absolute;
         inset: 0;
@@ -1140,110 +889,101 @@
       }
 
       .curve-grid-line {
-        stroke: rgba(0, 0, 0, 0.05);
+        stroke: var(--line);
         stroke-dasharray: 4 4;
         stroke-width: 1;
       }
 
       .curve-axis-label {
-        font-size: 10px;
         font-family: var(--font-mono);
-        fill: var(--text-tertiary);
+        font-size: 10px;
+        fill: var(--ink-3);
       }
 
       .curve-point-dot {
         cursor: pointer;
-        transition: r 0.18s cubic-bezier(0.4, 0, 0.2, 1), stroke-width 0.18s ease;
+        transition: r var(--t-fast) var(--ease), stroke-width var(--t-fast) var(--ease);
       }
 
       .curve-point-dot:hover {
-        r: 6.5;
-        stroke-width: 3.5;
+        r: 6;
+        stroke-width: 3;
       }
 
-      /* Tooltip flotante interactivo (Con límite seguro dentro del contenedor para no desbordarse) */
       .chart-tooltip-floating {
         position: absolute;
         bottom: 130px;
         left: 50%;
         transform: translateX(-50%);
-        background: var(--card-dark);
-        color: #ffffff;
-        padding: 6px 12px;
-        border-radius: var(--radius-btn);
-        font-size: 11.5px;
-        font-weight: 600;
+        background: var(--ink);
+        color: var(--canvas);
+        padding: 6px var(--s-3);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-meta);
+        font-weight: 500;
         white-space: nowrap;
         pointer-events: none;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+        box-shadow: var(--shadow-md);
         opacity: 0;
-        transition: opacity 0.15s ease, transform 0.15s ease;
+        transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
         z-index: 10;
         max-width: calc(100% - 24px);
+        font-variant-numeric: tabular-nums;
       }
 
       .chart-tooltip-floating.show {
         opacity: 1;
-        transform: translateX(-50%) translateY(-6px);
-      }
-
-      .chart-tooltip-floating::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        border: 5px solid transparent;
-        border-top-color: var(--card-dark);
+        transform: translateX(-50%) translateY(-4px);
       }
 
       /* ==========================================================================
-         4. MOVIMIENTOS RECIENTES (De la Referencia 2: Filas con separadores)
+         4. Movimientos recientes
          ========================================================================== */
       .transactions-card {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-card);
-        padding: 20px 22px;
-        box-shadow: var(--shadow-subtle);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-card);
+        padding: var(--s-5) var(--s-5) var(--s-4);
+        box-shadow: var(--shadow-sm);
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
       }
 
       .tx-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 6px;
+        gap: var(--s-4);
+        padding-bottom: var(--s-3);
       }
 
       .tx-title {
-        font-size: 14.5px;
-        font-weight: 700;
-        color: var(--text-primary);
+        font-size: var(--fs-lg);
+        font-weight: 600;
+        color: var(--ink);
         margin: 0;
+        line-height: 24px;
       }
 
       .tx-view-all {
         background: transparent;
         border: 0;
-        color: var(--color-accent);
-        font-size: 12px;
-        font-weight: 600;
+        color: var(--accent-ink);
+        font-size: var(--fs-meta);
+        font-weight: 500;
         cursor: pointer;
         padding: 0;
+        transition: color var(--t-fast) var(--ease);
       }
 
       .tx-view-all:hover {
-        text-decoration: underline;
+        color: var(--accent);
       }
 
       .tx-list-clean {
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
         flex: 1;
       }
 
@@ -1251,37 +991,40 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 9px 0;
-        border-bottom: 1px solid var(--border-subtle);
+        gap: var(--s-4);
+        padding: var(--s-3) 0;
+        border-bottom: 1px solid var(--line);
         cursor: pointer;
-        transition: background 0.12s ease;
       }
 
       .tx-row:last-child {
         border-bottom: 0;
-        padding-bottom: 2px;
       }
 
-      .tx-row:hover {
-        background: rgba(0, 0, 0, 0.015);
+      .tx-row:hover .tx-concept {
+        color: var(--accent-ink);
       }
 
       .tx-left {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: var(--s-3);
         min-width: 0;
       }
 
       .tx-icon-box {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: #f4f6fa;
+        width: 28px;
+        height: 28px;
+        border-radius: var(--r-xs);
+        background: var(--surface-2);
         display: grid;
         place-items: center;
-        color: var(--text-secondary);
+        color: var(--ink-3);
         flex-shrink: 0;
+      }
+
+      .tx-icon-box.income {
+        color: var(--income);
       }
 
       .tx-details {
@@ -1291,77 +1034,79 @@
       }
 
       .tx-concept {
-        font-size: 12.5px;
-        font-weight: 600;
-        color: var(--text-primary);
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        color: var(--ink);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        line-height: 18px;
+        transition: color var(--t-fast) var(--ease);
       }
 
       .tx-date-category {
         font-size: 11px;
-        color: var(--text-secondary);
-        margin-top: 1px;
+        color: var(--ink-3);
+        line-height: 16px;
       }
 
       .tx-amount {
-        font-size: 13px;
-        font-weight: 700;
+        font-size: var(--fs-sm);
+        font-weight: 600;
         font-variant-numeric: tabular-nums;
         flex-shrink: 0;
+        color: var(--ink);
       }
 
       .tx-amount.expense {
-        color: var(--text-primary);
+        color: var(--ink);
       }
 
       .tx-amount.income {
-        color: var(--color-income);
+        color: var(--income);
       }
 
       /* ==========================================================================
-         5. MÓDULO OSCURO DE PROGRESO (De la Referencia 2 - Interactivo)
+         5. Widget oscuro (mes en curso)
          ========================================================================== */
       .progress-dark-widget {
-        background: var(--card-dark);
-        color: #ffffff;
-        border-radius: var(--radius-card);
-        padding: 16px 20px;
+        background: var(--hero-bg);
+        color: var(--hero-ink);
+        border: 1px solid var(--hero-line);
+        border-radius: var(--r-card);
+        padding: var(--s-5);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 10px 24px -6px rgba(23, 21, 31, 0.18);
+        gap: var(--s-4);
         cursor: default;
-        transition: transform 0.15s ease;
         flex: 1;
-      }
-
-      .progress-dark-widget:hover {
-        transform: translateY(-1px);
       }
 
       .progress-dark-info {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: 2px;
       }
 
       .progress-dark-title {
-        font-size: 11.5px;
-        font-weight: 500;
-        color: #94a3b8;
+        font-size: var(--fs-meta);
+        font-weight: 400;
+        color: var(--hero-ink-2);
       }
 
       .progress-dark-status {
-        font-size: 15.5px;
-        font-weight: 700;
-        color: #ffffff;
+        font-size: var(--fs-title);
+        font-weight: 500;
+        color: var(--hero-ink);
+        font-variant-numeric: tabular-nums;
+        line-height: var(--lh-title);
       }
 
       .progress-dark-sub {
-        font-size: 11px;
-        color: #94a3b8;
+        font-size: var(--fs-meta);
+        color: var(--hero-ink-2);
+        font-variant-numeric: tabular-nums;
       }
 
       .progress-dark-ring-box {
@@ -1382,79 +1127,104 @@
         inset: 0;
         display: grid;
         place-items: center;
-        font-size: 12px;
-        font-weight: 800;
-        color: #ffffff;
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        color: var(--hero-ink);
         font-variant-numeric: tabular-nums;
       }
 
       /* ==========================================================================
-         6. MÓDULO CELESTE DE CALIBRACIÓN (De la Referencia 1 #EAF5F5)
+         6. Nota del período
          ========================================================================== */
       .celeste-card {
-        background: var(--surface-celeste);
-        border: 1px solid var(--surface-celeste-border);
-        border-radius: var(--radius-card);
-        padding: 16px 20px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-card);
+        padding: var(--s-5);
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: var(--s-2);
       }
 
       .celeste-header {
-        font-size: 11.5px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--surface-celeste-text);
-        margin-bottom: 4px;
+        font-size: var(--fs-meta);
+        font-weight: 600;
+        color: var(--ink);
       }
 
       .celeste-body {
-        font-size: 12px;
-        line-height: 1.45;
-        color: #134e48;
+        font-size: var(--fs-sm);
+        line-height: var(--lh-text);
+        color: var(--ink-2);
+        font-variant-numeric: tabular-nums;
       }
 
       .celeste-body strong {
-        color: #042f2e;
-        font-weight: 700;
+        color: var(--ink);
+        font-weight: 600;
       }
 
       /* ==========================================================================
-         VISTAS HISTORIAL Y RESUMEN
+         Historial y resumen
          ========================================================================== */
       .white-panel {
-        background: var(--bg-surface);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-card);
-        padding: 24px;
-        box-shadow: var(--shadow-subtle);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-card);
+        padding: var(--s-6);
+        box-shadow: var(--shadow-sm);
       }
 
       .panel-header-clean {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 18px;
-        padding-bottom: 14px;
-        border-bottom: 1px solid var(--border-subtle);
+        gap: var(--s-4);
+        margin-bottom: var(--s-5);
+        padding-bottom: var(--s-4);
+        border-bottom: 1px solid var(--line);
       }
 
       .panel-title-clean {
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--text-primary);
+        font-size: var(--fs-title);
+        font-weight: 600;
+        color: var(--ink);
         margin: 0;
+        line-height: var(--lh-title);
+        letter-spacing: -0.01em;
       }
 
       .toolbar-row {
         display: flex;
-        gap: 12px;
+        gap: var(--s-2);
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: var(--s-4);
         flex-wrap: wrap;
+      }
+
+      .period-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--s-3);
+        flex-wrap: wrap;
+        margin-bottom: var(--s-5);
+      }
+
+      .date-range-group {
+        display: flex;
+        align-items: center;
+        gap: var(--s-2);
+        font-size: var(--fs-meta);
+        color: var(--ink-2);
+      }
+
+      .panel-note {
+        font-size: var(--fs-meta);
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
       }
 
       .search-input-box {
@@ -1465,99 +1235,319 @@
 
       .search-input-box input {
         width: 100%;
-        background: #f8fafc;
-        border: 1px solid var(--border-medium);
-        border-radius: var(--radius-btn);
-        padding: 8px 12px 8px 34px;
-        font-size: 13px;
-        color: var(--text-primary);
+        background: var(--surface-2);
+        border: 1px solid transparent;
+        border-radius: var(--r-sm);
+        padding: var(--s-2) var(--s-3) var(--s-2) var(--s-8);
+        font-size: var(--fs-sm);
+        color: var(--ink);
+        transition: border-color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
+      }
+
+      .search-input-box input::placeholder {
+        color: var(--ink-3);
       }
 
       .search-input-box input:focus {
-        background: #ffffff;
-        border-color: var(--color-accent);
+        background: var(--surface);
+        border-color: var(--accent);
         outline: none;
       }
 
       .search-icon-pos {
         position: absolute;
-        left: 10px;
+        left: var(--s-3);
         top: 50%;
         transform: translateY(-50%);
-        color: var(--text-tertiary);
+        color: var(--ink-3);
         pointer-events: none;
+        display: flex;
       }
 
       .filter-pills-bar {
         display: flex;
-        gap: 6px;
+        gap: var(--s-1);
       }
 
       .pill-filter-btn {
-        background: #f1f3f7;
-        border: 1px solid transparent;
-        color: var(--text-secondary);
-        font-size: 12px;
-        font-weight: 600;
-        padding: 6px 12px;
-        border-radius: var(--radius-pill);
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink-2);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        padding: 5px var(--s-3);
+        border-radius: var(--r-sm);
         cursor: pointer;
-        transition: all 0.12s ease;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease),
+          border-color var(--t-fast) var(--ease);
       }
 
       .pill-filter-btn:hover {
-        background: #e2e8f0;
-        color: var(--text-primary);
+        background: var(--surface-2);
+        color: var(--ink);
       }
 
       .pill-filter-btn.active {
-        background: var(--card-dark);
-        color: #ffffff;
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ink-invert);
       }
 
-      /* Tabla limpia */
+      .quick-period-pills {
+        display: flex;
+        gap: var(--s-1);
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .quick-pill-btn {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink-2);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        padding: 5px var(--s-3);
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease),
+          border-color var(--t-fast) var(--ease);
+      }
+
+      .quick-pill-btn:hover {
+        background: var(--surface-2);
+        color: var(--ink);
+      }
+
+      .quick-pill-btn.active {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ink-invert);
+      }
+
+      .quick-date-selector {
+        display: flex;
+        align-items: center;
+        gap: var(--s-2);
+      }
+
+      .date-helper-chip {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink-2);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        padding: 5px var(--s-3);
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+      }
+
+      .date-helper-chip:hover {
+        background: var(--surface-2);
+        color: var(--ink);
+      }
+
+      .date-helper-chip.active {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--ink-invert);
+      }
+
+      /* Inputs de fecha */
+      input[type="date"] {
+        font-family: var(--font-main);
+        color-scheme: light;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: var(--s-2) var(--s-3);
+        color: var(--ink);
+        font-weight: 500;
+        font-size: var(--fs-sm);
+        font-variant-numeric: tabular-nums;
+        cursor: pointer;
+        transition: border-color var(--t-fast) var(--ease);
+      }
+
+      :root[data-theme="dark"] input[type="date"] {
+        color-scheme: dark;
+      }
+
+      input[type="date"]:hover {
+        border-color: var(--line-strong);
+      }
+
+      input[type="date"]:focus {
+        border-color: var(--accent);
+        outline: none;
+      }
+
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.55;
+        transition: opacity var(--t-fast) var(--ease);
+      }
+
+      input[type="date"]:hover::-webkit-calendar-picker-indicator {
+        opacity: 0.9;
+      }
+
       .clean-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: var(--fs-sm);
       }
 
       .clean-table th {
         text-align: left;
-        padding: 10px 12px;
-        font-size: 11.5px;
-        font-weight: 600;
-        color: var(--text-tertiary);
-        border-bottom: 1px solid var(--border-subtle);
+        padding: var(--s-2) var(--s-3);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        color: var(--ink-3);
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
       }
 
       .clean-table td {
-        padding: 12px 12px;
-        border-bottom: 1px solid var(--border-subtle);
-        color: var(--text-primary);
+        padding: var(--s-3);
+        border-bottom: 1px solid var(--line);
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .clean-table tbody tr:last-child td {
+        border-bottom: 0;
       }
 
       .clean-table tr:hover td {
-        background: #fbfcfd;
+        background: var(--surface-2);
+      }
+
+      .table-row {
+        cursor: pointer;
+      }
+
+      .table-row td:first-child {
+        border-radius: var(--r-sm) 0 0 var(--r-sm);
+      }
+
+      .table-row td:last-child {
+        border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      }
+
+      .table-cell-concept .tx-left {
+        gap: var(--s-3);
+      }
+
+      .table-concept-name {
+        font-weight: 500;
+        color: var(--ink);
+      }
+
+      .table-date {
+        color: var(--ink-2);
+        white-space: nowrap;
+      }
+
+      .table-origen {
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+
+      .table-amount {
+        text-align: right;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .table-amount.income {
+        color: var(--income);
+      }
+
+      .table-empty {
+        text-align: center;
+        color: var(--ink-3);
+        padding: var(--s-8) 0 !important;
+      }
+
+      .empty-line {
+        display: grid;
+        place-items: center;
+        min-height: 120px;
+        padding: var(--s-4) var(--s-3);
+        text-align: center;
+        color: var(--ink-3);
+        font-size: var(--fs-sm);
+        line-height: var(--lh-text);
       }
 
       /* ==========================================================================
-         MODALES: REGISTRO Y DETALLE
+         Detalle del movimiento
+         ========================================================================== */
+      .detail-list {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: var(--s-5);
+        border-top: 1px solid var(--line);
+      }
+
+      .detail-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--s-4);
+        padding: var(--s-3) 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .detail-key {
+        font-size: var(--fs-meta);
+        color: var(--ink-3);
+        flex-shrink: 0;
+      }
+
+      .detail-value {
+        font-size: var(--fs-base);
+        font-weight: 500;
+        color: var(--ink);
+        text-align: right;
+        word-break: break-word;
+      }
+
+      .detail-value.income {
+        color: var(--income);
+      }
+
+      .modal-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--s-3);
+        flex-wrap: wrap;
+      }
+
+      .modal-actions-right {
+        display: flex;
+        align-items: center;
+        gap: var(--s-2);
+        margin-left: auto;
+      }
+
+      /* ==========================================================================
+         Modales
          ========================================================================== */
       .modal-overlay {
         position: fixed;
         inset: 0;
         z-index: 2500;
-        background: rgba(23, 21, 31, 0.45);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(15, 15, 18, 0.5);
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
+        padding: var(--s-6);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease, visibility 0.2s ease;
+        transition: opacity var(--t-base) var(--ease), visibility var(--t-base) var(--ease);
       }
 
       .modal-overlay.open {
@@ -1568,160 +1558,229 @@
       .modal-card {
         width: 440px;
         max-width: 100%;
-        background: #ffffff;
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-hero);
-        box-shadow: 0 20px 48px -10px rgba(23, 21, 31, 0.2);
-        overflow: hidden;
+        max-height: 100%;
+        overflow-y: auto;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-panel);
+        box-shadow: var(--shadow-lg);
       }
 
       .modal-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 18px 22px;
-        border-bottom: 1px solid var(--border-subtle);
+        gap: var(--s-4);
+        padding: var(--s-4) var(--s-6);
+        border-bottom: 1px solid var(--line);
       }
 
       .modal-title {
         margin: 0;
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--text-primary);
+        font-size: var(--fs-lg);
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 24px;
       }
 
       .modal-close {
         width: 28px;
         height: 28px;
-        border-radius: var(--radius-pill);
+        border-radius: var(--r-sm);
         border: 0;
-        background: #f1f3f7;
-        color: var(--text-secondary);
+        background: transparent;
+        color: var(--ink-2);
         display: grid;
         place-items: center;
         cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+      }
+
+      .modal-close:hover {
+        background: var(--surface-2);
+        color: var(--ink);
       }
 
       .modal-body {
-        padding: 22px;
+        padding: var(--s-6);
       }
 
       .modal-type-switch {
         display: flex;
-        gap: 4px;
-        background: #f1f3f7;
-        padding: 3px;
-        border-radius: var(--radius-pill);
-        margin-bottom: 18px;
+        gap: 2px;
+        background: var(--surface-2);
+        padding: 2px;
+        border-radius: var(--r-sm);
+        margin-bottom: var(--s-5);
       }
 
       .switch-btn {
         flex: 1;
         border: 0;
         background: transparent;
-        padding: 7px;
-        border-radius: var(--radius-pill);
-        font-size: 12.5px;
-        font-weight: 700;
-        color: var(--text-secondary);
+        padding: var(--s-2);
+        border-radius: 6px;
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        color: var(--ink-2);
         cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+      }
+
+      .switch-btn.active.expense,
+      .switch-btn.active.income {
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        font-weight: 600;
       }
 
       .switch-btn.active.expense {
-        background: #ffffff;
-        color: var(--color-expense);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        color: var(--expense);
       }
 
       .switch-btn.active.income {
-        background: #ffffff;
-        color: var(--color-income);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        color: var(--income);
       }
 
       .form-row {
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        margin-bottom: 14px;
+        gap: var(--s-2);
+        margin-bottom: var(--s-4);
       }
 
       .form-row label {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--text-secondary);
+        font-size: var(--fs-meta);
+        font-weight: 500;
+        color: var(--ink-2);
       }
 
-      .form-row input, .form-row select {
-        background: #f8fafc;
-        border: 1px solid var(--border-medium);
-        border-radius: var(--radius-btn);
-        padding: 9px 12px;
-        font-size: 13.5px;
-        color: var(--text-primary);
+      .form-row input,
+      .form-row select {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: var(--s-2) var(--s-3);
+        font-size: var(--fs-base);
+        color: var(--ink);
+        transition: border-color var(--t-fast) var(--ease);
       }
 
-      .form-row input:focus, .form-row select:focus {
-        background: #ffffff;
-        border-color: var(--color-accent);
+      .form-row input:focus,
+      .form-row select:focus {
+        border-color: var(--accent);
         outline: none;
       }
 
       .modal-foot {
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
-        margin-top: 18px;
+        gap: var(--s-2);
+        padding: var(--s-4) var(--s-6);
+        border-top: 1px solid var(--line);
       }
 
       .btn-cancel {
-        background: #f1f3f7;
-        border: 0;
-        color: var(--text-secondary);
-        padding: 8px 16px;
-        border-radius: var(--radius-btn);
-        font-size: 12.5px;
-        font-weight: 600;
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink-2);
+        padding: var(--s-2) var(--s-4);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
+        font-weight: 500;
         cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+      }
+
+      .btn-cancel:hover {
+        background: var(--surface-2);
+        color: var(--ink);
       }
 
       .btn-submit {
-        background: var(--card-dark);
-        border: 0;
-        color: #ffffff;
-        padding: 8px 18px;
-        border-radius: var(--radius-btn);
-        font-size: 12.5px;
-        font-weight: 700;
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        color: var(--ink-invert);
+        padding: var(--s-2) var(--s-4);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
+        font-weight: 600;
         cursor: pointer;
+        transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+      }
+
+      .btn-submit:hover {
+        opacity: 0.88;
+      }
+
+      .btn-submit:active {
+        transform: scale(0.98);
       }
 
       .btn-danger {
-        background: var(--color-expense);
-        border: 0;
-        color: #ffffff;
-        padding: 8px 16px;
-        border-radius: var(--radius-btn);
-        font-size: 12.5px;
+        background: transparent;
+        border: 1px solid var(--expense);
+        color: var(--expense);
+        padding: var(--s-2) var(--s-4);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
         font-weight: 600;
+        cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease);
+      }
+
+      .btn-danger:hover {
+        background: var(--expense);
+        color: #ffffff;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        padding: var(--s-2) var(--s-4);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
+        font-weight: 500;
         cursor: pointer;
       }
 
-      /* TOAST */
+      .example-btn {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        color: var(--ink-2);
+        padding: var(--s-2) var(--s-3);
+        font-size: var(--fs-sm);
+        cursor: pointer;
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+      }
+
+      .example-btn:hover {
+        background: var(--surface-2);
+        color: var(--ink);
+      }
+
+      /* ==========================================================================
+         Toast
+         ========================================================================== */
       .toast {
         position: fixed;
-        bottom: 24px;
+        bottom: var(--s-6);
         left: 50%;
-        transform: translateX(-50%) translateY(10px);
-        background: var(--card-dark);
-        color: #ffffff;
-        padding: 9px 18px;
-        border-radius: var(--radius-pill);
-        font-size: 12.5px;
-        font-weight: 600;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        transform: translateX(-50%) translateY(8px);
+        background: var(--ink);
+        color: var(--canvas);
+        padding: var(--s-2) var(--s-5);
+        border-radius: var(--r-sm);
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        box-shadow: var(--shadow-md);
         opacity: 0;
-        transition: all 0.2s ease;
+        transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
         z-index: 3000;
         pointer-events: none;
       }
@@ -1731,22 +1790,51 @@
         transform: translateX(-50%) translateY(0);
       }
 
-      /* RESPONSIVE (BREAKPOINT MÁS INTELIGENTE) */
-      @media (max-width: 800px) {
+      /* ==========================================================================
+         Responsive
+         ========================================================================== */
+      @media (max-width: 900px) {
         .dash-layout-grid {
           grid-template-columns: 1fr;
         }
       }
 
-      @media (max-width: 580px) {
+      @media (max-width: 640px) {
         .pastel-cards-grid {
           grid-template-columns: 1fr;
         }
+
         .hero-amount {
           font-size: 28px;
         }
+
+        .topbar {
+          padding: 0 var(--s-4);
+        }
+
+        .main-app {
+          padding: 0 var(--s-4) var(--s-10);
+        }
+
+        .white-panel,
+        .modal-body {
+          padding: var(--s-4);
+        }
+
+        .brand {
+          display: none;
+        }
       }
-    </style>
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+</style>
   </head>
   <body>
     <!-- ===================================================================
@@ -1831,19 +1919,20 @@
               <div class="hero-dark-card">
                 <div class="hero-dark-top">
                   <div class="hero-dark-title-wrap">
-                    <span class="hero-dark-eyebrow">Presupuesto Disponible · Octubre 2026</span>
+                    <span class="hero-dark-eyebrow">Balance registrado</span>
+                    <span class="hero-dark-period" id="dash-periodo">Octubre 2026</span>
                   </div>
                   <div class="hero-cycle-badge">
                     <span class="hero-cycle-dot"></span>
-                    <span>Día 22 de 31</span>
+                    <span id="dash-dia-mes">Día 1 de 31</span>
                   </div>
                 </div>
 
                 <div class="hero-dark-amount-row">
                   <div>
-                    <div class="hero-amount" id="dash-presupuesto-restante">$ 1.360.000 COP</div>
-                    <div class="hero-dark-sub">
-                      Margen sugerido: <strong>$ 151.100 / día</strong> para los 9 días restantes.
+                    <div class="hero-amount" id="dash-balance">+ $ 0</div>
+                    <div class="hero-dark-sub" id="dash-hero-sub">
+                      Ingresos <strong>+ $ 0</strong> menos gastos <strong>− $ 0</strong>
                     </div>
                   </div>
 
@@ -1853,59 +1942,46 @@
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                       </svg>
-                      <span>+ Gasto</span>
+                      <span>Gasto</span>
                     </button>
                     <button class="btn-hero-secondary" id="btn-hero-ingreso" type="button">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <line x1="12" y1="19" x2="12" y2="5"></line>
                         <polyline points="5 12 12 5 19 12"></polyline>
                       </svg>
-                      <span>+ Ingreso</span>
+                      <span>Ingreso</span>
                     </button>
                   </div>
                 </div>
               </div>
 
-              <!-- 2. TRÍO DE TARJETAS PASTEL -->
+              <!-- 2. TRÍO DE MÉTRICAS -->
               <div class="pastel-cards-grid">
-                <!-- Tarjeta Verde Pastel: Ingresos -->
+                <!-- Ingresos -->
                 <div class="pastel-card green">
                   <div class="pastel-card-top">
-                    <span class="pastel-card-title">Total Ingresos</span>
-                    <svg class="pastel-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                      <polyline points="17 6 23 6 23 12"></polyline>
-                    </svg>
+                    <span class="pastel-card-title">Ingresos</span>
                   </div>
-                  <div class="pastel-card-amount" id="dash-ingresos-total">+$ 3.500.000</div>
-                  <div class="pastel-card-foot">Nómina + honorarios</div>
+                  <div class="pastel-card-amount" id="dash-ingresos-total">+ $ 0</div>
+                  <div class="pastel-card-foot" id="dash-ingresos-foot">0 registros</div>
                 </div>
 
-                <!-- Tarjeta Durazno Pastel: Gastos -->
+                <!-- Gastos -->
                 <div class="pastel-card peach">
                   <div class="pastel-card-top">
-                    <span class="pastel-card-title">Total Gastos</span>
-                    <svg class="pastel-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
-                      <polyline points="17 18 23 18 23 12"></polyline>
-                    </svg>
+                    <span class="pastel-card-title">Gastos</span>
                   </div>
-                  <div class="pastel-card-amount" id="dash-gastos-total">$ 1.840.000</div>
-                  <div class="pastel-card-foot">&darr; 8% vs mes anterior</div>
+                  <div class="pastel-card-amount" id="dash-gastos-total">− $ 0</div>
+                  <div class="pastel-card-foot" id="dash-gastos-foot">0 registros</div>
                 </div>
 
-                <!-- Tarjeta Azul Pastel: Balance registrado -->
+                <!-- Registros -->
                 <div class="pastel-card blue">
                   <div class="pastel-card-top">
-                    <span class="pastel-card-title">Balance registrado</span>
-                    <svg class="pastel-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="12" y1="8" x2="12" y2="12"></line>
-                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
+                    <span class="pastel-card-title">Registros</span>
                   </div>
-                  <div class="pastel-card-amount">+$ 1.660.000</div>
-                  <div class="pastel-card-foot">Superávit del mes</div>
+                  <div class="pastel-card-amount" id="dash-registros-total">0</div>
+                  <div class="pastel-card-foot" id="dash-registros-foot">en el período</div>
                 </div>
               </div>
             </div>
@@ -1930,115 +2006,68 @@
               <div class="chart-panel">
                 <div class="chart-header">
                   <div>
-                    <h3 class="chart-title">Evolución de gastos por semana</h3>
-                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
-                      Pasa el cursor para ver el desglose interactivo
-                    </div>
+                    <h3 class="chart-title">Gasto por semana</h3>
+                    <p class="chart-sub" id="dash-chart-sub">Mes en curso</p>
                   </div>
                   <div class="chart-mode-switch">
                     <button class="mode-switch-btn active" id="btn-mode-bars" type="button">Barras</button>
-                    <button class="mode-switch-btn" id="btn-mode-curve" type="button">Curva de Flujo</button>
+                    <button class="mode-switch-btn" id="btn-mode-curve" type="button">Curva</button>
                   </div>
                 </div>
 
                 <div class="chart-interactive-stage">
-                  <!-- MODO 1: BARRAS INTERACTIVAS -->
+                  <!-- MODO 1: BARRAS -->
                   <div class="chart-bars-wrap" id="dash-chart-bars">
                     <!-- Inyectado por JS -->
                   </div>
 
-                  <!-- MODO 2: CURVA CONTINUA SVG -->
+                  <!-- MODO 2: CURVA -->
                   <div class="chart-curve-svg-wrap" id="dash-chart-curve">
-                    <svg class="curve-svg" viewBox="0 0 540 170" preserveAspectRatio="none" id="curve-svg-el">
-                      <defs>
-                        <linearGradient id="curve-gradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stop-color="var(--color-accent)" stop-opacity="0.25"></stop>
-                          <stop offset="60%" stop-color="var(--color-accent)" stop-opacity="0.06"></stop>
-                          <stop offset="100%" stop-color="var(--color-accent)" stop-opacity="0"></stop>
-                        </linearGradient>
-                      </defs>
-
-                      <!-- Líneas de referencia horizontal (Ejes Y) -->
-                      <line x1="45" y1="25" x2="520" y2="25" class="curve-grid-line" />
-                      <text x="10" y="29" class="curve-axis-label">$600k</text>
-
-                      <line x1="45" y1="65" x2="520" y2="65" class="curve-grid-line" />
-                      <text x="10" y="69" class="curve-axis-label">$400k</text>
-
-                      <line x1="45" y1="105" x2="520" y2="105" class="curve-grid-line" />
-                      <text x="10" y="109" class="curve-axis-label">$200k</text>
-
-                      <line x1="45" y1="140" x2="520" y2="140" stroke="var(--border-subtle)" stroke-width="1" />
-                      <text x="15" y="143" class="curve-axis-label">$0</text>
-
-                      <!-- Etiquetas de semanas en eje X -->
-                      <text x="60" y="158" class="curve-axis-label" text-anchor="middle" font-weight="600">Sem 1</text>
-                      <text x="200" y="158" class="curve-axis-label" text-anchor="middle" font-weight="600">Sem 2</text>
-                      <text x="340" y="158" class="curve-axis-label" text-anchor="middle" font-weight="600">Sem 3</text>
-                      <text x="480" y="158" class="curve-axis-label" text-anchor="middle" font-weight="600" fill="#10b981">Sem 4 (hoy)</text>
-
-                      <!-- Área degradada continua -->
-                      <path
-                        d="M 60 140 L 60 55 C 130 50, 160 42, 200 40 C 270 36, 300 20, 340 18 C 400 45, 440 95, 480 102 L 480 140 Z"
-                        fill="url(#curve-gradient)"
-                      />
-                      <!-- Línea de trazado continua -->
-                      <path
-                        d="M 60 55 C 130 50, 160 42, 200 40 C 270 36, 300 20, 340 18 C 400 45, 440 95, 480 102"
-                        fill="none"
-                        stroke="var(--color-accent)"
-                        stroke-width="2.5"
-                        stroke-linecap="round"
-                      />
-                      <!-- Puntos interactivos con halos -->
-                      <circle class="curve-point-dot" cx="60" cy="55" r="5" fill="var(--bg-surface)" stroke="var(--color-accent)" stroke-width="2.5" data-point="0" />
-                      <circle class="curve-point-dot" cx="200" cy="40" r="5" fill="var(--bg-surface)" stroke="var(--color-accent)" stroke-width="2.5" data-point="1" />
-                      <circle class="curve-point-dot" cx="340" cy="18" r="5" fill="var(--bg-surface)" stroke="var(--color-accent)" stroke-width="2.5" data-point="2" />
-                      <circle class="curve-point-dot" cx="480" cy="102" r="6" fill="#10b981" stroke="var(--color-accent)" stroke-width="2.5" data-point="3" />
+                    <svg class="curve-svg" viewBox="0 0 540 180" preserveAspectRatio="none" id="curve-svg-el">
+                      <!-- Inyectado por JS -->
                     </svg>
                   </div>
 
-                  <!-- Tooltip flotante interactivo (Con límite inteligente para no desbordar a la izquierda) -->
-                  <div class="chart-tooltip-floating" id="chart-floating-tooltip">
-                    Semana 1: $ 480.000 COP
-                  </div>
+                  <!-- Tooltip -->
+                  <div class="chart-tooltip-floating" id="chart-floating-tooltip"></div>
                 </div>
               </div>
             </div>
 
-            <!-- FILA 2 - DERECHA: PROGRESO MENSUAL + RITMO Y PROYECCIÓN (Alineados a la par con la gráfica) -->
+            <!-- FILA 2 - DERECHA -->
             <div class="dash-area-bottom-right">
-              <!-- Módulo Oscuro de Progreso -->
-              <div class="progress-dark-widget" id="progress-widget-box" title="Presupuesto disponible vs ejecutado">
+              <!-- Mes en curso -->
+              <div class="progress-dark-widget" id="progress-widget-box">
                 <div class="progress-dark-info">
-                  <span class="progress-dark-title">Presupuesto mensual</span>
-                  <span class="progress-dark-status">57.5% Consumido</span>
-                  <span class="progress-dark-sub">$ 1.840.000 de $ 3.200.000 (Holgura: +13.5%)</span>
+                  <span class="progress-dark-title">Mes en curso</span>
+                  <span class="progress-dark-status" id="dash-dia-status">1 de 31 días</span>
+                  <span class="progress-dark-sub" id="dash-dia-sub">Quedan 30 días</span>
                 </div>
                 <div class="progress-dark-ring-box">
                   <svg class="progress-svg" viewBox="0 0 56 56">
-                    <circle cx="28" cy="28" r="23" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="4.5" />
+                    <circle cx="28" cy="28" r="23" fill="none" stroke="var(--hero-line)" stroke-width="4" />
                     <circle
+                      id="dash-dia-ring"
                       cx="28"
                       cy="28"
                       r="23"
                       fill="none"
-                      stroke="#34d399"
-                      stroke-width="4.5"
+                      stroke="var(--accent)"
+                      stroke-width="4"
                       stroke-dasharray="144.51"
-                      stroke-dashoffset="61.41"
+                      stroke-dashoffset="144.51"
                       stroke-linecap="round"
                     />
                   </svg>
-                  <div class="progress-ring-text">58%</div>
+                  <div class="progress-ring-text" id="dash-dia-pct">0%</div>
                 </div>
               </div>
 
-              <!-- Módulo Celeste de Calibración / Proyección -->
+              <!-- Promedio diario -->
               <div class="celeste-card">
-                <div class="celeste-header">Ritmo de Gasto y Proyección</div>
-                <div class="celeste-body">
-                  Tu gasto promedio diario es de <strong>$ 83.600</strong> (techo: $ 103.200). A este ritmo proyectas un excedente libre de <strong>$ 380.000 COP</strong> para tu reserva.
+                <div class="celeste-header">Promedio diario</div>
+                <div class="celeste-body" id="dash-promedio">
+                  Aún no hay movimientos registrados en el período.
                 </div>
               </div>
             </div>
@@ -2049,7 +2078,7 @@
         <section class="tab-content" id="tab-historial" role="tabpanel">
           <div class="white-panel">
             <div class="panel-header-clean">
-              <h2 class="panel-title-clean">Historial de Movimientos</h2>
+              <h2 class="panel-title-clean">Movimientos</h2>
               <button class="btn-submit" id="btn-historial-nuevo" type="button">
                 + Nuevo movimiento
               </button>
@@ -2062,7 +2091,7 @@
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input id="filtro-busqueda" type="text" placeholder="Buscar por concepto o comercio..." />
+                <input id="filtro-busqueda" type="text" placeholder="Buscar por concepto" aria-label="Buscar movimientos por concepto" />
               </div>
 
               <div class="filter-pills-bar">
@@ -2072,8 +2101,8 @@
               </div>
             </div>
 
-            <!-- SELECTORES DE PERÍODO RÁPIDO CON FILOSOFÍA ELEGANTE -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+            <!-- SELECTORES DE PERÍODO -->
+            <div class="period-row">
               <div class="quick-period-pills">
                 <button class="quick-pill-btn active" data-range="este-mes" type="button">Este mes</button>
                 <button class="quick-pill-btn" data-range="mes-anterior" type="button">Mes anterior</button>
@@ -2081,11 +2110,11 @@
                 <button class="quick-pill-btn" data-range="todo" type="button">Todo el tiempo</button>
               </div>
 
-              <div style="display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-secondary);">
-                <span>Desde:</span>
-                <input type="date" id="filtro-desde" />
-                <span>Hasta:</span>
-                <input type="date" id="filtro-hasta" />
+              <div class="date-range-group">
+                <span>Desde</span>
+                <input type="date" id="filtro-desde" aria-label="Fecha desde" />
+                <span>Hasta</span>
+                <input type="date" id="filtro-hasta" aria-label="Fecha hasta" />
                 <button class="btn-cancel" id="btn-filtrar-fechas" type="button">Filtrar</button>
                 <button class="btn-cancel" id="btn-limpiar-filtros" type="button">Limpiar</button>
               </div>
@@ -2111,41 +2140,41 @@
         <section class="tab-content" id="tab-resumen" role="tabpanel">
           <div class="white-panel">
             <div class="panel-header-clean">
-              <h2 class="panel-title-clean">Resumen Contable Consolidado</h2>
-              <span style="font-size: 12px; color: var(--text-secondary);" id="resumen-rango">Todo el historial</span>
+              <h2 class="panel-title-clean">Resumen del período</h2>
+              <span class="panel-note" id="resumen-rango">Todo el historial</span>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 10px;">
+            <div class="period-row">
               <div class="quick-period-pills">
                 <button class="quick-pill-btn active" data-res-range="este-mes" type="button">Este mes</button>
                 <button class="quick-pill-btn" data-res-range="mes-anterior" type="button">Mes anterior</button>
                 <button class="quick-pill-btn" data-res-range="todo" type="button">Todo el tiempo</button>
               </div>
 
-              <div style="display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-secondary);">
-                <span>Desde:</span>
-                <input type="date" id="resumen-desde" />
-                <span>Hasta:</span>
-                <input type="date" id="resumen-hasta" />
+              <div class="date-range-group">
+                <span>Desde</span>
+                <input type="date" id="resumen-desde" aria-label="Fecha desde del resumen" />
+                <span>Hasta</span>
+                <input type="date" id="resumen-hasta" aria-label="Fecha hasta del resumen" />
                 <button class="btn-cancel" id="btn-resumen-filtrar" type="button">Actualizar</button>
               </div>
             </div>
 
             <div class="pastel-cards-grid">
               <div class="pastel-card green">
-                <span class="pastel-card-title">Ingresos Registrados</span>
+                <span class="pastel-card-title">Ingresos</span>
                 <div class="pastel-card-amount" id="resumen-ingresos">+ $ 0</div>
-                <div class="pastel-card-foot">Total en el período</div>
+                <div class="pastel-card-foot" id="resumen-ingresos-foot">0 registros</div>
               </div>
               <div class="pastel-card peach">
-                <span class="pastel-card-title">Gastos Registrados</span>
+                <span class="pastel-card-title">Gastos</span>
                 <div class="pastel-card-amount" id="resumen-gastos">− $ 0</div>
-                <div class="pastel-card-foot">Total en el período</div>
+                <div class="pastel-card-foot" id="resumen-gastos-foot">0 registros</div>
               </div>
               <div class="pastel-card blue">
                 <span class="pastel-card-title">Balance registrado</span>
-                <div class="pastel-card-amount" id="resumen-balance">$ 0</div>
-                <div class="pastel-card-foot">Diferencia contable</div>
+                <div class="pastel-card-amount" id="resumen-balance">+ $ 0</div>
+                <div class="pastel-card-foot">Ingresos menos gastos</div>
               </div>
             </div>
           </div>
@@ -2195,7 +2224,7 @@
 
             <!-- SELECTOR RÁPIDO DE FECHA ELEGANTE -->
             <div class="form-row">
-              <label>Fecha del movimiento</label>
+              <label for="modal-reg-fecha">Fecha del movimiento</label>
               <div class="quick-date-selector">
                 <button class="date-helper-chip active" id="chip-date-today" type="button">Hoy</button>
                 <button class="date-helper-chip" id="chip-date-yesterday" type="button">Ayer</button>
@@ -2218,17 +2247,19 @@
     <div class="modal-overlay" id="modal-detalle-tx" aria-hidden="true">
       <div class="modal-card" style="width: 380px;" role="dialog" aria-modal="true">
         <div class="modal-head">
-          <h3 class="modal-title">Detalle de Movimiento</h3>
+          <h3 class="modal-title">Detalle del movimiento</h3>
           <button class="modal-close" id="btn-cerrar-modal-detalle" type="button">✕</button>
         </div>
         <div class="modal-body">
-          <div id="tx-detalle-body" style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; margin-bottom: 20px;">
+          <div id="tx-detalle-body" class="detail-list">
             <!-- JS -->
           </div>
-          <div style="display: flex; justify-content: space-between;">
-            <button class="btn-danger" id="btn-eliminar-tx" type="button">Eliminar registro</button>
-            <button class="btn-secondary" id="btn-editar-tx" type="button">Editar</button>
-            <button class="btn-cancel" id="btn-cerrar-tx-view" type="button">Cerrar</button>
+          <div class="modal-actions">
+            <button class="btn-danger" id="btn-eliminar-tx" type="button">Eliminar</button>
+            <div class="modal-actions-right">
+              <button class="btn-secondary" id="btn-editar-tx" type="button">Editar</button>
+              <button class="btn-cancel" id="btn-cerrar-tx-view" type="button">Cerrar</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2249,7 +2280,7 @@
             
             <div class="form-row">
               <label for="edit-tx-tipo">Tipo</label>
-              <div id="edit-tx-tipo-display" style="padding: 8px 12px; background: var(--bg-secondary); border-radius: 8px; font-weight: 600; color: var(--text-primary);">
+              <div id="edit-tx-tipo-display" style="padding: 8px 12px; background: var(--surface-2); border-radius: 8px; font-weight: 600; color: var(--ink);">
                 <!-- Se rellena por JS -->
               </div>
               <input type="hidden" id="edit-tx-tipo" />
@@ -2272,7 +2303,7 @@
 
             <div class="form-row">
               <label for="edit-tx-origen">Origen</label>
-              <div id="edit-tx-origen-display" style="padding: 8px 12px; background: var(--bg-secondary); border-radius: 8px; font-size: 12px; color: var(--text-secondary);">
+              <div id="edit-tx-origen-display" style="padding: 8px 12px; background: var(--surface-2); border-radius: 8px; font-size: 12px; color: var(--ink-2);">
                 <!-- Se rellena por JS -->
               </div>
             </div>
@@ -2291,19 +2322,20 @@
          =================================================================== -->
     <div class="modal-overlay" id="command-overlay" aria-hidden="true">
       <div class="modal-card" style="width: 500px;" role="dialog" aria-modal="true">
-        <div style="display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); gap: 10px;">
+        <div style="display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); gap: 10px;">
           <input
             id="command-input"
             type="text"
             placeholder="Ej. gasté 18 mil en almuerzo..."
+            aria-label="Registro rápido en lenguaje natural"
             autocomplete="off"
             spellcheck="false"
-            style="flex: 1; border: 0; background: transparent; font-size: 14px; color: var(--text-primary); outline: none;"
+            style="flex: 1; border: 0; background: transparent; font-size: 14px; color: var(--ink); outline: none;"
           />
-          <kbd style="font-size: 10px; font-family: var(--font-mono); color: var(--text-tertiary); background: #f1f3f7; padding: 2px 6px; border-radius: 4px;">Esc</kbd>
+          <kbd style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-3); background: #f1f3f7; padding: 2px 6px; border-radius: 4px;">Esc</kbd>
         </div>
-        <div style="padding: 16px 18px; font-size: 12.5px; color: var(--text-secondary);">
-          <div style="margin-bottom: 8px; font-weight: 600; color: var(--text-primary);">Prueba escribir:</div>
+        <div style="padding: 16px 18px; font-size: 12.5px; color: var(--ink-2);">
+          <div style="margin-bottom: 8px; font-weight: 600; color: var(--ink);">Prueba escribir:</div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <button class="btn-cancel example-btn" type="button" data-example="gasté 18 mil en almuerzo" style="text-align: left; font-size: 12px;">
               &rarr; gasté 18 mil en almuerzo
@@ -2341,26 +2373,63 @@
     <script>
       const $ = (id) => document.getElementById(id);
 
+      const MESES = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+      ];
+      const MESES_CORTOS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+
       function formatNumber(valor) {
-        return Math.abs(Number(valor) || 0)
+        return Math.abs(Math.round(Number(valor) || 0))
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       }
 
-      function formatCOP(valor) {
-        const n = Number(valor) || 0;
-        const sign = n < 0 ? "−" : "+";
-        return `${sign} $ ${formatNumber(n)}`;
+      // Cifra sin signo: $ 1.840.000
+      function formatMoney(valor) {
+        return `$ ${formatNumber(valor)}`;
+      }
+
+      // Cifra con signo explícito: + $ 3.500.000 / − $ 1.840.000
+      function formatSigned(valor) {
+        const n = Math.round(Number(valor) || 0);
+        return `${n < 0 ? "−" : "+"} $ ${formatNumber(n)}`;
+      }
+
+      function plural(n, singular, varios) {
+        return `${n} ${n === 1 ? singular : varios}`;
+      }
+
+      function fechaCorta(fecha) {
+        const [, m, d] = String(fecha).split("-").map(Number);
+        return `${d} ${MESES_CORTOS[m - 1]}`;
+      }
+
+      function rangoTexto(desde, hasta) {
+        const f = (v) => {
+          const [y, m, d] = v.split("-").map(Number);
+          return `${d} ${MESES_CORTOS[m - 1]} ${y}`;
+        };
+        if (desde && hasta) return `${f(desde)} — ${f(hasta)}`;
+        if (desde) return `Desde ${f(desde)}`;
+        if (hasta) return `Hasta ${f(hasta)}`;
+        return "Todo el historial";
+      }
+
+      // Fecha local en formato ISO (YYYY-MM-DD). Nunca usar toISOString():
+      // desplaza un día en zonas horarias negativas después de las 19:00.
+      function dateToISO(d) {
+        return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
       }
 
       function todayStr() {
-        return new Date().toISOString().split("T")[0];
+        return dateToISO(new Date());
       }
 
       function yesterdayStr() {
         const d = new Date();
         d.setDate(d.getDate() - 1);
-        return d.toISOString().split("T")[0];
+        return dateToISO(d);
       }
 
       function toast(message) {
@@ -2370,13 +2439,88 @@
         setTimeout(() => el.classList.remove("show"), 2200);
       }
 
+      // ---------------------------------------------------------------------
+      // SOLO PARA LA VISTA PREVIA EN NAVEGADOR (sin Tauri).
+      // La app real siempre lee de SQLite por IPC; esto solo permite revisar
+      // el diseño abriendo dist/index.html directamente en un navegador.
+      // ---------------------------------------------------------------------
+      let demoCache = null;
+
+      function demoMovimientos() {
+        if (demoCache) return demoCache;
+        const hoy = new Date();
+        const y = hoy.getFullYear();
+        const m = hoy.getMonth();
+        const previa = new Date(y, m - 1, 1);
+
+        const filas = [
+          [y, m, 2, "ingreso", 3200000, "Nómina del mes", "formulario"],
+          [y, m, 3, "gasto", 1250000, "Arriendo apartamento", "formulario"],
+          [y, m, 3, "gasto", 98000, "Internet fibra óptica", "mensaje"],
+          [y, m, 5, "gasto", 245000, "Mercado de la quincena", "mensaje"],
+          [y, m, 6, "gasto", 65000, "Gasolina", "mensaje"],
+          [y, m, 8, "gasto", 18500, "Café con Andrés", "mensaje"],
+          [y, m, 10, "ingreso", 850000, "Honorarios diseño web", "formulario"],
+          [y, m, 12, "gasto", 43000, "Farmacia", "mensaje"],
+          [y, m, 15, "gasto", 76000, "Cena familiar", "mensaje"],
+          [y, m, 18, "gasto", 32000, "Transporte al centro", "mensaje"],
+          [y, m, 20, "gasto", 210000, "Ropa y calzado", "mensaje"],
+          [y, m, 24, "gasto", 54000, "Supermercado de barrio", "mensaje"],
+          [previa.getFullYear(), previa.getMonth(), 2, "gasto", 1250000, "Arriendo apartamento", "formulario"],
+          [previa.getFullYear(), previa.getMonth(), 4, "gasto", 230000, "Mercado de la quincena", "mensaje"],
+          [previa.getFullYear(), previa.getMonth(), 5, "ingreso", 3100000, "Nómina del mes", "formulario"],
+          [previa.getFullYear(), previa.getMonth(), 11, "gasto", 98000, "Internet fibra óptica", "mensaje"],
+        ];
+
+        demoCache = filas.map(([yy, mm, dd, tipo, monto, concepto, origen], i) => {
+          // En el mes en curso las fechas se reparten hasta hoy, nunca en el futuro.
+          const esMesActual = yy === y && mm === m;
+          const dia = esMesActual ? Math.max(1, Math.round((dd / 24) * hoy.getDate())) : dd;
+          const fecha = `${yy}-${pad2(mm + 1)}-${pad2(dia)}`;
+          return {
+            id: `demo-${i + 1}`,
+            tipo,
+            monto_centavos: monto,
+            concepto,
+            fecha,
+            origen,
+            creado_en: `${fecha}T${pad2(9 + (i % 8))}:15:00`,
+            actualizado_en: `${fecha}T${pad2(9 + (i % 8))}:15:00`,
+          };
+        });
+        return demoCache;
+      }
+
+      function demoEnRango(desde, hasta) {
+        return demoMovimientos().filter((x) => {
+          if (desde && x.fecha < desde) return false;
+          if (hasta && x.fecha > hasta) return false;
+          return true;
+        });
+      }
+
       // Conexión segura a Tauri IPC
       async function invoke(cmd, args = {}) {
         try {
           if (!window.__TAURI__ || !window.__TAURI__.core) {
             console.warn("Tauri API no disponible en navegador:", cmd, args);
-            if (cmd === "get_history") return [];
-            if (cmd === "get_summary") return { ingresos_centavos: 0, gastos_centavos: 0, diferencia_centavos: 0 };
+            if (cmd === "get_history") return demoEnRango(args.desde, args.hasta);
+            if (cmd === "get_summary") {
+              const lista = demoEnRango(args.desde, args.hasta);
+              const ingresos = lista
+                .filter((x) => x.tipo === "ingreso")
+                .reduce((a, x) => a + Number(x.monto_centavos || 0), 0);
+              const gastos = lista
+                .filter((x) => x.tipo === "gasto")
+                .reduce((a, x) => a + Number(x.monto_centavos || 0), 0);
+              return {
+                ingresos_centavos: ingresos,
+                gastos_centavos: gastos,
+                diferencia_centavos: ingresos - gastos,
+                desde: args.desde || null,
+                hasta: args.hasta || null,
+              };
+            }
             return null;
           }
           return await window.__TAURI__.core.invoke(cmd, args);
@@ -2402,12 +2546,16 @@
         vivienda: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
         ocio: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 8h1a4 4 0 1 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>`,
         salud: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 6v12M6 12h12"/></svg>`,
-        ingreso: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+        ingreso: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
         otro: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/></svg>`
       };
 
       function getOutlineIcon(catName) {
-        const c = (catName || "").toLowerCase();
+        // Sin tildes para que "Nómina" matchee "nomin", "Café" matchee "caf", etc.
+        const c = (catName || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
         if (c.includes("alim") || c.includes("comida") || c.includes("super")) return OUTLINE_ICONS.alimentacion;
         if (c.includes("trans") || c.includes("gas") || c.includes("uber")) return OUTLINE_ICONS.transporte;
         if (c.includes("viv") || c.includes("serv") || c.includes("luz") || c.includes("claro")) return OUTLINE_ICONS.vivienda;
@@ -2418,28 +2566,57 @@
       }
 
       // =======================================================================
-      // MODELO DE DATOS Y RENDERIZADO INTERACTIVO
+      // DATOS REALES DESDE SQLITE Y RENDERIZADO INTERACTIVO
       // =======================================================================
-      const DASHBOARD_DATA = {
-        presupuestoTotal: 3200000,
-        gastosMes: 1840000,
-        ingresosMes: 3500000,
-        semanas: [
-          { label: "Semana 1", rango: "1 al 7 de oct", gasto: 480000, pctTotal: "26.1%", actual: false },
-          { label: "Semana 2", rango: "8 al 14 de oct", gasto: 530000, pctTotal: "28.8%", actual: false },
-          { label: "Semana 3", rango: "15 al 21 de oct", gasto: 610000, pctTotal: "33.1%", actual: false },
-          { label: "Semana 4", rango: "22 al 31 de oct", gasto: 220000, pctTotal: "12.0%", actual: true },
-        ],
-        movimientosRecientes: [
-          { concepto: "Almuerzo de trabajo en La Casona", cat: "Alimentación", fecha: "22 oct", monto: 22000, tipo: "gasto" },
-          { concepto: "Gasolina Terpel Calle 80", cat: "Transporte", fecha: "22 oct", monto: 65000, tipo: "gasto" },
-          { concepto: "Supermercado Éxito compras quincena", cat: "Alimentación", fecha: "21 oct", monto: 245000, tipo: "gasto" },
-          { concepto: "Honorarios profesionales diseño", cat: "Ingreso", fecha: "20 oct", monto: 850000, tipo: "ingreso" },
-          { concepto: "Recibo internet fibra óptica Claro", cat: "Vivienda", fecha: "19 oct", monto: 98000, tipo: "gasto" },
-        ]
-      };
+      let chartSemanas = [];
+      let chartTop = 0;
 
-      let chartMode = "bars"; // 'bars' | 'curve'
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+
+      function fechaISO(y, m, d) {
+        return `${y}-${pad2(m + 1)}-${pad2(d)}`;
+      }
+
+      // Semanas naturales del mes en curso: 1-7, 8-14, 15-21, 22-fin
+      function semanasDelMes(hoy) {
+        const y = hoy.getFullYear();
+        const m = hoy.getMonth();
+        const dias = new Date(y, m + 1, 0).getDate();
+        const cortes = [
+          [1, 7],
+          [8, 14],
+          [15, 21],
+          [22, dias],
+        ];
+        return cortes.map(([a, b], i) => ({
+          label: `Sem ${i + 1}`,
+          rango: `${a} al ${b} de ${MESES[m]}`,
+          desde: fechaISO(y, m, a),
+          hasta: fechaISO(y, m, b),
+          gasto: 0,
+        }));
+      }
+
+      // Techo redondo para que los ejes no muestren cifras quebradas
+      function niceMax(valor) {
+        if (!valor || valor <= 0) return 100000;
+        const pow = Math.pow(10, Math.floor(Math.log10(valor)));
+        const n = valor / pow;
+        const mult = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+        return mult * pow;
+      }
+
+      function formatCompact(valor) {
+        const n = Math.abs(Number(valor) || 0);
+        if (n >= 1000000) {
+          const texto = (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1).replace(".", ",");
+          return `${texto}M`;
+        }
+        if (n >= 1000) return `${Math.round(n / 1000)}k`;
+        return `${Math.round(n)}`;
+      }
 
       function showChartTooltip(text, x, y) {
         const tooltip = $("chart-floating-tooltip");
@@ -2448,14 +2625,13 @@
         tooltip.style.bottom = `${y}px`;
         tooltip.classList.add("show");
 
-        // Calcular posición con protección contra desbordamiento en los bordes izquierdo y derecho
+        // Calcular posición con protección contra desbordamiento en los bordes
         requestAnimationFrame(() => {
           const stageW = stage.clientWidth || 400;
           const tipW = tooltip.offsetWidth || 180;
           const halfTip = tipW / 2;
           const padding = 12;
 
-          // Clamping para que nunca salga del stage por la izquierda (< 0) ni por la derecha (> stageW)
           let clampedX = Math.max(halfTip + padding, Math.min(x, stageW - halfTip - padding));
           tooltip.style.left = `${clampedX}px`;
         });
@@ -2465,97 +2641,257 @@
         $("chart-floating-tooltip").classList.remove("show");
       }
 
-      function renderDashboard() {
-        const d = DASHBOARD_DATA;
-        $("dash-presupuesto-restante").textContent = `$ ${formatNumber(d.presupuestoTotal - d.gastosMes)} COP`;
-        $("dash-ingresos-total").textContent = `+$ ${formatNumber(d.ingresosMes)}`;
-        $("dash-gastos-total").textContent = `$ ${formatNumber(d.gastosMes)}`;
+      function smoothPath(pts) {
+        if (pts.length < 2) return pts.length ? `M ${pts[0][0]} ${pts[0][1]}` : "";
+        let d = `M ${pts[0][0]} ${pts[0][1]}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[i - 1] || pts[i];
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+          const p3 = pts[i + 2] || p2;
+          const t = 0.16;
+          const cp1x = p1[0] + (p2[0] - p0[0]) * t;
+          const cp1y = p1[1] + (p2[1] - p0[1]) * t;
+          const cp2x = p2[0] - (p3[0] - p1[0]) * t;
+          const cp2y = p2[1] - (p3[1] - p1[1]) * t;
+          d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2[0]} ${p2[1]}`;
+        }
+        return d;
+      }
 
-        // Gráfica de Barras Interactivas con Hover
-        const maxVal = 720000;
-        $("dash-chart-bars").innerHTML = d.semanas.map((s, idx) => {
-          const h = Math.min(Math.round((s.gasto / maxVal) * 100), 100);
-          return `
-            <div class="chart-week-col" data-index="${idx}">
-              <div class="chart-bar-track">
-                <div class="chart-bar-fill ${s.actual ? 'active' : ''}" style="height: ${h}%;"></div>
-              </div>
-              <span class="chart-week-label">${s.label}</span>
-              <span class="chart-week-amount">$${Math.round(s.gasto / 1000)}k</span>
-            </div>
-          `;
-        }).join("");
+      function renderCurva(semanas, top) {
+        const svg = $("curve-svg-el");
+        if (!svg) return;
 
-        // Eventos interactivos en las columnas de la gráfica
-        document.querySelectorAll(".chart-week-col").forEach(col => {
-          col.addEventListener("mouseenter", (e) => {
-            const idx = col.dataset.index;
-            const s = d.semanas[idx];
-            const text = `${s.label} (${s.rango}): $ ${formatNumber(s.gasto)} COP (${s.pctTotal} del mes)${s.actual ? ' · En curso' : ''}`;
-            const rect = col.getBoundingClientRect();
-            const parentRect = col.parentElement.getBoundingClientRect();
-            const posX = (rect.left - parentRect.left) + (rect.width / 2);
-            showChartTooltip(text, posX, 115);
-          });
-          col.addEventListener("mouseleave", hideChartTooltip);
+        const left = 46;
+        const right = 520;
+        const topY = 20;
+        const baseY = 146;
+        const n = semanas.length;
+        const yDe = (valor) => baseY - (top > 0 ? (valor / top) * (baseY - topY) : 0);
+
+        const pts = semanas.map((s, i) => {
+          const x = n === 1 ? (left + right) / 2 : left + (i * (right - left)) / (n - 1);
+          return [Math.round(x * 10) / 10, Math.round(yDe(s.gasto) * 10) / 10];
         });
 
-        // Eventos en los puntos de la curva continua
-        document.querySelectorAll(".curve-point-dot").forEach(dot => {
-          dot.addEventListener("mouseenter", (e) => {
-            const idx = dot.dataset.point;
-            const s = d.semanas[idx];
-            const text = `${s.label} (${s.rango}): $ ${formatNumber(s.gasto)} COP${s.actual ? ' · En curso' : ''}`;
-            const cx = parseFloat(dot.getAttribute("cx")) || 60;
-            const cy = parseFloat(dot.getAttribute("cy")) || 50;
+        let markup = "";
+
+        // Grilla horizontal + etiquetas del eje Y
+        [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
+          const y = yDe(top * f);
+          const valor = top * f;
+          markup += `<line x1="${left}" y1="${y}" x2="${right}" y2="${y}" class="curve-grid-line" />`;
+          markup += `<text x="${left - 6}" y="${y + 3.5}" class="curve-axis-label" text-anchor="end">$${formatCompact(valor)}</text>`;
+        });
+
+        // Área bajo la curva
+        if (pts.length > 1) {
+          const area = `${smoothPath([...pts, [right, baseY], [left, baseY]])} Z`;
+          markup += `<path d="${area}" fill="var(--accent)" fill-opacity="0.07" stroke="none" />`;
+          markup += `<path d="${smoothPath(pts)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />`;
+        }
+
+        // Etiquetas del eje X y puntos interactivos
+        pts.forEach(([x, y], i) => {
+          const s = semanas[i];
+          const activa = s.actual;
+          markup += `<circle class="curve-point-dot" cx="${x}" cy="${y}" r="${activa ? 5 : 4}" fill="var(--surface)" stroke="${activa ? "var(--accent)" : "var(--ink-3)"}" stroke-width="2" data-point="${i}" />`;
+          markup += `<text x="${x}" y="164" class="curve-axis-label" text-anchor="middle" ${activa ? 'fill="var(--accent)"' : ""}>${s.label}</text>`;
+        });
+
+        svg.innerHTML = markup;
+
+        svg.querySelectorAll(".curve-point-dot").forEach((dot) => {
+          dot.addEventListener("mouseenter", () => {
+            const s = semanas[Number(dot.dataset.point)];
+            const cx = parseFloat(dot.getAttribute("cx")) || left;
+            const cy = parseFloat(dot.getAttribute("cy")) || baseY;
             const stageW = $("dash-chart-curve").clientWidth || 540;
             const posX = (cx / 540) * stageW;
-            const posY = 170 - cy + 18;
-            showChartTooltip(text, posX, posY);
+            const posY = 180 - cy + 16;
+            showChartTooltip(
+              `${s.label} · ${s.rango}: ${formatMoney(s.gasto)}${s.actual ? " · en curso" : ""}`,
+              posX,
+              posY
+            );
           });
           dot.addEventListener("mouseleave", hideChartTooltip);
         });
-
-        // Movimientos recientes
-        $("dash-recent-list").innerHTML = d.movimientosRecientes.map(m => {
-          const isIncome = m.tipo === "ingreso";
-          return `
-            <div class="tx-row" onclick="switchTab('historial')">
-              <div class="tx-left">
-                <div class="tx-icon-box">
-                  ${getOutlineIcon(m.cat)}
-                </div>
-                <div class="tx-details">
-                  <span class="tx-concept">${m.concepto}</span>
-                  <span class="tx-date-category">${m.fecha} &bull; ${m.cat}</span>
-                </div>
-              </div>
-              <div class="tx-amount ${isIncome ? 'income' : 'expense'}">
-                ${isIncome ? '+' : '−'} $ ${formatNumber(m.monto)}
-              </div>
-            </div>
-          `;
-        }).join("");
       }
 
-      // Alternar modo de gráfica (Barras vs Curva de Flujo)
+      async function renderDashboard() {
+        const hoy = new Date();
+        const y = hoy.getFullYear();
+        const m = hoy.getMonth();
+        const dia = hoy.getDate();
+        const dias = new Date(y, m + 1, 0).getDate();
+        const desde = fechaISO(y, m, 1);
+        const hasta = fechaISO(y, m, dias);
+        const hoyISO = fechaISO(y, m, dia);
+
+        $("dash-periodo").textContent = `${MESES[m].charAt(0).toUpperCase()}${MESES[m].slice(1)} ${y}`;
+
+        try {
+          const [historial, resumen] = await Promise.all([
+            invoke("get_history", { desde, hasta }),
+            invoke("get_summary", { desde, hasta }),
+          ]);
+
+          const movimientos = Array.isArray(historial) ? historial : [];
+          const ingresos = Number(resumen && resumen.ingresos_centavos) || 0;
+          const gastos = Number(resumen && resumen.gastos_centavos) || 0;
+          const balance = Number(resumen && resumen.diferencia_centavos) || ingresos - gastos;
+
+          const ingresosCount = movimientos.filter((x) => x.tipo === "ingreso").length;
+          const gastosCount = movimientos.filter((x) => x.tipo === "gasto").length;
+
+          // Panel protagonista
+          $("dash-balance").textContent = formatSigned(balance);
+          $("dash-hero-sub").innerHTML =
+            `Ingresos <strong>${formatSigned(ingresos)}</strong> menos gastos <strong>${formatSigned(-gastos)}</strong>`;
+
+          // Trío de métricas
+          $("dash-ingresos-total").textContent = formatSigned(ingresos);
+          $("dash-gastos-total").textContent = formatSigned(-gastos);
+          $("dash-registros-total").textContent = String(movimientos.length);
+          $("dash-ingresos-foot").textContent = plural(ingresosCount, "registro", "registros");
+          $("dash-gastos-foot").textContent = plural(gastosCount, "registro", "registros");
+          $("dash-registros-foot").textContent = "en el período";
+
+          // Semanas del mes
+          const semanas = semanasDelMes(hoy);
+          semanas.forEach((s) => {
+            s.actual = hoyISO >= s.desde && hoyISO <= s.hasta;
+            s.gasto = movimientos
+              .filter((x) => x.tipo === "gasto" && x.fecha >= s.desde && x.fecha <= s.hasta)
+              .reduce((acc, x) => acc + (Number(x.monto_centavos) || 0), 0);
+          });
+
+          const maxGasto = Math.max(...semanas.map((s) => s.gasto), 0);
+          chartSemanas = semanas;
+          chartTop = niceMax(maxGasto);
+
+          $("dash-chart-sub").textContent = `Del 1 al ${dias} de ${MESES[m]}`;
+
+          // Barras
+          const barras = semanas
+            .map((s, idx) => {
+              const h = maxGasto > 0 ? Math.max(Math.round((s.gasto / maxGasto) * 100), s.gasto > 0 ? 4 : 0) : 0;
+              return `
+                <div class="chart-bar-col" data-bar-index="${idx}">
+                  <div class="chart-bar-track">
+                    <div class="chart-bar-fill ${s.actual ? "active" : ""}" style="height: ${h}%;"></div>
+                  </div>
+                </div>
+              `;
+            })
+            .join("");
+
+          const etiquetas = semanas
+            .map(
+              (s, idx) => `
+                <div class="chart-label-col" data-bar-index="${idx}">
+                  <span class="chart-week-label">${s.label}</span>
+                  <span class="chart-week-amount">${s.gasto > 0 ? formatCompact(s.gasto) : "—"}</span>
+                </div>
+              `
+            )
+            .join("");
+
+          $("dash-chart-bars").innerHTML = `
+            <div class="chart-bars-row">${barras}</div>
+            <div class="chart-labels-row">${etiquetas}</div>
+          `;
+
+          document.querySelectorAll("[data-bar-index]").forEach((col) => {
+            col.addEventListener("mouseenter", () => {
+              const s = semanas[Number(col.dataset.barIndex)];
+              const rect = col.getBoundingClientRect();
+              const parentRect = $("dash-chart-bars").getBoundingClientRect();
+              const posX = rect.left - parentRect.left + rect.width / 2;
+              showChartTooltip(
+                `${s.label} · ${s.rango}: ${formatMoney(s.gasto)}${s.actual ? " · en curso" : ""}`,
+                posX,
+                120
+              );
+            });
+            col.addEventListener("mouseleave", hideChartTooltip);
+          });
+
+          renderCurva(semanas, chartTop);
+
+          // Movimientos recientes: 5 más nuevos
+          const recientes = [...movimientos]
+            .sort((a, b) => {
+              if (a.fecha !== b.fecha) return a.fecha < b.fecha ? 1 : -1;
+              return String(b.creado_en || "").localeCompare(String(a.creado_en || ""));
+            })
+            .slice(0, 5);
+
+          $("dash-recent-list").innerHTML = recientes.length
+            ? recientes
+                .map((mov) => {
+                  const isIncome = mov.tipo === "ingreso";
+                  return `
+                    <div class="tx-row" onclick="switchTab('historial')">
+                      <div class="tx-left">
+                        <div class="tx-icon-box ${isIncome ? "income" : ""}">${getOutlineIcon(mov.concepto)}</div>
+                        <div class="tx-details">
+                          <span class="tx-concept">${mov.concepto}</span>
+                          <span class="tx-date-category">${fechaCorta(mov.fecha)} · ${mov.origen === "mensaje" ? "Rápido" : "Manual"}</span>
+                        </div>
+                      </div>
+                      <div class="tx-amount ${isIncome ? "income" : "expense"}">
+                        ${isIncome ? "+" : "−"} ${formatMoney(mov.monto_centavos)}
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("")
+            : `<div class="empty-line">Aún no hay movimientos este mes. Registra el primero con “+ Gasto” o “+ Ingreso”.</div>`;
+
+          // Día del mes en curso
+          const pct = Math.round((dia / dias) * 100);
+          $("dash-dia-mes").textContent = `Día ${dia} de ${dias}`;
+          $("dash-dia-status").textContent = `${dia} de ${dias} días`;
+          $("dash-dia-sub").textContent = dias - dia === 0 ? "Último día del mes" : `Quedan ${dias - dia} días`;
+          $("dash-dia-pct").textContent = `${pct}%`;
+          $("dash-dia-ring").style.strokeDashoffset = String(144.51 * (1 - dia / dias));
+
+          // Promedio diario de gasto
+          if (gastos > 0) {
+            $("dash-promedio").innerHTML =
+              `Gasto promedio de <strong>${formatMoney(Math.round(gastos / dia))}</strong> por día en lo que va del mes.`;
+          } else {
+            $("dash-promedio").textContent = "Sin gastos registrados en el período.";
+          }
+
+        } catch (e) {
+          console.error("No se pudo cargar el dashboard", e);
+        }
+      }
+
+      let chartMode = "bars"; // 'bars' | 'curve'
+
+      // Alternar modo de gráfica (Barras vs Curva)
       $("btn-mode-bars").addEventListener("click", () => {
+        chartMode = "bars";
         $("btn-mode-bars").classList.add("active");
         $("btn-mode-curve").classList.remove("active");
         $("dash-chart-bars").style.display = "flex";
         $("dash-chart-curve").classList.remove("active");
+        hideChartTooltip();
       });
 
       $("btn-mode-curve").addEventListener("click", () => {
+        chartMode = "curve";
         $("btn-mode-curve").classList.add("active");
         $("btn-mode-bars").classList.remove("active");
         $("dash-chart-bars").style.display = "none";
         $("dash-chart-curve").classList.add("active");
-      });
-
-      // Hover interactivo en el widget de progreso oscuro
-      $("progress-widget-box").addEventListener("mouseenter", () => {
-        toast("Presupuesto: $ 1.840.000 gastados (57.5%) · $ 1.360.000 margen libre (42.5%)");
+        hideChartTooltip();
+        renderCurva(chartSemanas, chartTop);
       });
 
       // =======================================================================
@@ -2675,7 +3011,7 @@
           cacheHistorial = await invoke("get_history", { desde, hasta }) || [];
           renderHistorialFiltrado();
         } catch (e) {
-          $("lista-movimientos-tbody").innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-expense); padding: 24px 0;">Error cargando registros</td></tr>`;
+          $("lista-movimientos-tbody").innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--expense); padding: 24px 0;">Error cargando registros</td></tr>`;
         }
       }
 
@@ -2690,8 +3026,8 @@
         if (!lista.length) {
           $("lista-movimientos-tbody").innerHTML = `
             <tr>
-              <td colspan="4" style="text-align: center; color: var(--text-tertiary); padding: 32px 0;">
-                No se encontraron movimientos registrados en este período.
+              <td colspan="4" class="table-empty">
+                No hay movimientos registrados en este período.
               </td>
             </tr>
           `;
@@ -2701,19 +3037,17 @@
         $("lista-movimientos-tbody").innerHTML = lista.map(m => {
           const isIncome = m.tipo === "ingreso";
           return `
-            <tr style="cursor: pointer;" onclick="abrirDetalleTx('${m.id}')" title="Clic para ver detalle o eliminar">
-              <td>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <div class="tx-icon-box" style="width: 28px; height: 28px;">
-                    ${getOutlineIcon(m.concepto)}
-                  </div>
-                  <span><strong>${m.concepto}</strong></span>
+            <tr class="table-row" onclick="abrirDetalleTx('${m.id}')" title="Ver detalle">
+              <td class="table-cell-concept">
+                <div class="tx-left">
+                  <div class="tx-icon-box ${isIncome ? "income" : ""}">${getOutlineIcon(m.concepto)}</div>
+                  <span class="table-concept-name">${m.concepto}</span>
                 </div>
               </td>
-              <td style="color: var(--text-secondary);">${m.fecha}</td>
-              <td style="color: var(--text-tertiary);">${m.origen === 'mensaje' ? 'Rápido' : 'Manual'}</td>
-              <td style="text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; color: ${isIncome ? 'var(--color-income)' : 'var(--text-primary)'};">
-                ${isIncome ? '+' : '−'} $ ${formatNumber(m.monto_centavos)}
+              <td class="table-date">${fechaCorta(m.fecha)}</td>
+              <td class="table-origen">${m.origen === "mensaje" ? "Rápido" : "Manual"}</td>
+              <td class="table-amount ${isIncome ? "income" : ""}">
+                ${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}
               </td>
             </tr>
           `;
@@ -2736,12 +3070,12 @@
           } else if (range === "mes-anterior") {
             const prev = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
             const last = new Date(hoy.getFullYear(), hoy.getMonth(), 0);
-            $("filtro-desde").value = prev.toISOString().split("T")[0];
-            $("filtro-hasta").value = last.toISOString().split("T")[0];
+            $("filtro-desde").value = dateToISO(prev);
+            $("filtro-hasta").value = dateToISO(last);
           } else if (range === "ultimos-90") {
             const d90 = new Date();
             d90.setDate(d90.getDate() - 90);
-            $("filtro-desde").value = d90.toISOString().split("T")[0];
+            $("filtro-desde").value = dateToISO(d90);
             $("filtro-hasta").value = todayStr();
           } else if (range === "todo") {
             $("filtro-desde").value = "";
@@ -2767,8 +3101,8 @@
           } else if (range === "mes-anterior") {
             const prev = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
             const last = new Date(hoy.getFullYear(), hoy.getMonth(), 0);
-            $("resumen-desde").value = prev.toISOString().split("T")[0];
-            $("resumen-hasta").value = last.toISOString().split("T")[0];
+            $("resumen-desde").value = dateToISO(prev);
+            $("resumen-hasta").value = dateToISO(last);
           } else if (range === "todo") {
             $("resumen-desde").value = "";
             $("resumen-hasta").value = "";
@@ -2808,11 +3142,22 @@
         const isIncome = m.tipo === "ingreso";
 
         $("tx-detalle-body").innerHTML = `
-          <div><strong>Concepto:</strong> ${m.concepto}</div>
-          <div><strong>Monto:</strong> <span style="color: ${isIncome ? 'var(--color-income)' : 'var(--text-primary)'}; font-weight: 700;">${isIncome ? '+' : '−'} $ ${formatNumber(m.monto_centavos)} COP</span></div>
-          <div><strong>Fecha:</strong> ${m.fecha}</div>
-          <div><strong>Origen:</strong> ${m.origen === 'mensaje' ? 'Registro rápido (NLP)' : 'Formulario'}</div>
-          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);"><strong>ID:</strong> ${m.id}</div>
+          <div class="detail-row">
+            <span class="detail-key">Concepto</span>
+            <span class="detail-value">${m.concepto}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Monto</span>
+            <span class="detail-value ${isIncome ? "income" : ""}">${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Fecha</span>
+            <span class="detail-value">${fechaCorta(m.fecha)} ${m.fecha.slice(0, 4)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Origen</span>
+            <span class="detail-value">${m.origen === "mensaje" ? "Registro rápido" : "Manual"}</span>
+          </div>
         `;
 
         $("modal-detalle-tx").classList.add("open");
@@ -2856,7 +3201,7 @@
         $("edit-tx-id").value = m.id;
         $("edit-tx-tipo").value = m.tipo;
         $("edit-tx-tipo-display").textContent = isIncome ? "Ingreso" : "Gasto";
-        $("edit-tx-tipo-display").style.color = isIncome ? "var(--color-income)" : "var(--color-expense)";
+        $("edit-tx-tipo-display").style.color = isIncome ? "var(--income)" : "var(--expense)";
         $("edit-tx-monto").value = m.monto_centavos;
         $("edit-tx-concepto").value = m.concepto;
         $("edit-tx-fecha").value = m.fecha;
@@ -2903,15 +3248,27 @@
         try {
           const desde = $("resumen-desde").value || null;
           const hasta = $("resumen-hasta").value || null;
-          const r = await invoke("get_summary", { desde, hasta });
-          const ingresos = Number(r.ingresos_centavos) || 0;
-          const gastos = Number(r.gastos_centavos) || 0;
-          const balance = Number(r.diferencia_centavos) || 0;
+          const [r, historial] = await Promise.all([
+            invoke("get_summary", { desde, hasta }),
+            invoke("get_history", { desde, hasta }),
+          ]);
 
-          $("resumen-ingresos").textContent = `+$ ${formatNumber(ingresos)}`;
-          $("resumen-gastos").textContent = `−$ ${formatNumber(gastos)}`;
-          $("resumen-balance").textContent = formatCOP(balance);
-        } catch (e) {}
+          const ingresos = Number(r && r.ingresos_centavos) || 0;
+          const gastos = Number(r && r.gastos_centavos) || 0;
+          const balance = Number(r && r.diferencia_centavos) || ingresos - gastos;
+          const lista = Array.isArray(historial) ? historial : [];
+          const ingresosCount = lista.filter((x) => x.tipo === "ingreso").length;
+          const gastosCount = lista.filter((x) => x.tipo === "gasto").length;
+
+          $("resumen-ingresos").textContent = formatSigned(ingresos);
+          $("resumen-gastos").textContent = formatSigned(-gastos);
+          $("resumen-balance").textContent = formatSigned(balance);
+          $("resumen-ingresos-foot").textContent = plural(ingresosCount, "registro", "registros");
+          $("resumen-gastos-foot").textContent = plural(gastosCount, "registro", "registros");
+          $("resumen-rango").textContent = rangoTexto(desde, hasta);
+        } catch (e) {
+          console.error("No se pudo cargar el resumen", e);
+        }
       }
 
       $("btn-resumen-filtrar").addEventListener("click", cargarResumen);
