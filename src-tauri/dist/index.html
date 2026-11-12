@@ -2011,7 +2011,298 @@
           transition-duration: 0.01ms !important;
         }
       }
-</style>
+
+      /* ==========================================================================
+         SPOTLIGHT COMMAND PALETTE (CTRL + K) — Apple & Raycast Style
+         ========================================================================== */
+      .spotlight-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 3000;
+        background: rgba(8, 10, 15, 0.45);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: clamp(60px, 14vh, 140px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1), visibility 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .spotlight-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .spotlight-card {
+        width: 600px;
+        max-width: calc(100vw - 32px);
+        background: var(--surface);
+        border: 1px solid var(--line-strong);
+        border-radius: 18px;
+        box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        transform: scale(0.96) translateY(-10px);
+        transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 240ms ease;
+      }
+
+      .spotlight-overlay.open .spotlight-card {
+        transform: scale(1) translateY(0);
+      }
+
+      :root[data-theme="dark"] .spotlight-card {
+        background: rgba(16, 18, 26, 0.88);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 30px rgba(59, 130, 246, 0.12);
+      }
+
+      .spotlight-input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--line);
+        background: transparent;
+      }
+
+      .spotlight-icon {
+        width: 22px;
+        height: 22px;
+        color: var(--accent);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .spotlight-input {
+        flex: 1;
+        border: 0;
+        background: transparent;
+        font-family: var(--font-main);
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--ink);
+        outline: none;
+        letter-spacing: -0.01em;
+      }
+
+      .spotlight-input::placeholder {
+        color: var(--ink-3);
+        font-weight: 400;
+      }
+
+      .spotlight-kbd-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .spotlight-kbd {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-2);
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        padding: 3px 7px;
+        border-radius: 6px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      }
+
+      .spotlight-body {
+        padding: 14px 18px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .spotlight-section-title {
+        font-size: 11.5px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ink-3);
+        margin-bottom: 4px;
+        padding-left: 4px;
+      }
+
+      .spotlight-chips-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .spotlight-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--surface-2);
+        border: 1px solid transparent;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        text-align: left;
+        transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .spotlight-chip:hover {
+        background: var(--surface);
+        border-color: var(--accent);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+      }
+
+      .spotlight-chip-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        color: var(--ink-2);
+        transition: transform 150ms ease, background-color 150ms ease;
+      }
+
+      .spotlight-chip:hover .spotlight-chip-icon {
+        transform: scale(1.08);
+      }
+
+      .spotlight-chip-icon.income-icon {
+        color: var(--income);
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.2);
+      }
+
+      .spotlight-chip-icon.expense-icon {
+        color: var(--expense);
+        background: rgba(244, 63, 94, 0.1);
+        border-color: rgba(244, 63, 94, 0.2);
+      }
+
+      .spotlight-chip-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .spotlight-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 18px;
+        background: var(--surface-2);
+        border-top: 1px solid var(--line);
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+
+      .spotlight-footer-hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+    
+      /* ==========================================================================
+         FINTECH 2026 CARD HOVER & AMBIENT GLOW EFFECTS
+         ========================================================================== */
+      .hero-dark-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1), border-color 260ms ease;
+      }
+
+      .hero-dark-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(59, 130, 246, 0) 70%);
+        border-radius: 50%;
+        filter: blur(28px);
+        pointer-events: none;
+        transition: opacity 300ms ease, transform 300ms ease;
+        opacity: 0.7;
+      }
+
+      .hero-dark-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-glow);
+      }
+
+      .hero-dark-card:hover::before {
+        opacity: 1;
+        transform: scale(1.15) translate(10px, -10px);
+      }
+
+      .pastel-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease;
+      }
+
+      .pastel-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .pastel-card.green:hover {
+        border-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 10px 24px -6px rgba(16, 185, 129, 0.18);
+      }
+
+      .pastel-card.peach:hover {
+        border-color: rgba(244, 63, 94, 0.4);
+        box-shadow: 0 10px 24px -6px rgba(244, 63, 94, 0.18);
+      }
+
+      .pastel-card.blue:hover {
+        border-color: rgba(59, 130, 246, 0.4);
+        box-shadow: 0 10px 24px -6px rgba(59, 130, 246, 0.18);
+      }
+
+      .white-panel {
+        transition: border-color 240ms ease, box-shadow 240ms ease;
+      }
+
+      .white-panel:hover {
+        border-color: var(--line-strong);
+        box-shadow: var(--shadow-md);
+      }
+
+      .tx-row {
+        transition: background-color 140ms ease, transform 140ms ease, border-color 140ms ease;
+        border-radius: 10px;
+        padding: 8px 10px;
+        margin: 2px 0;
+      }
+
+      .tx-row:hover {
+        background: var(--surface-2);
+        transform: translateX(3px);
+      }
+
+      .table-row {
+        transition: background-color 140ms ease;
+      }
+
+      .table-row:hover {
+        background: var(--surface-2);
+      }
+
+    </style>
   </head>
   <body>
     <!-- ===================================================================
@@ -2489,31 +2780,65 @@
     </div>
 
     <!-- ===================================================================
-         MODAL LANZADOR RÁPIDO (CTRL+K)
+         SPOTLIGHT COMMAND PALETTE (CTRL+K) — APPLE / RAYCAST STYLE
          =================================================================== -->
-    <div class="modal-overlay" id="command-overlay" aria-hidden="true">
-      <div class="modal-card" style="width: 500px;" role="dialog" aria-modal="true">
-        <div style="display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); gap: 10px;">
+    <div class="spotlight-overlay" id="command-overlay" aria-hidden="true">
+      <div class="spotlight-card" role="dialog" aria-modal="true">
+        <div class="spotlight-input-wrap">
+          <div class="spotlight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
           <input
             id="command-input"
+            class="spotlight-input"
             type="text"
-            placeholder="Ej. gasté 18 mil en almuerzo..."
+            placeholder="¿Qué movimiento deseas registrar? Ej. gasté 25 mil en taxi..."
             aria-label="Registro rápido en lenguaje natural"
             autocomplete="off"
             spellcheck="false"
-            style="flex: 1; border: 0; background: transparent; font-size: 14px; color: var(--ink); outline: none;"
           />
-          <kbd style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-3); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">Esc</kbd>
+          <div class="spotlight-kbd-wrap">
+            <kbd class="spotlight-kbd">Esc</kbd>
+          </div>
         </div>
-        <div style="padding: 16px 18px; font-size: 12.5px; color: var(--ink-2);">
-          <div style="margin-bottom: 8px; font-weight: 600; color: var(--ink);">Prueba escribir:</div>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <button class="btn-cancel example-btn" type="button" data-example="gasté 18 mil en almuerzo" style="text-align: left; font-size: 12px;">
-              &rarr; gasté 18 mil en almuerzo
+        <div class="spotlight-body">
+          <div class="spotlight-section-title">Sugerencias rápidas (Haz clic o escribe)</div>
+          <div class="spotlight-chips-grid">
+            <button class="spotlight-chip example-btn" type="button" data-example="gasté 18 mil en almuerzo">
+              <div class="spotlight-chip-icon expense-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2M15 2v18M6 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2M8 11v9"/></svg>
+              </div>
+              <span class="spotlight-chip-text">Gasté 18 mil en almuerzo</span>
             </button>
-            <button class="btn-cancel example-btn" type="button" data-example="recibí 1.500.000 de pago quincena" style="text-align: left; font-size: 12px;">
-              &rarr; recibí 1.500.000 de pago quincena
+            <button class="spotlight-chip example-btn" type="button" data-example="recibí 1.500.000 de pago quincena">
+              <div class="spotlight-chip-icon income-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
+              <span class="spotlight-chip-text">Recibí 1.500.000 quincena</span>
             </button>
+            <button class="spotlight-chip example-btn" type="button" data-example="gasté 45 mil en gasolina">
+              <div class="spotlight-chip-icon expense-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11.1 2 11.5 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+              </div>
+              <span class="spotlight-chip-text">Gasté 45 mil en gasolina</span>
+            </button>
+            <button class="spotlight-chip example-btn" type="button" data-example="pagué 85 mil de internet">
+              <div class="spotlight-chip-icon expense-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+              <span class="spotlight-chip-text">Pagué 85 mil de internet</span>
+            </button>
+          </div>
+        </div>
+        <div class="spotlight-footer">
+          <div class="spotlight-footer-hint">
+            <span>Usa</span> <kbd class="spotlight-kbd" style="font-size: 10px; padding: 1px 5px;">↵ Enter</kbd> <span>para interpretar con IA</span>
+          </div>
+          <div class="spotlight-footer-hint">
+            <span>Kite AI Engine 2026</span>
           </div>
         </div>
       </div>
