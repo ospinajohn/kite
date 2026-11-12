@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kite — Finanzas Personales</title>
-    <!-- Tipografía Manrope oficial -->
+    <!-- Tipografía: Manrope (UI) · Newsreader (cifra hero) · IBM Plex Mono (metas) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -37,8 +37,8 @@
         --fs-md: 15px;
         --fs-lg: 16px;
         --fs-title: 20px;
-        --fs-figure: 28px;
-        --fs-hero: 36px;
+        --fs-figure: 24px;
+        --fs-hero: 44px;
 
         --lh-meta: 16px;
         --lh-text: 20px;
@@ -91,46 +91,52 @@
         --shadow-lg: 0 24px 48px -12px rgba(26, 25, 23, 0.22);
 
         --font-main: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        --font-mono: "Cascadia Mono", "Cascadia Code", ui-monospace, Consolas, monospace;
+        --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+        --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
 
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
         --t-fast: 150ms;
         --t-base: 240ms;
       }
 
+      /* Dark "tinta y tiza": la misma libreta de noche. Canvas cálido casi negro,
+         superficies un paso arriba, y un único momento claro: el hero vuelve a papel. */
       :root[data-theme="dark"] {
-        --canvas: #0f0f12;
-        --surface: #17171c;
-        --surface-2: #1e1e24;
-        --raised: #26262d;
-        --line: rgba(242, 242, 243, 0.08);
-        --line-strong: rgba(242, 242, 243, 0.16);
-        --ink: #f2f2f3;
-        --ink-2: #a3a3ab;
-        --ink-3: #73737c;
-        --ink-invert: #0f0f12;
+        --canvas: #141311;
+        --surface: #1c1b18;
+        --surface-2: #24221e;
+        --raised: #2c2925;
+        --line: rgba(236, 232, 224, 0.1);
+        --line-strong: rgba(236, 232, 224, 0.18);
+        --ink: #ece8e0;
+        --ink-2: #a39e93;
+        --ink-3: #7c776d;
+        --ink-invert: #141311;
 
-        --accent: #93b0f8;
-        --accent-ink: #b9cbfb;
-        --accent-soft: #1b2337;
+        --accent: #5e8bff;
+        --accent-ink: #8aa8ff;
+        --accent-soft: #1d2438;
 
-        --income: #4ade80;
-        --expense: #f87171;
+        --income: #7fbf8e;
+        --expense: #e0857c;
 
-        --hero-bg: #1f1f27;
-        --hero-ink: #f5f5f6;
-        --hero-ink-2: rgba(245, 245, 246, 0.62);
-        --hero-line: rgba(245, 245, 246, 0.18);
+        /* El momento claro: la hoja suelta sobre la mesa a oscuras */
+        --hero-bg: #f6f5f2;
+        --hero-ink: #1a1917;
+        --hero-ink-2: rgba(26, 25, 23, 0.62);
+        --hero-line: rgba(26, 25, 23, 0.16);
 
-        --metric-income-bg: #17171c;
-        --metric-expense-bg: #17171c;
-        --metric-neutral-bg: #17171c;
+        --metric-income-bg: #1a201b;
+        --metric-expense-bg: #221a18;
+        --metric-neutral-bg: #191d24;
 
-        --chart-bar: rgba(242, 242, 243, 0.16);
+        --chart-bar: rgba(236, 232, 224, 0.16);
 
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
-        --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+        /* Luz de arriba: el hairline que separa "dark real" de grises apilados */
+        --shadow-sm:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.35);
+        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
       }
 
       *,
@@ -562,15 +568,19 @@
         flex-wrap: wrap;
       }
 
-      /* Firma: doble regla de total bajo la cifra que manda */
+      /* Firma: doble regla de total bajo la cifra que manda.
+         Newsreader 500: la cifra se lee como en un libro contable impreso. */
       .hero-amount {
         display: inline-block;
+        font-family: var(--font-serif);
+        font-optical-sizing: auto;
         font-size: var(--fs-hero);
         font-weight: 500;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         color: var(--hero-ink);
-        font-variant-numeric: tabular-nums;
-        line-height: 1.1;
+        font-variant-numeric: lining-nums tabular-nums;
+        font-feature-settings: "tnum" 1;
+        line-height: 1.05;
         padding-bottom: var(--s-2);
         border-bottom: 1px solid var(--hero-ink-2);
         box-shadow: 0 4px 0 -3px var(--hero-ink-2);
@@ -641,7 +651,7 @@
          ========================================================================== */
       .pastel-cards-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--s-3);
       }
 
@@ -654,6 +664,15 @@
         gap: var(--s-1);
         min-height: 104px;
         justify-content: center;
+        container-type: inline-size;
+      }
+
+      /* En tarjeta estrecha (dashboard a 2 columnas), la cifra no puede partirse */
+      @container (max-width: 230px) {
+        .pastel-card-amount {
+          font-size: 20px;
+          white-space: nowrap;
+        }
       }
 
       .pastel-card.green {
@@ -687,8 +706,8 @@
       }
 
       .pastel-card-amount {
-        font-size: var(--fs-title);
-        font-weight: 600;
+        font-size: var(--fs-figure);
+        font-weight: 500;
         letter-spacing: -0.01em;
         font-variant-numeric: tabular-nums;
         line-height: var(--lh-title);
@@ -1067,12 +1086,12 @@
       }
 
       /* ==========================================================================
-         5. Widget oscuro (mes en curso)
+         5. Widget de progreso (mes en curso)
          ========================================================================== */
       .progress-dark-widget {
-        background: var(--hero-bg);
-        color: var(--hero-ink);
-        border: 1px solid var(--hero-line);
+        background: var(--surface);
+        color: var(--ink);
+        border: 1px solid var(--line);
         border-radius: var(--r-card);
         padding: var(--s-5);
         display: flex;
@@ -1092,20 +1111,20 @@
       .progress-dark-title {
         font-size: var(--fs-meta);
         font-weight: 400;
-        color: var(--hero-ink-2);
+        color: var(--ink-2);
       }
 
       .progress-dark-status {
         font-size: var(--fs-title);
         font-weight: 500;
-        color: var(--hero-ink);
+        color: var(--ink);
         font-variant-numeric: tabular-nums;
         line-height: var(--lh-title);
       }
 
       .progress-dark-sub {
         font-size: var(--fs-meta);
-        color: var(--hero-ink-2);
+        color: var(--ink-2);
         font-variant-numeric: tabular-nums;
       }
 
@@ -1129,7 +1148,7 @@
         place-items: center;
         font-size: var(--fs-meta);
         font-weight: 500;
-        color: var(--hero-ink);
+        color: var(--ink);
         font-variant-numeric: tabular-nums;
       }
 
@@ -1799,13 +1818,113 @@
         }
       }
 
+      /* Presión: la señal táctil de app nativa. 0.98 en press, sin bounce. */
+      .main-app button:active,
+      .modal-overlay button:active,
+      .tx-row:active,
+      .table-row:active {
+        transform: scale(0.98);
+      }
+
+      .tx-row,
+      .table-row {
+        transition: transform 90ms var(--ease);
+      }
+
+      /* Transición de presión unificada para botones interactivos */
+      .btn-hero-secondary,
+      .btn-submit,
+      .btn-cancel,
+      .btn-secondary,
+      .btn-danger,
+      .switch-btn,
+      .mode-switch-btn,
+      .date-helper-chip,
+      .quick-pill-btn,
+      .pill-filter-btn {
+        transition:
+          background-color var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease),
+          border-color var(--t-fast) var(--ease),
+          opacity var(--t-fast) var(--ease),
+          transform 90ms var(--ease);
+      }
+
+      /* Cabecera de grupo por día en el historial */
+      .day-group-row td {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ink-3);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: var(--s-5) var(--s-3) var(--s-1);
+        border-bottom: 0;
+        white-space: nowrap;
+      }
+
+      .clean-table tr.day-group-row:hover td {
+        background: transparent;
+      }
+
+      /* Pie de gráfica: metadata del sistema, en mono */
+      .chart-foot {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--ink-3);
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Estado vacío compuesto: la portada de la libreta */
+      .chart-empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--s-4);
+        padding: var(--s-8) 0;
+        text-align: center;
+        width: 100%;
+      }
+
+      .chart-empty-rule {
+        width: 180px;
+        border-top: 1px solid var(--line-strong);
+        box-shadow: 0 4px 0 -3px var(--line-strong);
+      }
+
+      .chart-empty-copy {
+        margin: 0;
+        max-width: 360px;
+        color: var(--ink-2);
+        font-size: var(--fs-md);
+      }
+
+      /* Preview vivo del monto en el modal de registro */
+      .monto-preview {
+        margin: var(--s-2) 0 0;
+        font-family: var(--font-mono);
+        font-size: var(--fs-md);
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-3);
+      }
+
+      .monto-preview.income {
+        color: var(--income);
+      }
+
+      .monto-preview.expense {
+        color: var(--expense);
+      }
+
       @media (max-width: 640px) {
         .pastel-cards-grid {
           grid-template-columns: 1fr;
         }
 
         .hero-amount {
-          font-size: 28px;
+          font-size: 32px;
         }
 
         .topbar {
@@ -1974,15 +2093,6 @@
                   <div class="pastel-card-amount" id="dash-gastos-total">− $ 0</div>
                   <div class="pastel-card-foot" id="dash-gastos-foot">0 registros</div>
                 </div>
-
-                <!-- Registros -->
-                <div class="pastel-card blue">
-                  <div class="pastel-card-top">
-                    <span class="pastel-card-title">Registros</span>
-                  </div>
-                  <div class="pastel-card-amount" id="dash-registros-total">0</div>
-                  <div class="pastel-card-foot" id="dash-registros-foot">en el período</div>
-                </div>
               </div>
             </div>
 
@@ -2031,6 +2141,8 @@
                   <!-- Tooltip -->
                   <div class="chart-tooltip-floating" id="chart-floating-tooltip"></div>
                 </div>
+
+                <p class="chart-foot" id="dash-chart-foot">&mdash;</p>
               </div>
             </div>
 
@@ -2045,7 +2157,7 @@
                 </div>
                 <div class="progress-dark-ring-box">
                   <svg class="progress-svg" viewBox="0 0 56 56">
-                    <circle cx="28" cy="28" r="23" fill="none" stroke="var(--hero-line)" stroke-width="4" />
+                    <circle cx="28" cy="28" r="23" fill="none" stroke="var(--line-strong)" stroke-width="4" />
                     <circle
                       id="dash-dia-ring"
                       cx="28"
@@ -2124,7 +2236,7 @@
               <thead>
                 <tr>
                   <th>Concepto</th>
-                  <th>Fecha</th>
+                  <th aria-hidden="true"></th>
                   <th>Origen</th>
                   <th style="text-align: right;">Monto</th>
                 </tr>
@@ -2202,6 +2314,7 @@
             <div class="form-row">
               <label for="modal-reg-monto">Monto (COP)</label>
               <input type="number" id="modal-reg-monto" placeholder="Ej. 25000" min="1" step="1" required />
+              <p class="monto-preview" id="modal-reg-preview" aria-live="polite">&mdash;</p>
             </div>
 
             <div class="form-row">
@@ -2332,7 +2445,7 @@
             spellcheck="false"
             style="flex: 1; border: 0; background: transparent; font-size: 14px; color: var(--ink); outline: none;"
           />
-          <kbd style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-3); background: #f1f3f7; padding: 2px 6px; border-radius: 4px;">Esc</kbd>
+          <kbd style="font-size: 10px; font-family: var(--font-mono); color: var(--ink-3); background: var(--surface-2); padding: 2px 6px; border-radius: 4px;">Esc</kbd>
         </div>
         <div style="padding: 16px 18px; font-size: 12.5px; color: var(--ink-2);">
           <div style="margin-bottom: 8px; font-weight: 600; color: var(--ink);">Prueba escribir:</div>
@@ -2398,6 +2511,31 @@
 
       function plural(n, singular, varios) {
         return `${n} ${n === 1 ? singular : varios}`;
+      }
+
+      // Tween de cifras: en finanzas el cambio de valor ES el evento, y animarlo
+      // hace que registrar un movimiento se sienta. 500ms out-cubic, sin bounce;
+      // respeta prefers-reduced-motion.
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const figureFrom = new WeakMap();
+
+      function tweenFigure(el, target, format) {
+        const from = figureFrom.has(el) ? figureFrom.get(el) : 0;
+        figureFrom.set(el, target);
+        if (reduceMotion || from === target) {
+          el.textContent = format(target);
+          return;
+        }
+        if (el.dataset.tweenRaf) cancelAnimationFrame(Number(el.dataset.tweenRaf));
+        const dur = 500;
+        const t0 = performance.now();
+        const step = (t) => {
+          const p = Math.min((t - t0) / dur, 1);
+          const v = Math.round(from + (target - from) * (1 - Math.pow(1 - p, 3)));
+          el.textContent = format(v);
+          if (p < 1) el.dataset.tweenRaf = String(requestAnimationFrame(step));
+        };
+        el.dataset.tweenRaf = String(requestAnimationFrame(step));
       }
 
       function fechaCorta(fecha) {
@@ -2747,17 +2885,16 @@
           const gastosCount = movimientos.filter((x) => x.tipo === "gasto").length;
 
           // Panel protagonista
-          $("dash-balance").textContent = formatSigned(balance);
+          tweenFigure($("dash-balance"), balance, formatSigned);
           $("dash-hero-sub").innerHTML =
             `Ingresos <strong>${formatSigned(ingresos)}</strong> menos gastos <strong>${formatSigned(-gastos)}</strong>`;
 
-          // Trío de métricas
-          $("dash-ingresos-total").textContent = formatSigned(ingresos);
-          $("dash-gastos-total").textContent = formatSigned(-gastos);
-          $("dash-registros-total").textContent = String(movimientos.length);
+          // Par de métricas (el count de registros vive en el pie de la gráfica)
+          tweenFigure($("dash-ingresos-total"), ingresos, formatSigned);
+          tweenFigure($("dash-gastos-total"), -gastos, formatSigned);
           $("dash-ingresos-foot").textContent = plural(ingresosCount, "registro", "registros");
           $("dash-gastos-foot").textContent = plural(gastosCount, "registro", "registros");
-          $("dash-registros-foot").textContent = "en el período";
+          $("dash-chart-foot").textContent = `${plural(movimientos.length, "registro", "registros")} en el período`;
 
           // Semanas del mes
           const semanas = semanasDelMes(hoy);
@@ -2774,8 +2911,20 @@
 
           $("dash-chart-sub").textContent = `Del 1 al ${dias} de ${MESES[m]}`;
 
-          // Barras
-          const barras = semanas
+          if (!movimientos.length) {
+            // Estado vacío compuesto: la portada de la libreta.
+            // Sin ilustraciones: la composición tipográfica con el propio sistema ES la ilustración.
+            $("dash-chart-bars").innerHTML = `
+              <div class="chart-empty-state">
+                <div class="chart-empty-rule"></div>
+                <p class="chart-empty-copy">La primera página está en blanco. Registra tu primer movimiento y la libreta empieza a contar.</p>
+                <button class="btn-submit" id="btn-primer-movimiento" type="button">Registrar primer movimiento</button>
+              </div>
+            `;
+            $("btn-primer-movimiento").addEventListener("click", () => openModalRegistro("gasto"));
+          } else {
+            // Barras
+            const barras = semanas
             .map((s, idx) => {
               const h = maxGasto > 0 ? Math.max(Math.round((s.gasto / maxGasto) * 100), s.gasto > 0 ? 4 : 0) : 0;
               return `
@@ -2818,6 +2967,7 @@
             });
             col.addEventListener("mouseleave", hideChartTooltip);
           });
+          }
 
           renderCurva(semanas, chartTop);
 
@@ -2930,7 +3080,26 @@
         $("switch-btn-gasto").classList.toggle("active", isExpense);
         $("switch-btn-ingreso").classList.toggle("active", !isExpense);
         $("modal-registro-title").textContent = isExpense ? "Registrar Gasto" : "Registrar Ingreso";
+        actualizarPreviewMonto();
       }
+
+      // Preview vivo del monto: confirmación visual del formato mientras escribes.
+      // Neutro, sin validación agresiva — el parsing real lo hace el backend.
+      function actualizarPreviewMonto() {
+        const preview = $("modal-reg-preview");
+        const n = parseInt($("modal-reg-monto").value, 10);
+        if (!Number.isFinite(n) || n <= 0) {
+          preview.textContent = "—";
+          preview.classList.remove("income", "expense");
+          return;
+        }
+        const isExpense = modalTipoActual === "gasto";
+        preview.textContent = `${isExpense ? "−" : "+"} ${formatMoney(n)}`;
+        preview.classList.toggle("expense", isExpense);
+        preview.classList.toggle("income", !isExpense);
+      }
+
+      $("modal-reg-monto").addEventListener("input", actualizarPreviewMonto);
 
       function openModalRegistro(tipo = "gasto") {
         setModalTipo(tipo);
@@ -2939,6 +3108,7 @@
         $("chip-date-yesterday").classList.remove("active");
         $("modal-reg-monto").value = "";
         $("modal-reg-concepto").value = "";
+        actualizarPreviewMonto();
         $("modal-registro").classList.add("open");
         document.body.classList.add("modal-open");
         setTimeout(() => $("modal-reg-monto").focus(), 80);
@@ -3034,24 +3204,66 @@
           return;
         }
 
-        $("lista-movimientos-tbody").innerHTML = lista.map(m => {
-          const isIncome = m.tipo === "ingreso";
-          return `
-            <tr class="table-row" onclick="abrirDetalleTx('${m.id}')" title="Ver detalle">
-              <td class="table-cell-concept">
-                <div class="tx-left">
-                  <div class="tx-icon-box ${isIncome ? "income" : ""}">${getOutlineIcon(m.concepto)}</div>
-                  <span class="table-concept-name">${m.concepto}</span>
-                </div>
-              </td>
-              <td class="table-date">${fechaCorta(m.fecha)}</td>
-              <td class="table-origen">${m.origen === "mensaje" ? "Rápido" : "Manual"}</td>
-              <td class="table-amount ${isIncome ? "income" : ""}">
-                ${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}
-              </td>
-            </tr>
-          `;
-        }).join("");
+        // Agrupado por día: el historial se lee como agenda, no como lista plana.
+        // La fecha por fila desaparece: la cabecera de grupo ya la dice.
+        const ordenada = [...lista].sort((a, b) => {
+          if (a.fecha !== b.fecha) return a.fecha < b.fecha ? 1 : -1;
+          return String(b.creado_en || "").localeCompare(String(a.creado_en || ""));
+        });
+
+        const hoyISO = todayStr();
+        const ayer = new Date();
+        ayer.setDate(ayer.getDate() - 1);
+        const ayerISO = dateToISO(ayer);
+        const anioActual = new Date().getFullYear();
+
+        const etiquetaDia = (iso) => {
+          if (iso === hoyISO) return "Hoy";
+          if (iso === ayerISO) return "Ayer";
+          const [y, m, d] = iso.split("-").map(Number);
+          return y === anioActual ? `${d} ${MESES_CORTOS[m - 1]}` : `${d} ${MESES_CORTOS[m - 1]} ${y}`;
+        };
+
+        const grupos = [];
+        for (const mov of ordenada) {
+          const ultimo = grupos[grupos.length - 1];
+          if (!ultimo || ultimo.fecha !== mov.fecha) {
+            grupos.push({ fecha: mov.fecha, items: [mov] });
+          } else {
+            ultimo.items.push(mov);
+          }
+        }
+
+        $("lista-movimientos-tbody").innerHTML = grupos
+          .map((g) => {
+            const filas = g.items
+              .map((m) => {
+                const isIncome = m.tipo === "ingreso";
+                return `
+                  <tr class="table-row" onclick="abrirDetalleTx('${m.id}')" title="Ver detalle">
+                    <td class="table-cell-concept">
+                      <div class="tx-left">
+                        <div class="tx-icon-box ${isIncome ? "income" : ""}">${getOutlineIcon(m.concepto)}</div>
+                        <span class="table-concept-name">${m.concepto}</span>
+                      </div>
+                    </td>
+                    <td class="table-date"></td>
+                    <td class="table-origen">${m.origen === "mensaje" ? "Rápido" : "Manual"}</td>
+                    <td class="table-amount ${isIncome ? "income" : ""}">
+                      ${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}
+                    </td>
+                  </tr>
+                `;
+              })
+              .join("");
+            return `
+              <tr class="day-group-row">
+                <td colspan="4">${etiquetaDia(g.fecha)}</td>
+              </tr>
+              ${filas}
+            `;
+          })
+          .join("");
       }
 
       // Píldoras de rango rápido en Historial
