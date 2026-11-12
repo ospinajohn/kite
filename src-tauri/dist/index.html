@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -51,48 +51,50 @@
         --r-card: 16px;
         --r-panel: 20px;
 
-        /* Neutros: papel */
-        --canvas: #f6f5f2;
+        /* Neutros: Fintech Slate & Crisp Porcelain (Light Mode 2026) */
+        --canvas: #f8fafc;
         --surface: #ffffff;
-        --surface-2: #f0efeb;
-        --raised: #e9e7e2;
-        --line: rgba(26, 25, 23, 0.08);
-        --line-strong: rgba(26, 25, 23, 0.16);
-        --ink: #1a1917;
-        --ink-2: #5f5b53;
-        --ink-3: #8b877e;
+        --surface-2: #f1f5f9;
+        --raised: #e2e8f0;
+        --line: rgba(15, 23, 42, 0.08);
+        --grid-line: rgba(15, 23, 42, 0.035);
+        --line-strong: rgba(15, 23, 42, 0.15);
+        --ink: #0f172a;
+        --ink-2: #475569;
+        --ink-3: #94a3b8;
         --ink-invert: #ffffff;
 
-        /* Acento: tinta de bolígrafo */
-        --accent: #1d4ed8;
-        --accent-ink: #1e40af;
-        --accent-soft: #edf1fc;
+        /* Acento: NeuroBank Electric Cobalt */
+        --accent: #2563eb;
+        --accent-ink: #1d4ed8;
+        --accent-soft: #eff6ff;
+        --accent-glow: rgba(37, 99, 235, 0.22);
 
-        /* Semánticos: solo cifras */
-        --income: #15803d;
-        --expense: #b42318;
+        /* Semánticos: Emerald & Rose */
+        --income: #059669;
+        --expense: #e11d48;
 
-        /* Panel protagonista */
-        --hero-bg: #1a1917;
-        --hero-ink: #f7f6f3;
-        --hero-ink-2: rgba(247, 246, 243, 0.62);
-        --hero-line: rgba(247, 246, 243, 0.18);
+        /* Panel protagonista: Deep Indigo Tech */
+        --hero-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --hero-ink: #ffffff;
+        --hero-ink-2: rgba(248, 250, 252, 0.7);
+        --hero-line: rgba(255, 255, 255, 0.12);
 
         /* Tarjetas de métrica */
-        --metric-income-bg: #f1f8f2;
-        --metric-expense-bg: #fdf3f0;
-        --metric-neutral-bg: #f2f4fa;
+        --metric-income-bg: #ecfdf5;
+        --metric-expense-bg: #fff1f2;
+        --metric-neutral-bg: #f8fafc;
 
         /* Gráfica */
-        --chart-bar: rgba(26, 25, 23, 0.16);
+        --chart-bar: rgba(15, 23, 42, 0.12);
 
-        --shadow-sm: 0 1px 2px rgba(26, 25, 23, 0.06);
-        --shadow-md: 0 8px 24px rgba(26, 25, 23, 0.08);
-        --shadow-lg: 0 24px 48px -12px rgba(26, 25, 23, 0.22);
+        --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+        --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        --shadow-lg: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
 
-        --font-main: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
-        --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+        --font-main: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --font-serif: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
         --t-fast: 150ms;
@@ -102,41 +104,41 @@
       /* Dark "tinta y tiza": la misma libreta de noche. Canvas cálido casi negro,
          superficies un paso arriba, y un único momento claro: el hero vuelve a papel. */
       :root[data-theme="dark"] {
-        --canvas: #141311;
-        --surface: #1c1b18;
-        --surface-2: #24221e;
-        --raised: #2c2925;
-        --line: rgba(236, 232, 224, 0.1);
-        --line-strong: rgba(236, 232, 224, 0.18);
-        --ink: #ece8e0;
-        --ink-2: #a39e93;
-        --ink-3: #7c776d;
-        --ink-invert: #141311;
+        --canvas: #090a0f;
+        --surface: #10121a;
+        --surface-2: #171b26;
+        --raised: #212636;
+        --line: rgba(255, 255, 255, 0.08);
+        --grid-line: rgba(255, 255, 255, 0.032);
+        --line-strong: rgba(255, 255, 255, 0.16);
+        --ink: #f8fafc;
+        --ink-2: #94a3b8;
+        --ink-3: #64748b;
+        --ink-invert: #090a0f;
 
-        --accent: #5e8bff;
-        --accent-ink: #8aa8ff;
-        --accent-soft: #1d2438;
+        --accent: #3b82f6;
+        --accent-ink: #60a5fa;
+        --accent-soft: rgba(59, 130, 246, 0.15);
+        --accent-glow: rgba(59, 130, 246, 0.35);
 
-        --income: #7fbf8e;
-        --expense: #e0857c;
+        --income: #10b981;
+        --expense: #f43f5e;
 
-        /* El momento claro: la hoja suelta sobre la mesa a oscuras */
-        --hero-bg: #f6f5f2;
-        --hero-ink: #1a1917;
-        --hero-ink-2: rgba(26, 25, 23, 0.62);
-        --hero-line: rgba(26, 25, 23, 0.16);
+        /* Hero Dark: Obsidian Glass con luz interior */
+        --hero-bg: linear-gradient(135deg, #141824 0%, #0c0e15 100%);
+        --hero-ink: #ffffff;
+        --hero-ink-2: rgba(248, 250, 252, 0.65);
+        --hero-line: rgba(255, 255, 255, 0.12);
 
-        --metric-income-bg: #1a201b;
-        --metric-expense-bg: #221a18;
-        --metric-neutral-bg: #191d24;
+        --metric-income-bg: #0f1c19;
+        --metric-expense-bg: #1f1217;
+        --metric-neutral-bg: #12151f;
 
-        --chart-bar: rgba(236, 232, 224, 0.16);
+        --chart-bar: rgba(255, 255, 255, 0.14);
 
-        /* Luz de arriba: el hairline que separa "dark real" de grises apilados */
-        --shadow-sm:
-          inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.35);
-        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+        --shadow-sm: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.45);
+        --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        --shadow-lg: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
       }
 
       *,
@@ -147,19 +149,38 @@
 
       html,
       body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        background: var(--canvas);
+        background-color: var(--canvas);
+        /* Cuadriculado difuminado y sutil (Grid de 28px con línea muy suave) */
+        background-image: 
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 28px 28px;
+        background-position: -1px -1px;
+        background-attachment: fixed;
         color: var(--ink);
         font-family: var(--font-main);
         font-size: var(--fs-base);
         line-height: var(--lh-text);
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
+      }
+
+      /* Glow difuminado radial en el fondo tipo cuaderno fintech (Vignette suave) */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 65%),
+                    radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.4) 0%, transparent 80%);
+        backdrop-filter: blur(0.5px);
+      }
+
+      .topbar,
+      .main-app {
+        position: relative;
+        z-index: 1;
       }
 
       button,
@@ -491,6 +512,19 @@
 
       .dash-area-top-left {
         gap: var(--s-4);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .hero-dark-card {
+        flex: 1; /* Crece elegantemente eliminando el hueco intermedio */
+      }
+
+      .dash-area-top-right {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       .dash-area-bottom-right {
@@ -572,18 +606,14 @@
          Newsreader 500: la cifra se lee como en un libro contable impreso. */
       .hero-amount {
         display: inline-block;
-        font-family: var(--font-serif);
-        font-optical-sizing: auto;
+        font-family: var(--font-main);
         font-size: var(--fs-hero);
-        font-weight: 500;
-        letter-spacing: -0.01em;
+        font-weight: 700;
+        letter-spacing: -0.03em;
         color: var(--hero-ink);
         font-variant-numeric: lining-nums tabular-nums;
-        font-feature-settings: "tnum" 1;
-        line-height: 1.05;
-        padding-bottom: var(--s-2);
-        border-bottom: 1px solid var(--hero-ink-2);
-        box-shadow: 0 4px 0 -3px var(--hero-ink-2);
+        font-feature-settings: "tnum" 1, "cv02" 1, "cv03" 1;
+        line-height: 1.1;
       }
 
       .hero-dark-sub {
@@ -608,15 +638,24 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: var(--hero-ink);
-        color: var(--hero-bg);
+        background: #f43f5e !important;
+        color: #ffffff !important;
         border: 0;
-        padding: var(--s-2) var(--s-4);
-        border-radius: var(--r-sm);
+        padding: 8px 16px;
+        border-radius: 10px;
         font-size: var(--fs-sm);
         font-weight: 600;
         cursor: pointer;
-        transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+        box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+        transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-hero-primary svg {
+        stroke: #ffffff;
+      }
+
+      .btn-hero-primary span {
+        color: #ffffff;
       }
 
       .btn-hero-primary:hover {
@@ -631,15 +670,23 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: transparent;
-        color: var(--hero-ink);
-        border: 1px solid var(--hero-line);
-        padding: calc(var(--s-2) - 1px) calc(var(--s-4) - 1px);
-        border-radius: var(--r-sm);
+        background: rgba(16, 185, 129, 0.15) !important;
+        color: #10b981 !important;
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        padding: 8px 16px;
+        border-radius: 10px;
         font-size: var(--fs-sm);
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
-        transition: background-color var(--t-fast) var(--ease);
+        transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-hero-secondary svg {
+        stroke: #10b981;
+      }
+
+      .btn-hero-secondary span {
+        color: #10b981;
       }
 
       .btn-hero-secondary:hover {
@@ -665,6 +712,17 @@
         min-height: 104px;
         justify-content: center;
         container-type: inline-size;
+        background: var(--surface); /* Fondo opaco sólido base */
+      }
+
+      :root[data-theme="dark"] .pastel-card.green {
+        background-color: #111a17; /* Sólido, no translúcido */
+        border-color: rgba(16, 185, 129, 0.22);
+      }
+
+      :root[data-theme="dark"] .pastel-card.peach {
+        background-color: #1b1216; /* Sólido, no translúcido */
+        border-color: rgba(244, 63, 94, 0.22);
       }
 
       /* En tarjeta estrecha (dashboard a 2 columnas), la cifra no puede partirse */
