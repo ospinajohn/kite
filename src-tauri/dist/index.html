@@ -2302,6 +2302,63 @@
         background: var(--surface-2);
       }
 
+      /* ===== Compromisos ===== */
+      .compromiso-badge {
+        display: inline-block;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        margin-left: 6px;
+        border-radius: 9px;
+        background: #e63946;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 18px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .comp-group { margin-bottom: 14px; }
+      .comp-group-title {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-2);
+        margin: 10px 0 8px;
+      }
+      .comp-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 6px;
+        background: var(--surface);
+      }
+      .comp-item-main { flex: 1; min-width: 0; }
+      .comp-item-concepto { font-weight: 600; font-size: 14px; }
+      .comp-item-detalle { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+      .comp-item-monto { font-weight: 600; font-size: 14px; white-space: nowrap; }
+      .comp-item.atrasado { border-color: #e63946; background: rgba(230,57,70,0.05); }
+      .comp-item.hoy { border-color: #e9a13b; background: rgba(233,161,59,0.06); }
+      .comp-list { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+      .comp-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: var(--surface);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .comp-card.pausado { opacity: 0.55; }
+      .comp-card-info { flex: 1; min-width: 0; }
+      .comp-card-title { font-weight: 700; font-size: 15px; }
+      .comp-card-meta { font-size: 12px; color: var(--ink-2); margin-top: 3px; line-height: 1.5; }
+      .comp-card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+      .comp-card-actions button { font-size: 12px; padding: 6px 10px; }
     </style>
   </head>
   <body>
@@ -2347,6 +2404,9 @@
             </button>
             <button class="island-tab-btn" id="tab-btn-resumen" data-tab="resumen" role="tab" aria-selected="false">
               Resumen
+            </button>
+            <button class="island-tab-btn" id="tab-btn-compromisos" data-tab="compromisos" role="tab" aria-selected="false">
+              Compromisos<span class="compromiso-badge" id="badge-compromisos" style="display:none;">0</span>
             </button>
           </nav>
 
@@ -2640,6 +2700,27 @@
             </div>
           </div>
         </section>
+
+        <!-- VISTA 4: COMPROMISOS -->
+        <section class="tab-content" id="tab-compromisos" role="tabpanel">
+          <div class="white-panel">
+            <div class="panel-header-clean">
+              <h2 class="panel-title-clean">Compromisos recurrentes</h2>
+              <button class="btn-submit" id="btn-nuevo-compromiso" type="button">+ Nuevo compromiso</button>
+            </div>
+
+            <div id="comp-vencimientos-panel">
+              <!-- Vencen hoy / atrasados / próximos -->
+              <div id="comp-venc-hoy" class="comp-group"></div>
+              <div id="comp-venc-atrasados" class="comp-group"></div>
+              <div id="comp-venc-proximos" class="comp-group"></div>
+            </div>
+
+            <div class="comp-list" id="comp-lista">
+              <!-- JS: tarjetas de gestión -->
+            </div>
+          </div>
+        </section>
       </main>
     </div>
 
@@ -2845,6 +2926,94 @@
     </div>
 
     <!-- MODAL CONFIRMAR PROPUESTA -->
+    <!-- ===================================================================
+         MODAL DE COMPROMISO (crear / editar)
+         =================================================================== -->
+    <div class="modal-overlay" id="modal-compromiso" aria-hidden="true">
+      <div class="modal-card" style="width: 440px;" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h3 class="modal-title" id="modal-comp-title">Nuevo compromiso</h3>
+          <button class="modal-close" id="btn-cerrar-modal-comp" type="button">✕</button>
+        </div>
+        <form id="form-compromiso">
+          <div class="modal-body">
+            <input type="hidden" id="comp-id" />
+            <div class="form-row">
+              <label for="comp-concepto">Concepto</label>
+              <input type="text" id="comp-concepto" placeholder="Ej. Arriendo" maxlength="200" required />
+            </div>
+            <div class="form-row">
+              <label for="comp-monto">Monto base (COP)</label>
+              <input type="number" id="comp-monto" placeholder="Ej. 500000" min="1" step="1" required />
+            </div>
+            <div class="form-row">
+              <label>Frecuencia</label>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <select id="comp-frecuencia" aria-label="Frecuencia">
+                  <option value="mensual">Mensual</option>
+                  <option value="quincenal">Quincenal</option>
+                </select>
+                <input type="number" id="comp-dia" placeholder="Día" min="1" max="31" style="width:80px;" />
+                <select id="comp-quincena" aria-label="Quincena" style="display:none;">
+                  <option value="primera">Primera (día 15)</option>
+                  <option value="segunda">Segunda (fin de mes)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Duración</label>
+              <select id="comp-duracion" aria-label="Duración">
+                <option value="indefinido">Indefinido</option>
+                <option value="fecha_fin">Fecha fin</option>
+                <option value="cuotas">Cuotas</option>
+              </select>
+              <input type="date" id="comp-fecha-fin" style="display:none;" aria-label="Fecha fin" />
+              <input type="number" id="comp-cuotas" placeholder="N° cuotas" min="1" step="1" style="display:none;" aria-label="Número de cuotas" />
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn-cancel" id="btn-cancelar-comp">Cancelar</button>
+              <button type="submit" class="btn-submit" id="btn-guardar-comp">Guardar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         MODAL DE CONFIRMACIÓN DE PAGO DE COMPROMISO
+         =================================================================== -->
+    <div class="modal-overlay" id="modal-pago-compromiso" aria-hidden="true">
+      <div class="modal-card" style="width: 380px;" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h3 class="modal-title">Registrar pago</h3>
+          <button class="modal-close" id="btn-cerrar-pago-comp" type="button">✕</button>
+        </div>
+        <form id="form-pago-compromiso">
+          <div class="modal-body">
+            <input type="hidden" id="pago-comp-id" />
+            <input type="hidden" id="pago-periodo" />
+            <div class="form-row">
+              <label>Concepto</label>
+              <div id="pago-concepto" style="font-weight:600;"></div>
+            </div>
+            <div class="form-row">
+              <label for="pago-monto">Monto (COP)</label>
+              <input type="number" id="pago-monto" min="1" step="1" required />
+              <small id="pago-periodo-label" style="color:var(--ink-2);"></small>
+            </div>
+            <div class="form-row">
+              <label for="pago-fecha">Fecha del pago</label>
+              <input type="date" id="pago-fecha" required />
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn-cancel" id="btn-cancelar-pago-comp">Cancelar</button>
+              <button type="submit" class="btn-submit" id="btn-confirmar-pago-comp">Confirmar pago</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div class="modal-overlay" id="modal-propuesta" aria-hidden="true">
       <div class="modal-card" style="width: 400px;" role="dialog" aria-modal="true">
         <div class="modal-head">
@@ -2958,6 +3127,15 @@
         el.textContent = message;
         el.classList.add("show");
         setTimeout(() => el.classList.remove("show"), 2200);
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
       }
 
       // ---------------------------------------------------------------------
@@ -3444,6 +3622,7 @@
         if (tabId === "dashboard") renderDashboard();
         if (tabId === "historial") cargarHistorial();
         if (tabId === "resumen") cargarResumen();
+        if (tabId === "compromisos") cargarCompromisos();
       }
 
       document.querySelectorAll(".island-tab-btn").forEach(btn => {
@@ -3959,8 +4138,295 @@
             $("modal-propuesta").classList.remove("open");
             document.body.classList.remove("modal-open");
           }
+          if ($("modal-compromiso").classList.contains("open")) cerrarModalCompromiso();
+          if ($("modal-pago-compromiso").classList.contains("open")) cerrarModalPagoCompromiso();
         }
       });
+
+      // =======================================================================
+      // COMPROMISOS RECURRENTES
+      // =======================================================================
+      let compromisosCache = [];
+
+      function fmtFechaCorta(iso) {
+        const [y, m, d] = iso.split("-");
+        return `${d}/${m}/${y}`;
+      }
+
+      function etiquetaDuracion(c) {
+        if (c.duracion.indefinido !== undefined) return "Indefinido";
+        if (c.duracion.fecha_fin) return `Hasta ${fmtFechaCorta(c.duracion.fecha_fin)}`;
+        if (c.duracion.cuotas !== undefined) {
+          const total = c.duracion.cuotas;
+          const pagadas = c.cuotas_confirmadas;
+          return `${pagadas}/${total} cuotas`;
+        }
+        return "";
+      }
+
+      function etiquetaFrecuencia(c) {
+        if (c.frecuencia.mensual !== undefined) return `Mensual · día ${c.frecuencia.mensual}`;
+        if (c.frecuencia.quincenal === "primera") return "Quincenal · 1ª (día 15)";
+        if (c.frecuencia.quincenal === "segunda") return "Quincenal · 2ª (fin de mes)";
+        return "";
+      }
+
+      async function cargarCompromisos() {
+        await Promise.all([renderVencimientos(), renderListaCompromisos()]);
+      }
+
+      async function renderVencimientos() {
+        let v;
+        try {
+          v = await invoke("get_vencimientos");
+        } catch (e) {
+          console.error("Error cargando vencimientos", e);
+          return;
+        }
+        const badge = $("badge-compromisos");
+        const pendientes = (v.atrasados?.length || 0) + (v.hoy?.length || 0);
+        badge.textContent = pendientes;
+        badge.style.display = pendientes > 0 ? "inline-block" : "none";
+
+        renderGrupoVencimientos("comp-venc-hoy", "Vencen hoy", v.hoy || [], "hoy");
+        renderGrupoVencimientos("comp-venc-atrasados", "Atrasados", v.atrasados || [], "atrasado");
+        renderGrupoVencimientos("comp-venc-proximos", "Próximos (7 días)", v.proximos || [], "proximo");
+      }
+
+      function renderGrupoVencimientos(id, titulo, items, clase) {
+        const cont = $(id);
+        if (!items.length) {
+          cont.innerHTML = "";
+          return;
+        }
+        const filas = items.map(item => {
+          const c = item.compromiso;
+          const fecha = item.fecha;
+          const texto = item.dias > 0
+            ? `Atrasado ${item.dias} día${item.dias === 1 ? "" : "s"}`
+            : item.dias === 0
+              ? "Vence hoy"
+              : `Vence ${fmtFechaCorta(fecha)}`;
+          return `
+            <div class="comp-item ${clase}">
+              <div class="comp-item-main">
+                <div class="comp-item-concepto">${escapeHtml(c.concepto)}</div>
+                <div class="comp-item-detalle">${texto} · ${etiquetaFrecuencia(c)}</div>
+              </div>
+              <div class="comp-item-monto">${formatMoney(item.compromiso.monto_centavos)}</div>
+              <button class="btn-submit" type="button"
+                onclick="abrirPagoCompromiso('${c.id}', '${item.periodo_key}', ${item.compromiso.monto_centavos})">
+                Registrar pago
+              </button>
+            </div>`;
+        }).join("");
+        cont.innerHTML = `<div class="comp-group-title">${titulo}</div>${filas}`;
+      }
+
+      async function renderListaCompromisos() {
+        let items;
+        try {
+          items = await invoke("list_compromisos");
+          compromisosCache = items;
+        } catch (e) {
+          console.error("Error cargando compromisos", e);
+          return;
+        }
+        const lista = $("comp-lista");
+        if (!items.length) {
+          lista.innerHTML = `
+            <div class="comp-group-title">Mis compromisos</div>
+            <p style="color:var(--ink-2);padding:12px 0;">
+              No tenés compromisos aún. Creá uno con «+ Nuevo compromiso» para recibir recordatorios de pago.
+            </p>`;
+          return;
+        }
+        const tarjetas = items.map(item => {
+          const c = item.compromiso;
+          const pausado = c.estado === "pausado";
+          const prox = item.proximo
+            ? `Próximo: ${fmtFechaCorta(item.proximo.fecha)}`
+            : (pausado ? "Pausado" : "Sin vencimientos pendientes");
+          return `
+            <div class="comp-card ${pausado ? "pausado" : ""}">
+              <div class="comp-card-info">
+                <div class="comp-card-title">${escapeHtml(c.concepto)}</div>
+                <div class="comp-card-meta">
+                  ${formatMoney(c.monto_centavos)} · ${etiquetaFrecuencia(c)} · ${etiquetaDuracion(c)}<br>
+                  ${prox}
+                </div>
+              </div>
+              <div class="comp-card-actions">
+                <button class="btn-secondary" type="button" onclick="togglePausaCompromiso('${c.id}', ${pausado ? "false" : "true"})">
+                  ${pausado ? "Reactivar" : "Pausar"}
+                </button>
+                <button class="btn-secondary" type="button" onclick="abrirEditarCompromiso('${c.id}')">Editar</button>
+                <button class="btn-danger" type="button" onclick="eliminarCompromiso('${c.id}')">Eliminar</button>
+              </div>
+            </div>`;
+        }).join("");
+        lista.innerHTML = `<div class="comp-group-title">Mis compromisos</div>${tarjetas}`;
+      }
+
+      function actualizarVisibilidadFrecuencia() {
+        const esMensual = $("comp-frecuencia").value === "mensual";
+        $("comp-dia").style.display = esMensual ? "inline-block" : "none";
+        $("comp-quincena").style.display = esMensual ? "none" : "inline-block";
+      }
+      function actualizarVisibilidadDuracion() {
+        const tipo = $("comp-duracion").value;
+        $("comp-fecha-fin").style.display = tipo === "fecha_fin" ? "block" : "none";
+        $("comp-cuotas").style.display = tipo === "cuotas" ? "inline-block" : "none";
+      }
+      $("comp-frecuencia").addEventListener("change", actualizarVisibilidadFrecuencia);
+      $("comp-duracion").addEventListener("change", actualizarVisibilidadDuracion);
+
+      function abrirNuevoCompromiso() {
+        $("comp-id").value = "";
+        $("comp-concepto").value = "";
+        $("comp-monto").value = "";
+        $("comp-frecuencia").value = "mensual";
+        $("comp-dia").value = "1";
+        $("comp-quincena").value = "primera";
+        $("comp-duracion").value = "indefinido";
+        $("comp-fecha-fin").value = "";
+        $("comp-cuotas").value = "";
+        $("modal-comp-title").textContent = "Nuevo compromiso";
+        actualizarVisibilidadFrecuencia();
+        actualizarVisibilidadDuracion();
+        $("modal-compromiso").classList.add("open");
+        document.body.classList.add("modal-open");
+        setTimeout(() => $("comp-concepto").focus(), 80);
+      }
+
+      function abrirEditarCompromiso(id) {
+        const item = compromisosCache.find(x => x.compromiso.id === id);
+        if (!item) return;
+        const c = item.compromiso;
+        $("comp-id").value = id;
+        $("comp-concepto").value = c.concepto;
+        $("comp-monto").value = c.monto_centavos;
+        if (c.frecuencia.mensual !== undefined) {
+          $("comp-frecuencia").value = "mensual";
+          $("comp-dia").value = c.frecuencia.mensual;
+        } else {
+          $("comp-frecuencia").value = "quincenal";
+          $("comp-quincena").value = c.frecuencia.quincenal;
+        }
+        if (c.duracion.indefinido !== undefined) {
+          $("comp-duracion").value = "indefinido";
+        } else if (c.duracion.fecha_fin) {
+          $("comp-duracion").value = "fecha_fin";
+          $("comp-fecha-fin").value = c.duracion.fecha_fin;
+        } else {
+          $("comp-duracion").value = "cuotas";
+          $("comp-cuotas").value = c.duracion.cuotas;
+        }
+        $("modal-comp-title").textContent = "Editar compromiso";
+        actualizarVisibilidadFrecuencia();
+        actualizarVisibilidadDuracion();
+        $("modal-compromiso").classList.add("open");
+        document.body.classList.add("modal-open");
+      }
+
+      function cerrarModalCompromiso() {
+        $("modal-compromiso").classList.remove("open");
+        document.body.classList.remove("modal-open");
+      }
+
+      $("form-compromiso").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = $("comp-id").value;
+        const concepto = $("comp-concepto").value.trim();
+        const monto = parseInt($("comp-monto").value, 10);
+        const frecuencia = $("comp-frecuencia").value === "mensual"
+          ? { mensual: parseInt($("comp-dia").value, 10) }
+          : { quincenal: $("comp-quincena").value };
+        const tipoDur = $("comp-duracion").value;
+        const duracion = tipoDur === "indefinido"
+          ? { indefinido: null }
+          : tipoDur === "fecha_fin"
+            ? { fecha_fin: $("comp-fecha-fin").value }
+            : { cuotas: parseInt($("comp-cuotas").value, 10) };
+        try {
+          if (id) {
+            await invoke("update_compromiso", { id, concepto, montoCentavos: monto, frecuencia, duracion });
+          } else {
+            await invoke("add_compromiso", { concepto, montoCentavos: monto, frecuencia, duracion });
+          }
+          cerrarModalCompromiso();
+          await cargarCompromisos();
+          toast("Compromiso guardado");
+        } catch (err) {
+          toast(`Error: ${err}`);
+        }
+      });
+
+      async function togglePausaCompromiso(id, pausado) {
+        try {
+          await invoke("set_compromiso_estado", { id, pausado });
+          await cargarCompromisos();
+        } catch (e) {
+          toast(`Error: ${e}`);
+        }
+      }
+
+      async function eliminarCompromiso(id) {
+        const item = compromisosCache.find(x => x.compromiso.id === id);
+        const nombre = item ? item.compromiso.concepto : "este compromiso";
+        if (!window.confirm(`¿Eliminar «${nombre}»? Los pagos ya confirmados se conservan en el historial.`)) return;
+        try {
+          await invoke("delete_compromiso", { id });
+          await cargarCompromisos();
+          toast("Compromiso eliminado");
+        } catch (e) {
+          toast(`Error: ${e}`);
+        }
+      }
+
+      function abrirPagoCompromiso(id, periodo, montoBase) {
+        const item = compromisosCache.find(x => x.compromiso.id === id);
+        const concepto = item ? item.compromiso.concepto : "Compromiso";
+        $("pago-comp-id").value = id;
+        $("pago-periodo").value = periodo;
+        $("pago-concepto").textContent = concepto;
+        $("pago-monto").value = montoBase;
+        $("pago-periodo-label").textContent = `Período: ${periodo}`;
+        $("pago-fecha").value = todayStr();
+        $("modal-pago-compromiso").classList.add("open");
+        document.body.classList.add("modal-open");
+        setTimeout(() => $("pago-monto").focus(), 80);
+      }
+
+      function cerrarModalPagoCompromiso() {
+        $("modal-pago-compromiso").classList.remove("open");
+        document.body.classList.remove("modal-open");
+      }
+
+      $("form-pago-compromiso").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        try {
+          await invoke("confirmar_pago_compromiso", {
+            id: $("pago-comp-id").value,
+            periodoKey: $("pago-periodo").value,
+            montoCentavos: parseInt($("pago-monto").value, 10),
+            fecha: $("pago-fecha").value,
+          });
+          cerrarModalPagoCompromiso();
+          await cargarCompromisos();
+          await cargarHistorial();
+          renderDashboard();
+          toast("Pago registrado");
+        } catch (err) {
+          toast(`Error: ${err}`);
+        }
+      });
+
+      $("btn-nuevo-compromiso").addEventListener("click", abrirNuevoCompromiso);
+      $("btn-cerrar-modal-comp").addEventListener("click", cerrarModalCompromiso);
+      $("btn-cancelar-comp").addEventListener("click", cerrarModalCompromiso);
+      $("btn-cerrar-pago-comp").addEventListener("click", cerrarModalPagoCompromiso);
+      $("btn-cancelar-pago-comp").addEventListener("click", cerrarModalPagoCompromiso);
 
       // =======================================================================
       // MODO OSCURO (DARK MODE PERSISTENTE)
@@ -4010,6 +4476,7 @@
         $("resumen-hasta").value = todayStr();
 
         renderDashboard();
+        cargarCompromisos();
       });
     </script>
   </body>
