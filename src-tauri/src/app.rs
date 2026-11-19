@@ -1,4 +1,5 @@
 use crate::compromisos::port::CompromisosPort;
+use crate::config::ConfigPort;
 use crate::models::{Movement, MovementOrigin, MovementType};
 use crate::parser::port::{ParsedProposal, ParserPort};
 use crate::storage::port::StoragePort;
@@ -16,6 +17,7 @@ pub struct AppState {
     storage: Arc<dyn StoragePort>,
     parser: Arc<dyn ParserPort>,
     compromisos: Arc<dyn crate::compromisos::port::CompromisosPort>,
+    config: Arc<dyn crate::config::ConfigPort>,
     pending_proposal: Mutex<Option<ParsedProposal>>,
 }
 
@@ -117,11 +119,14 @@ impl AppState {
         storage.migrate()?;
         let compromisos = crate::compromisos::sqlite_impl::SqliteCompromisosStorage::new(&db_path)?;
         compromisos.migrate()?;
+        let config = crate::config::SqliteConfigStorage::new(&db_path)?;
+        config.migrate()?;
 
         Ok(Self {
             storage: Arc::new(storage),
             parser: Arc::new(crate::parser::regex_impl::RegexParser::new()),
             compromisos: Arc::new(compromisos),
+            config: Arc::new(config),
             pending_proposal: Mutex::new(None),
         })
     }
@@ -136,6 +141,10 @@ impl AppState {
 
     pub fn parser(&self) -> Arc<dyn ParserPort> {
         self.parser.clone()
+    }
+
+    pub fn config(&self) -> Arc<dyn crate::config::ConfigPort> {
+        self.config.clone()
     }
 
     pub fn take_pending_proposal(&self) -> Option<ParsedProposal> {
@@ -488,6 +497,36 @@ pub async fn confirmar_pago_compromiso(
         periodo_key,
         monto_centavos,
         fecha,
+    )
+    .map_err(|e| e.to_string())
+}
+
+// --- Planificación quincenal (feature 003) ---
+
+#[tauri::command]
+pub async fn get_planificacion(
+    state: tauri::State<'_, AppState>,
+    desde: Option<String>,
+    hasta: Option<String>,
+) -> Result<crate::planificacion::PlanQuincena, String> {
+    // La quincena se deriva de `desde` (o de hoy); `hasta` se acepta por la
+    // navegación de la UI pero el rango real lo define el día de corte.
+    let _ = hasta;
+    let referencia = desde
+        .map(|s| NaiveDate::parse_from_str(&s, "%Y-%m-%d"))
+        .transpose()
+        .map_err(|_| "Fecha inválida: se esperaba el formato YYYY-MM-DD".to_string())?;
+    let corte = match state.config().get("dia_corte").map_err(|e| e.to_string())? {
+        Some(valor) => valor
+            .parse::<u32>()
+            .map_err(|_| format!("El día de corte configurado no es válido: {valor}"))?,
+        None => 15,
+    };
+    crate::planificacion::plan_de_estado(
+        state.storage().as_ref(),
+        state.compromisos().as_ref(),
+        corte,
+        referencia,
     )
     .map_err(|e| e.to_string())
 }

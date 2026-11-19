@@ -1,7 +1,9 @@
 pub mod app;
 pub mod compromisos;
+pub mod config;
 pub mod models;
 pub mod parser;
+pub mod planificacion;
 pub mod storage;
 pub mod ui;
 

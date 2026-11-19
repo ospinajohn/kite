@@ -64,6 +64,7 @@ fn main() {
             kite::app::set_compromiso_estado,
             kite::app::get_vencimientos,
             kite::app::confirmar_pago_compromiso,
+            kite::app::get_planificacion,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
