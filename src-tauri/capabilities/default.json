@@ -4,6 +4,10 @@
   "description": "Capability for the main Kite window",
   "windows": ["main"],
   "permissions": [
-    "core:default"
+    "core:default",
+    "notification:default",
+    "notification:allow-notify",
+    "notification:allow-permission-state",
+    "notification:allow-request-permission"
   ]
 }
