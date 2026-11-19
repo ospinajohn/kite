@@ -16,17 +16,19 @@ esta feature (diferida al cierre del roadmap).
 
 ## Tasks
 
-- T1 [S2-S5] Redactar y someter a aprobación `specs/002-compromisos-recurrentes/spec.md` — commit docs.
+- T1 [S2-S5] Redactar y someter a aprobación `specs/002-compromisos-recurrentes/spec.md` — commit docs. ✓ `4b272a7`
 - T2 [S1-S7] Plan técnico: research breve (notificaciones Tauri v2 en Windows, manejo de fechas de recurrencia), data-model (migración 002: tabla compromisos + compromisos_pagos), contratos de comandos Tauri.
-- T3 [S1,S3,S7] Modelo `Compromiso` + validaciones + duración (indefinido / fecha fin / cuotas N≥1, excluyentes) + cálculo de próximos vencimientos (mensual con día 29-31 en meses cortos, quincenal, ventana 7 días) — unit tests primero.
-- T4 [S2,S4,S6] Storage: `CompromisosPort` + implementación SQLite (CRUD, pausar, deduplicación de pago por período) — contract tests.
-- T5 [S2,S4,S6] AppCommand: crear/editar/pausar/eliminar compromiso, listar vencimientos (Atrasados/Hoy/Próximos), proponer pago, confirmar pago → movimiento gasto, deduplicación — integration tests.
-- T6 [S5,S6] UI: sección Compromisos (lista + estado vacío), badge de pendientes, modal de confirmación de pago con monto editable, confirmación de eliminación — en `src-tauri/dist/index.html` siguiendo el sistema visual existente.
-- T7 [S5] Notificación de Windows el día del vencimiento (Tauri v2 notification plugin), mientras la app corre — prueba manual en Windows.
-- T8 [S1-S6] Actualizar README (uso de compromisos) + ROADMAP (estado). Bench/manual: ESC del quickstart 002.
+- T3 [S1,S3,S7] Modelo `Compromiso` + validaciones + duración (indefinido / fecha fin / cuotas N≥1, excluyentes) + cálculo de próximos vencimientos (mensual con día 29-31 en meses cortos, quincenal, ventana 7 días) — unit tests primero. ✓ `b64b38d` (16 tests, suite 62 verde, clippy limpio)
+- T4 [S2,S4,S6] Storage: `CompromisosPort` + implementación SQLite (CRUD, pausar, deduplicación de pago por período) — contract tests. ✓ `e4d739b` (4 tests; corregido deadlock lock+read y FK movements en tests)
+- T5 [S2,S4,S6] AppCommand: crear/editar/pausar/eliminar compromiso, listar vencimientos (Atrasados/Hoy/Próximos), proponer pago, confirmar pago → movimiento gasto, deduplicación — integration tests. ✓ `cb0c84b` (4 integration tests)
+- T6 [S5,S6] UI: sección Compromisos (lista + estado vacío), badge de pendientes, modal de confirmación de pago con monto editable, confirmación de eliminación — en `src-tauri/dist/index.html` siguiendo el sistema visual existente. ✓ `da177dd` (JS validado con node --check)
+- T7 [S5] Notificación de Windows el día del vencimiento (Tauri v2 notification plugin), mientras la app corre — prueba manual en Windows. ✓ `abcd6c6` (código + capabilities; verificación manual de la notificación pendiente del líder)
+- T8 [S1-S6] Actualizar README (uso de compromisos) + ROADMAP (estado). Bench/manual: ESC del quickstart 002. ✓ docs; ESC manual pendiente del líder.
 
 ## Log
 
 - L1 (2026-11-12): «me gustaria hacer estas, cual seria al plan» + lista de 5 features (verbatím en ROADMAP). Eligió empezar por Compromisos recurrentes. E6 de empaquetado se difiere al final.
 - L2 (2026-11-12): Sesión de clarificación aprobó C1–C4 (S2–S5).
 - L3 (2026-11-12): C5 aprobado (S7): duración configurable — indefinido / fecha fin / cuotas, una sola opción al crear; ventana Próximos 7 días aprobada. Spec 002 queda Aprobado.
+- L4 (2026-11-12): T2–T7 implementados. Commits: docs `4b272a7`, modelo `b64b38d` (16 unit), storage `e4d739b` (4 contract), app `cb0c84b` (4 integration), UI `da177dd`, notificaciones `abcd6c6`. Suite completa verde + clippy `-D warnings`. Nota: `src-tauri/dist/index.html` está en `.gitignore` (regla `dist/`) pero es la UI trackeada del proyecto; se agregó con `git add -f` igual que commits anteriores. Pendiente del líder: prueba manual de la app (`cargo tauri dev`) y de la notificación de Windows; cierre E6 diferido.
+- L5 (2026-11-12): Slice boundaries: docs+modelo (~900 líneas), storage (~500), app (~400), UI (~800). Acumulado en rama: ~5900 líneas desde master (UI preexistente 4 commits + esta feature); el candidato de revisión nativo es el work-unit, no el acumulado.

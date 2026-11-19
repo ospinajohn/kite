@@ -8,6 +8,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 - Historial ordenado por fecha con filtro de rango opcional
 - Corrección de movimientos (editar/eliminar con confirmación)
 - Resumen de período con totales (Balance registrado)
+- **Compromisos recurrentes** (arriendo, suscripciones, cuotas) con recordatorios y notificación de Windows
 - Persistencia local en SQLite (offline, sin servicios externos)
 - Un solo usuario, sin autenticación
 
@@ -32,6 +33,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 3. **Formulario manual**: En la pestaña **Registrar**, ingresar monto, concepto y fecha para gastos o ingresos.
 4. **Historial**: Ver movimientos ordenados por fecha, filtrar por rango.
 5. **Resumen**: Ver totales de ingresos, gastos y balance registrado.
+6. **Compromisos**: En la pestaña **Compromisos**, crear compromisos recurrentes (mensual o quincenal) con duración indefinida, fecha fin o N cuotas. Al abrir la app, los que vencen hoy generan una notificación de Windows; los atrasados y próximos (7 días) se listan con badge en la pestaña. «Registrar pago» propone el gasto con monto base corregible; se guarda solo tras confirmar.
 
 ## Interfaz
 

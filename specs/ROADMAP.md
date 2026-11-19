@@ -7,7 +7,7 @@ queda **al final de esta lista**, a decisión del líder.
 | # | Feature | Spec | Estado |
 | --- | --- | --- | --- |
 | 001 | Núcleo de registro y consulta de movimientos (MVP) | `001-registro-consulta-movimientos/` | Implementado (E1–E5); E6 de empaquetado diferido al final |
-| 002 | Compromisos recurrentes + recordatorios de pago | `002-compromisos-recurrentes/` | Spec aprobado (C1–C5); implementación en curso |
+| 002 | Compromisos recurrentes + recordatorios de pago | `002-compromisos-recurrentes/` | Implementado (modelo, storage, app, UI, notificaciones); pendiente validación manual |
 | 003 | Planificación por quincena y dinero libre | — | Pendiente de spec (depende de 002) |
 | 004 | Gestión de préstamos por cobrar (tarjetas pendientes) | — | Pendiente de spec |
 | 005 | Ahorro y metas | — | Pendiente de spec |
