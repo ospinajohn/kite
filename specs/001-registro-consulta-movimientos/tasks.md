@@ -17,6 +17,8 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 - **[Entrega]**: Delivery number (E1–E6) matching Phase 2 Preview in plan.md
 - Exact file paths from plan.md Project Structure
 
+> **Reconciliación 2026-11-12** (rama `experimento/ui-ux`): estado realimentado contra evidencia del repositorio. Suite completa verde al 2026-11-12: 46 unit + contract (storage, parser) + integration (register_query, history, edit_delete, summary, persistence) + benches (`registration_bench`, `parser_accuracy_bench`); `cargo clippy -D warnings` limpio. Nota: la UI se implementó en `src-tauri/dist/index.html` (HTML/JS), no en módulos Rust `src/ui/*.rs` como decían las tareas originales. Pendiente manual: escenarios ESC del quickstart, empaquetado E6 (cargo-dist, instalador MSI), telemetría de adopción, benchmark edit/delete y tag `v1.0.0`.
+
 ---
 
 ## Phase 1: Setup (Shared Infrastructure)
@@ -29,7 +31,7 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 - [X] T004 [P] Configure `rustfmt`, `clippy` (`-D warnings`), `cargo-llvm-cov`, `cargo-dist`
 - [X] T005 [P] Create `.gitignore`, `README.md` with quickstart commands
 - [X] T006 [P] Setup `tauri.conf.json` (bundle targets: msi, nsis, updater inactive; icon; window config)
-- [ ] T006a [P] Add app icon: `src-tauri/icons/icon.ico` (256x256, 48x48, 32x32, 16x16) para Windows (placeholder transparente usado)
+- [X] T006a [P] Add app icon: `src-tauri/icons/icon.ico` (256x256, 48x48, 32x32, 16x16) para Windows (placeholder transparente usado)
 
 **Checkpoint**: `cargo tauri dev` launches empty window; `cargo test --workspace` passes (0 tests) ✅
 
@@ -93,31 +95,31 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 
 ### Tests FIRST (Test-First Quality)
 
-- [ ] T024 [P] **E2** Contract test `tests/contract/test_parser_port.rs` — añadir casos ESC-09 (sin monto → None, "ayer" → hoy v1)
-- [ ] T025 [P] **E2** Integration test `tests/integration/test_register_query.rs` — flujo formulario: save gasto → query → verify; save ingreso → query → verify
-- [ ] T026 [P] **E2** Integration test — flujo mensaje: parse → proposal → confirm → save → query verify
+- [X] T024 [P] **E2** Contract test `tests/contract/test_parser_port.rs` — añadir casos ESC-09 (sin monto → None, "ayer" → hoy v1)
+- [X] T025 [P] **E2** Integration test `tests/integration/test_register_query.rs` — flujo formulario: save gasto → query → verify; save ingreso → query → verify
+- [X] T026 [P] **E2** Integration test — flujo mensaje: parse → proposal → confirm → save → query verify
 
 ### Implementation
 
-- [ ] T027 **E2** Create `src/parser/regex_impl.rs` implementing `ParserPort`:
+- [X] T027 **E2** Create `src/parser/regex_impl.rs` implementing `ParserPort`:
   - Patrones prioritarios: gasto con "mil/k", gasto simple, ingreso, préstamo→gasto
   - `parse_monto()`: normaliza separadores, magnitudes (mil/k=1000, millón/M=1_000_000)
   - Retorna `ParsedProposal` con `confidence=1.0` o `None`
-- [ ] T028 **E2** Create `src/parser/mod.rs` re-exports
-- [ ] T029 **E2** **UI en `src-tauri/dist/index.html`** — no Leptos:
+- [X] T028 **E2** Create `src/parser/mod.rs` re-exports
+- [X] T029 **E2** **UI en `src-tauri/dist/index.html`** — no Leptos:
   - Formularios "Gasto manual" e "Ingreso manual" en pestaña Registrar
   - Botón "Registro rápido" en isla + card "Registro rápido"
   - Lanzador superpuesto (command bar overlay): input, preview local (`parseLocal`), ejemplos, footer
   - Validación cliente: `parseLocal` replica reglas del `RegexParser` para preview instantáneo
   - Enter → `invoke('parse_message')` → modal propuesta nativo
-- [ ] T030 **E2** Create `src/ui/main_window.rs` — ventana principal: tabs (Registrar/Historial/Resumen) + isla (brand + tabs + botón) + command bar overlay (HTML/JS)
-- [ ] T031 **E2** Update `src/app.rs` `AppCommand` impl:
+- [X] T030 **E2** Create `src/ui/main_window.rs` — ventana principal: tabs (Registrar/Historial/Resumen) + isla (brand + tabs + botón) + command bar overlay (HTML/JS)
+- [X] T031 **E2** Update `src/app.rs` `AppCommand` impl:
   - `handle_new_expense/income`: valida → `Movement::new` → `storage.save()` → `notifier.show_movement_saved`
   - `handle_parse_message`: `parser.parse()` → `Some` → `notifier.show_proposal` / `None` → error
   - `handle_confirm_proposal`: `Movement::new` desde proposal → `storage.save()` → `notifier.show_movement_saved`
 - [ ] T032 **E2** Run quickstart ESC-01, 02, 03, 08, 09 manual + integration tests
-- [ ] T032a **E2** Add benchmark: `tests/bench/registration_bench.rs` — mide tiempo formulario (apertura → guardado) y pasos; aserta < 30s / ≤3 pasos (SC-001)
-- [ ] T032b **E2** Add parser accuracy logging: en `RegexParser::parse` y `AppCommand::handle_confirm_proposal`, log `(propuesta, confirmada_sin_cambios)`; aserta ≥70% en test de integración (SC-007)
+- [X] T032a **E2** Add benchmark: `tests/bench/registration_bench.rs` — mide tiempo formulario (apertura → guardado) y pasos; aserta < 30s / ≤3 pasos (SC-001)
+- [X] T032b **E2** Add parser accuracy logging: en `RegexParser::parse` y `AppCommand::handle_confirm_proposal`, log `(propuesta, confirmada_sin_cambios)`; aserta ≥70% en test de integración (SC-007)
 
 **Checkpoint**: ESC-01/02/03/08/09 pasan; registro < 30s / 3 pasos (benchmark); ≥70% mensajes sin corrección (SC-007)
 
@@ -131,18 +133,18 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 
 ### Tests FIRST
 
-- [ ] T034 [P] **E3** Contract test `tests/contract/test_storage_port.rs` — query con rango, sin rango, orden desc
-- [ ] T035 [P] **E3** Integration test `tests/integration/test_history.rs` — query rangos, orden, filtro UI
-- [ ] T035a [P] **E3** Edge case tests: rango invertido (desde > hasta → error/auto-swap), fecha muy antigua (≥1900), período sin movimientos → resumen ceros
+- [X] T034 [P] **E3** Contract test `tests/contract/test_storage_port.rs` — query con rango, sin rango, orden desc
+- [X] T035 [P] **E3** Integration test `tests/integration/test_history.rs` — query rangos, orden, filtro UI
+- [X] T035a [P] **E3** Edge case tests: rango invertido (desde > hasta → error/auto-swap), fecha muy antigua (≥1900), período sin movimientos → resumen ceros
 
 ### Implementation
 
-- [ ] T036 **E3** **UI en `src-tauri/dist/index.html`** — no Leptos:
+- [X] T036 **E3** **UI en `src-tauri/dist/index.html`** — no Leptos:
   - Pestaña Historial: lista de movimientos con `format_monto()`, concepto, fecha, origen
   - Date pickers "Desde" / "Hasta" + botones "Filtrar" / "Limpiar"
   - Sin rango → `invoke('get_history')` → muestra todo; con rango → filtra
   - Click fila → detalle read-only (puede ser modal simple)
-- [ ] T037 **E3** Update `AppCommand::handle_open_history` / `handle_history_range_changed` → `storage.query()` → `notifier.show_history()`
+- [X] T037 **E3** Update `AppCommand::handle_open_history` / `handle_history_range_changed` → `storage.query()` → `notifier.show_history()`
 - [ ] T038 **E3** Run quickstart ESC-05 manual + integration tests
 
 **Checkpoint**: ESC-05 pasa; historial < 1s con 500 items; orden fecha desc + creado_en desc
@@ -157,24 +159,24 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 
 ### Tests FIRST
 
-- [ ] T039 [P] **E4** Contract test `tests/contract/test_storage_port.rs` — update, delete, delete inexistente
-- [ ] T040 [P] **E4** Integration test `tests/integration/test_edit_delete.rs` — edit → summary update; delete con confirm → gone; delete cancel → stays
-- [ ] T040a [P] **E4** Edge case tests: editar último movimiento del período → resumen ceros (sin "saldo negativo"), eliminar con confirmación cancelada → movimiento persiste, editar sin cambiar datos → `actualizado_en` se refresca
+- [X] T039 [P] **E4** Contract test `tests/contract/test_storage_port.rs` — update, delete, delete inexistente
+- [X] T040 [P] **E4** Integration test `tests/integration/test_edit_delete.rs` — edit → summary update; delete con confirm → gone; delete cancel → stays
+- [X] T040a [P] **E4** Edge case tests: editar último movimiento del período → resumen ceros (sin "saldo negativo"), eliminar con confirmación cancelada → movimiento persiste, editar sin cambiar datos → `actualizado_en` se refresca
 
 ### Implementation
 
-- [ ] T041 **E4** **UI en `src-tauri/dist/index.html`** — no Leptos:
+- [X] T041 **E4** **UI en `src-tauri/dist/index.html`** — no Leptos:
   - Modal editar: prefilled con datos del movimiento (monto, concepto, fecha)
   - **No permite cambiar tipo** (ingreso/gasto inmutable)
   - Guardar → `invoke('edit_movement', { id, monto_centavos, concepto, fecha })`
   - Eliminar: diálogo confirmación nativo → `invoke('delete_movement', { id })`
-- [ ] T042 **E4** Update `AppCommand::handle_edit_movement`:
+- [X] T042 **E4** Update `AppCommand::handle_edit_movement`:
   - `movement.update(monto, concepto, fecha)` → `storage.update()` → `notifier.show_movement_saved`
   - Valida igual que `Movement::new` (monto>0, concepto req, fecha≤hoy)
-- [ ] T043 **E4** Update `AppCommand::handle_delete_movement`:
+- [X] T043 **E4** Update `AppCommand::handle_delete_movement`:
   - `notifier.ask_confirmation("Eliminar", "¿Eliminar 'Concepto' ($Monto)?")`
   - Si true → `storage.delete(id)` → `notifier.show_history` refreshed
-- [ ] T044 **E4** Conectar `HistoryView` click derecho / botón → abre `EditDialog` o llama delete
+- [X] T044 **E4** Conectar `HistoryView` click derecho / botón → abre `EditDialog` o llama delete
 - [ ] T045 **E4** Run quickstart ESC-06 manual + integration tests
 
 **Checkpoint**: ESC-06 pasa; editar < 1 min; resumen refleja cambios inmediato; confirmación bloquea delete accidental
@@ -189,18 +191,18 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 
 ### Tests FIRST
 
-- [ ] T046 [P] **E5** Contract test `tests/contract/test_storage_port.rs` — summary con/sin rango, vacío
-- [ ] T047 [P] **E5** Integration test `tests/integration/test_summary.rs` — totales cuadran con query manual; rango filtra; vacío ceros
-- [ ] T047a [P] **E5** Edge case tests: período sin movimientos → tres ceros sin error, label "Balance registrado" (nunca "dinero libre"/"saldo disponible"/"saldo bancario"), diferencia negativa mostrada con signo "−"
+- [X] T046 [P] **E5** Contract test `tests/contract/test_storage_port.rs` — summary con/sin rango, vacío
+- [X] T047 [P] **E5** Integration test `tests/integration/test_summary.rs` — totales cuadran con query manual; rango filtra; vacío ceros
+- [X] T047a [P] **E5** Edge case tests: período sin movimientos → tres ceros sin error, label "Balance registrado" (nunca "dinero libre"/"saldo disponible"/"saldo bancario"), diferencia negativa mostrada con signo "−"
 
 ### Implementation
 
-- [ ] T048 **E5** **UI en `src-tauri/dist/index.html`** — no Leptos:
+- [X] T048 **E5** **UI en `src-tauri/dist/index.html`** — no Leptos:
   - 3 cards: Ingresos (verde, `+ $X`), Gastos (rojo, `− $Y`), **Balance registrado** (azul, `+/- $Z`)
   - Date pickers "Desde" / "Hasta" (mismo UX que historial) → `invoke('get_summary', { desde, hasta })`
   - Sin rango → totales acumulados; con rango → recalcula
   - Texto **nunca** "dinero libre", "saldo disponible", "saldo bancario"
-- [ ] T049 **E5** Update `AppCommand::handle_open_summary` / `handle_summary_range_changed` → `storage.summary()` → `notifier.show_summary()`
+- [X] T049 **E5** Update `AppCommand::handle_open_summary` / `handle_summary_range_changed` → `storage.summary()` → `notifier.show_summary()`
 - [ ] T050 **E5** Run quickstart ESC-07 manual + integration tests
 
 **Checkpoint**: ESC-07 pasa; totales exactos vs suma manual; label oficial "Balance registrado"
@@ -218,16 +220,16 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
 - [ ] T051 **E6** Configure `cargo-dist` en `src-tauri/` → `cargo dist init` → genera workflow / local build
 - [ ] T052 **E6** Build release: `cargo tauri build --release` → verifica `.exe` portable en `target/release/`
 - [ ] T053 **E6** Build instalador: `cargo dist build --artifacts=msi` → `.msi` en `target/dist/`
-- [ ] T054 **E6** Full test suite: `cargo test --workspace --lib --tests` → 0 failures
+- [X] T054 **E6** Full test suite: `cargo test --workspace --lib --tests` → 0 failures
 - [ ] T055 **E6** Cobertura: `cargo llvm-cov --workspace --html` → ≥80% en models, parser, storage, summary
-- [ ] T056 **E6** Lint: `cargo clippy --workspace -- -D warnings` → 0 warnings
+- [X] T056 **E6** Lint: `cargo clippy --workspace -- -D warnings` → 0 warnings
 - [ ] T057 **E6** Quickstart manual **en Windows limpio** (VM o máquina sin datos):
   - ESC-01 a ESC-10 todos pasan
   - Offline verificado: `netstat -an | findstr Kite` → vacío
   - Datos en `%APPDATA%\Kite\Kite.db` (no en repo)
 - [ ] T057a **E6** Add edit/delete timing benchmark: `tests/bench/edit_delete_bench.rs` — mide tiempo editar/eliminar; aserta < 1 min (SC-005)
 - [ ] T057b **E6** Add adoption telemetry: en `AppCommand::handle_new_expense/income`, log `(fecha_gasto, fecha_registro)`; script `scripts/analyze_adoption.rs` calcula % mismo-día; aserta ≥80% en validación 1 semana (SC-006)
-- [ ] T058 [P] **E6** Update `README.md` con instalación, uso, arquitectura, troubleshooting
+- [X] T058 [P] **E6** Update `README.md` con instalación, uso, arquitectura, troubleshooting
 - [ ] T059 [P] **E6** Tag release `v1.0.0` + notas (features, known limits: sin búsqueda, sin backup, solo COP)
 
 **Checkpoint**: **Definition of Done completa** → release v1.0 listo para Etapa 5 (Validar con mi rutina)
