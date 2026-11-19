@@ -27,6 +27,13 @@ fn main() {
             kite::app::minimize_window,
             kite::app::toggle_maximize_window,
             kite::app::close_window,
+            kite::app::list_compromisos,
+            kite::app::add_compromiso,
+            kite::app::update_compromiso,
+            kite::app::delete_compromiso,
+            kite::app::set_compromiso_estado,
+            kite::app::get_vencimientos,
+            kite::app::confirmar_pago_compromiso,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,3 +1,4 @@
+use crate::compromisos::port::CompromisosPort;
 use crate::models::{Movement, MovementOrigin, MovementType};
 use crate::parser::port::{ParsedProposal, ParserPort};
 use crate::storage::port::StoragePort;
@@ -14,6 +15,7 @@ const LEGACY_DB_FILE: &str = "pocketflow.db";
 pub struct AppState {
     storage: Arc<dyn StoragePort>,
     parser: Arc<dyn ParserPort>,
+    compromisos: Arc<dyn crate::compromisos::port::CompromisosPort>,
     pending_proposal: Mutex<Option<ParsedProposal>>,
 }
 
@@ -113,16 +115,23 @@ impl AppState {
 
         let storage = crate::storage::sqlite_impl::SqliteStorage::new(&db_path)?;
         storage.migrate()?;
+        let compromisos = crate::compromisos::sqlite_impl::SqliteCompromisosStorage::new(&db_path)?;
+        compromisos.migrate()?;
 
         Ok(Self {
             storage: Arc::new(storage),
             parser: Arc::new(crate::parser::regex_impl::RegexParser::new()),
+            compromisos: Arc::new(compromisos),
             pending_proposal: Mutex::new(None),
         })
     }
 
     pub fn storage(&self) -> Arc<dyn StoragePort> {
         self.storage.clone()
+    }
+
+    pub fn compromisos(&self) -> Arc<dyn crate::compromisos::port::CompromisosPort> {
+        self.compromisos.clone()
     }
 
     pub fn parser(&self) -> Arc<dyn ParserPort> {
@@ -364,6 +373,123 @@ pub async fn delete_movement(state: tauri::State<'_, AppState>, id: String) -> R
     let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
     state.handle_delete_movement(id);
     Ok(())
+}
+
+// --- Compromisos recurrentes (feature 002) ---
+
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct CompromisoUI {
+    pub compromiso: crate::models::Compromiso,
+    pub proximo: Option<crate::models::Vencimiento>,
+    pub periodos_pagados: Vec<String>,
+}
+
+#[tauri::command]
+pub async fn list_compromisos(
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<CompromisoUI>, String> {
+    let hoy = chrono::Local::now().date_naive();
+    let storage = state.compromisos();
+    let mut items = Vec::new();
+    for c in storage.list().map_err(|e| e.to_string())? {
+        let pagados = storage.periodos_pagados(c.id).map_err(|e| e.to_string())?;
+        let proximo = crate::compromisos::proximo_vencimiento(&c, hoy, &pagados);
+        items.push(CompromisoUI { compromiso: c, proximo, periodos_pagados: pagados });
+    }
+    Ok(items)
+}
+
+#[tauri::command]
+pub async fn add_compromiso(
+    state: tauri::State<'_, AppState>,
+    concepto: String,
+    monto_centavos: i64,
+    frecuencia: crate::models::Frecuencia,
+    duracion: crate::models::Duracion,
+) -> Result<crate::models::Compromiso, String> {
+    let c = crate::models::Compromiso::new(concepto, monto_centavos, frecuencia, duracion)
+        .map_err(|e| e.to_string())?;
+    state.compromisos().save(c).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn update_compromiso(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    concepto: String,
+    monto_centavos: i64,
+    frecuencia: crate::models::Frecuencia,
+    duracion: crate::models::Duracion,
+) -> Result<crate::models::Compromiso, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    let actual = state
+        .compromisos()
+        .get_by_id(id)
+        .map_err(|e| e.to_string())?
+        .ok_or("Compromiso no encontrado")?;
+    let actualizado = actual
+        .update(concepto, monto_centavos, frecuencia, duracion)
+        .map_err(|e| e.to_string())?;
+    state.compromisos().update(actualizado).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn delete_compromiso(
+    state: tauri::State<'_, AppState>,
+    id: String,
+) -> Result<bool, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    state.compromisos().delete(id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn set_compromiso_estado(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    pausado: bool,
+) -> Result<crate::models::Compromiso, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    let estado = if pausado {
+        crate::models::EstadoCompromiso::Pausado
+    } else {
+        crate::models::EstadoCompromiso::Activo
+    };
+    state.compromisos().set_estado(id, estado).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn get_vencimientos(
+    state: tauri::State<'_, AppState>,
+) -> Result<crate::compromisos::VencimientosResponse, String> {
+    let hoy = chrono::Local::now().date_naive();
+    crate::compromisos::calcular_vencimientos(state.compromisos().as_ref(), hoy)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn confirmar_pago_compromiso(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    periodo_key: String,
+    monto_centavos: i64,
+    fecha: String,
+) -> Result<crate::models::Movement, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    let fecha = NaiveDate::parse_from_str(&fecha, "%Y-%m-%d").map_err(|e| e.to_string())?;
+    let compromiso = state
+        .compromisos()
+        .get_by_id(id)
+        .map_err(|e| e.to_string())?
+        .ok_or("Compromiso no encontrado")?;
+    crate::compromisos::confirmar_pago(
+        state.storage().as_ref(),
+        state.compromisos().as_ref(),
+        &compromiso,
+        periodo_key,
+        monto_centavos,
+        fecha,
+    )
+    .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
