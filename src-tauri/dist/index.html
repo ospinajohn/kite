@@ -2418,6 +2418,9 @@
             <button class="island-tab-btn" id="tab-btn-planificacion" data-tab="planificacion" role="tab" aria-selected="false">
               Planificación
             </button>
+            <button class="island-tab-btn" id="tab-btn-metas" data-tab="metas" role="tab" aria-selected="false">
+              Metas
+            </button>
           </nav>
 
           <div class="island-actions">
@@ -2638,6 +2641,7 @@
                 <button class="pill-filter-btn active" data-type="todos" type="button">Todos</button>
                 <button class="pill-filter-btn" data-type="gasto" type="button">Gastos</button>
                 <button class="pill-filter-btn" data-type="ingreso" type="button">Ingresos</button>
+                <button class="pill-filter-btn" data-type="aporte" type="button">Apartados</button>
               </div>
             </div>
 
@@ -2762,7 +2766,7 @@
               <div class="pastel-card green">
                 <span class="pastel-card-title">Libre de la quincena</span>
                 <div class="pastel-card-amount" id="plan-libre-quincena">+ $ 0</div>
-                <div class="pastel-card-foot">Ingresos menos gastos y compromisos del período</div>
+                <div class="pastel-card-foot">Ingresos menos gastos, compromisos y apartados del período</div>
               </div>
               <div class="pastel-card blue">
                 <span class="pastel-card-title">Libre real</span>
@@ -2785,6 +2789,12 @@
                 </div>
                 <div class="comp-item-monto" id="plan-gastos">− $ 0</div>
               </div>
+              <div class="comp-item">
+                <div class="comp-item-main">
+                  <div class="comp-item-concepto">Apartados del período</div>
+                </div>
+                <div class="comp-item-monto" id="plan-apartados">− $ 0</div>
+              </div>
               <div id="plan-pendientes"></div>
               <div id="plan-atrasados"></div>
             </div>
@@ -2800,6 +2810,26 @@
               </div>
               <p class="plan-empty-line">Primera quincena: del 1 al corte. Segunda: del corte+1 al fin de mes.</p>
             </div>
+          </div>
+        </section>
+
+        <!-- VISTA 6: METAS DE AHORRO (feature 005) -->
+        <section class="tab-content" id="tab-metas" role="tabpanel">
+          <div class="white-panel">
+            <div class="panel-header-clean">
+              <div>
+                <h2 class="panel-title-clean">Metas de ahorro</h2>
+                <span class="panel-note">Apartá dinero para tus objetivos. Los apartados no se cuentan como gastos.</span>
+              </div>
+              <button class="btn-submit" id="btn-nueva-meta" type="button">+ Nueva meta</button>
+            </div>
+
+            <div id="metas-activas" class="comp-group"></div>
+
+            <details class="comp-group" id="metas-cerradas-wrap" style="display:none;">
+              <summary class="comp-group-title" style="cursor:pointer;">Metas cerradas</summary>
+              <div id="metas-cerradas" style="margin-top:12px;"></div>
+            </details>
           </div>
         </section>
       </main>
@@ -3089,6 +3119,73 @@
             <div class="modal-actions">
               <button type="button" class="btn-cancel" id="btn-cancelar-pago-comp">Cancelar</button>
               <button type="submit" class="btn-submit" id="btn-confirmar-pago-comp">Confirmar pago</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODALES METAS (feature 005) -->
+    <div class="modal-overlay" id="modal-meta" aria-hidden="true">
+      <div class="modal-card" style="width: 440px;" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h3 class="modal-title" id="modal-meta-title">Nueva meta</h3>
+          <button class="modal-close" id="btn-cerrar-modal-meta" type="button">✕</button>
+        </div>
+        <form id="form-meta">
+          <div class="modal-body">
+            <input type="hidden" id="meta-id" />
+            <div class="form-row">
+              <label for="meta-nombre">Nombre de la meta</label>
+              <input type="text" id="meta-nombre" placeholder="Ej. Viaje a la costa" maxlength="200" required />
+            </div>
+            <div class="form-row">
+              <label for="meta-monto">Monto objetivo (COP)</label>
+              <input type="number" id="meta-monto" placeholder="Ej. 2000000" min="1" step="1" required />
+            </div>
+            <div class="form-row">
+              <label for="meta-fecha">Fecha objetivo (opcional)</label>
+              <input type="date" id="meta-fecha" />
+              <small class="panel-note">Si la definís, verás si vas a ritmo.</small>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn-cancel" id="btn-cancelar-meta">Cancelar</button>
+              <button type="submit" class="btn-submit">Guardar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-apartado" aria-hidden="true">
+      <div class="modal-card" style="width: 420px;" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h3 class="modal-title" id="modal-apartado-title">Apartar a meta</h3>
+          <button class="modal-close" id="btn-cerrar-modal-apartado" type="button">✕</button>
+        </div>
+        <form id="form-apartado">
+          <div class="modal-body">
+            <input type="hidden" id="apartado-id" />
+            <input type="hidden" id="apartado-meta-id" />
+            <div class="form-row">
+              <label id="apartado-meta-label">Meta</label>
+              <div id="apartado-meta-nombre" style="font-weight:600;"></div>
+            </div>
+            <div class="form-row">
+              <label for="apartado-monto">Monto (COP)</label>
+              <input type="number" id="apartado-monto" placeholder="Ej. 50000" min="1" step="1" required />
+            </div>
+            <div class="form-row" id="apartado-concepto-row" style="display:none;">
+              <label for="apartado-concepto">Concepto</label>
+              <input type="text" id="apartado-concepto" maxlength="200" />
+            </div>
+            <div class="form-row">
+              <label for="apartado-fecha">Fecha</label>
+              <input type="date" id="apartado-fecha" required />
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn-cancel" id="btn-cancelar-apartado">Cancelar</button>
+              <button type="submit" class="btn-submit" id="btn-guardar-apartado">Guardar</button>
             </div>
           </div>
         </form>
@@ -3721,6 +3818,7 @@
         if (tabId === "resumen") cargarResumen();
         if (tabId === "compromisos") cargarCompromisos();
         if (tabId === "planificacion") abrirPlanificacion();
+        if (tabId === "metas") cargarMetas();
       }
 
       document.querySelectorAll(".island-tab-btn").forEach(btn => {
@@ -3899,18 +3997,25 @@
             const filas = g.items
               .map((m) => {
                 const isIncome = m.tipo === "ingreso";
+                const isAporte = m.tipo === "aporte";
+                const iconClass = isIncome ? "income" : (isAporte ? "income" : "");
+                const amountClass = isIncome ? "income" : "";
+                const montoTxt = isAporte
+                  ? `→ ${formatMoney(m.monto_centavos)}`
+                  : `${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}`;
+                const origenTxt = isAporte ? "Apartado" : (m.origen === "mensaje" ? "Rápido" : "Manual");
                 return `
                   <tr class="table-row" onclick="abrirDetalleTx('${m.id}')" title="Ver detalle">
                     <td class="table-cell-concept">
                       <div class="tx-left">
-                        <div class="tx-icon-box ${isIncome ? "income" : ""}">${getOutlineIcon(m.concepto)}</div>
-                        <span class="table-concept-name">${m.concepto}</span>
+                        <div class="tx-icon-box ${iconClass}">${isAporte ? "◎" : getOutlineIcon(m.concepto)}</div>
+                        <span class="table-concept-name">${escapeHtml(m.concepto)}</span>
                       </div>
                     </td>
                     <td class="table-date"></td>
-                    <td class="table-origen">${m.origen === "mensaje" ? "Rápido" : "Manual"}</td>
-                    <td class="table-amount ${isIncome ? "income" : ""}">
-                      ${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}
+                    <td class="table-origen">${origenTxt}</td>
+                    <td class="table-amount ${amountClass}">
+                      ${montoTxt}
                     </td>
                   </tr>
                 `;
@@ -4006,21 +4111,32 @@
 
       // DETALLE Y ELIMINACIÓN
       let movimientoSeleccionado = null;
+      let editandoEsAporte = false;
 
       function abrirDetalleTx(id) {
         const m = cacheHistorial.find(x => x.id === id);
         if (!m) return;
         movimientoSeleccionado = m;
         const isIncome = m.tipo === "ingreso";
+        const isAporte = m.tipo === "aporte";
+        const montoTxt = isAporte
+          ? `→ ${formatMoney(m.monto_centavos)}`
+          : `${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}`;
+        const tipoTxt = isIncome ? "Ingreso" : (isAporte ? "Apartado a meta" : "Gasto");
+        const origenTxt = isAporte ? "Apartado" : (m.origen === "mensaje" ? "Registro rápido" : "Manual");
 
         $("tx-detalle-body").innerHTML = `
           <div class="detail-row">
             <span class="detail-key">Concepto</span>
-            <span class="detail-value">${m.concepto}</span>
+            <span class="detail-value">${escapeHtml(m.concepto)}</span>
           </div>
           <div class="detail-row">
             <span class="detail-key">Monto</span>
-            <span class="detail-value ${isIncome ? "income" : ""}">${isIncome ? "+" : "−"} ${formatMoney(m.monto_centavos)}</span>
+            <span class="detail-value ${isIncome ? "income" : ""}">${montoTxt}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Tipo</span>
+            <span class="detail-value">${tipoTxt}</span>
           </div>
           <div class="detail-row">
             <span class="detail-key">Fecha</span>
@@ -4028,7 +4144,7 @@
           </div>
           <div class="detail-row">
             <span class="detail-key">Origen</span>
-            <span class="detail-value">${m.origen === "mensaje" ? "Registro rápido" : "Manual"}</span>
+            <span class="detail-value">${origenTxt}</span>
           </div>
         `;
 
@@ -4049,14 +4165,26 @@
         if (!movimientoSeleccionado) return;
         const id = movimientoSeleccionado.id;
         const concepto = movimientoSeleccionado.concepto;
-        if (!confirm(`¿Eliminar el movimiento "${concepto}"?`)) return;
+        const esAporte = movimientoSeleccionado.tipo === "aporte";
+        if (!confirm(`¿Eliminar ${esAporte ? "el apartado" : "el movimiento"} "${concepto}"?`)) return;
 
         try {
-          await invoke("delete_movement", { id });
-          toast("Movimiento eliminado");
+          if (esAporte) {
+            await invoke("delete_apartado", { id });
+            toast("Apartado eliminado");
+          } else {
+            await invoke("delete_movement", { id });
+            toast("Movimiento eliminado");
+          }
           cerrarDetalleTx();
           cargarHistorial();
           cargarResumen();
+          if (document.getElementById("tab-planificacion").classList.contains("active")) {
+            cargarPlanificacion(planRango ? planRango.desde : null);
+          }
+          if (document.getElementById("tab-metas").classList.contains("active")) {
+            cargarMetas();
+          }
         } catch (e) {}
       });
 
@@ -4065,6 +4193,7 @@
         if (!movimientoSeleccionado) return;
         const m = movimientoSeleccionado;
         const isIncome = m.tipo === "ingreso";
+        editandoEsAporte = m.tipo === "aporte";
 
         // Cerrar modal detalle y abrir modal editar
         cerrarDetalleTx();
@@ -4072,12 +4201,19 @@
         // Llenar formulario
         $("edit-tx-id").value = m.id;
         $("edit-tx-tipo").value = m.tipo;
-        $("edit-tx-tipo-display").textContent = isIncome ? "Ingreso" : "Gasto";
-        $("edit-tx-tipo-display").style.color = isIncome ? "var(--income)" : "var(--expense)";
+        if (editandoEsAporte) {
+          $("edit-tx-tipo-display").textContent = "Apartado";
+          $("edit-tx-tipo-display").style.color = "var(--ink-2)";
+        } else {
+          $("edit-tx-tipo-display").textContent = isIncome ? "Ingreso" : "Gasto";
+          $("edit-tx-tipo-display").style.color = isIncome ? "var(--income)" : "var(--expense)";
+        }
         $("edit-tx-monto").value = m.monto_centavos;
         $("edit-tx-concepto").value = m.concepto;
         $("edit-tx-fecha").value = m.fecha;
-        $("edit-tx-origen-display").textContent = m.origen === 'mensaje' ? 'Registro rápido (NLP)' : 'Formulario';
+        if ($("edit-tx-origen-display")) {
+          $("edit-tx-origen-display").textContent = m.origen === 'mensaje' ? 'Registro rápido (NLP)' : 'Formulario';
+        }
 
         $("modal-editar-tx").classList.add("open");
         document.body.classList.add("modal-open");
@@ -4105,11 +4241,22 @@
         }
 
         try {
-          await invoke("edit_movement", { id, monto_centavos: monto, concepto, fecha });
-          toast("Movimiento actualizado");
+          if (editandoEsAporte) {
+            await invoke("edit_apartado", { id, monto_centavos: monto, concepto, fecha });
+            toast("Apartado actualizado");
+          } else {
+            await invoke("edit_movement", { id, monto_centavos: monto, concepto, fecha });
+            toast("Movimiento actualizado");
+          }
           cerrarEditarTx();
           cargarHistorial();
           cargarResumen();
+          if (document.getElementById("tab-planificacion").classList.contains("active")) {
+            cargarPlanificacion(planRango ? planRango.desde : null);
+          }
+          if (document.getElementById("tab-metas").classList.contains("active")) {
+            cargarMetas();
+          }
         } catch (err) {
           toast("Error al actualizar");
         }
@@ -4591,6 +4738,7 @@
         tweenFigure($("plan-libre-real"), Number(plan.libre_real_centavos) || 0, formatSigned);
         $("plan-ingresos").textContent = formatSigned(Number(plan.ingresos_centavos) || 0);
         $("plan-gastos").textContent = formatSigned(-(Number(plan.gastos_centavos) || 0));
+        $("plan-apartados").textContent = formatSigned(-(Number(plan.apartados_periodo_centavos) || 0));
         $("plan-pendientes").innerHTML = listaPlanCompromisos(
           "Compromisos del período (sin pagar)", plan.pendientes_periodo || [], "");
         $("plan-atrasados").innerHTML = listaPlanCompromisos(
@@ -4690,6 +4838,224 @@
       }
 
       $("btn-theme-toggle").addEventListener("click", toggleTheme);
+
+      // =======================================================================
+      // METAS DE AHORRO (feature 005)
+      // =======================================================================
+      let cacheMetas = [];
+
+      function fmtFechaMeta(iso) {
+        if (!iso) return "";
+        const [y, m, d] = iso.split("-").map(Number);
+        return `${d} ${MESES_CORTOS[m - 1]} ${y}`;
+      }
+
+      function ritmoTexto(aRitmo, fechaObjetivo) {
+        if (!fechaObjetivo) return "";
+        if (aRitmo === true) return "Vas a ritmo";
+        if (aRitmo === false) return "Atrasado respecto al ritmo";
+        return "";
+      }
+
+      async function cargarMetas() {
+        try {
+          cacheMetas = await invoke("list_metas") || [];
+          renderMetas();
+        } catch (e) {
+          $("metas-activas").innerHTML = `<p class="plan-empty-line">No se pudieron cargar las metas.</p>`;
+        }
+      }
+
+      function renderMetaCard(item) {
+        const m = item.meta;
+        const acumulado = Number(item.acumulado_centavos) || 0;
+        const objetivo = Number(m.monto_objetivo_centavos) || 0;
+        const pct = objetivo > 0 ? Math.min(100, Math.round((acumulado / objetivo) * 100)) : 0;
+        const estado = m.estado;
+        const cerrada = estado !== "Activa";
+        const ritmo = ritmoTexto(item.a_ritmo, m.fecha_objetivo);
+        const ritmoColor = item.a_ritmo === false ? "var(--expense)" : "var(--income)";
+        const estadoLabel = estado === "Completada" ? "Completada" : (estado === "Cancelada" ? "Cancelada" : "Activa");
+        const metaJson = encodeURIComponent(JSON.stringify(m));
+
+        const accionesActiva = `
+          <button class="btn-submit" type="button" data-action="apartar" data-id="${m.id}" data-nombre="${escapeHtml(m.nombre)}">Apartar</button>
+          <button class="btn-cancel" type="button" data-action="editar-meta" data-meta="${metaJson}">Editar</button>
+          <button class="btn-cancel" type="button" data-action="cancelar-meta" data-id="${m.id}">Archivar</button>
+        `;
+        const accionesCerrada = estado === "Cancelada"
+          ? `<button class="btn-cancel" type="button" data-action="reactivar-meta" data-id="${m.id}">Reactivar</button>`
+          : `<button class="btn-cancel" type="button" data-action="editar-meta" data-meta="${metaJson}">Ajustar objetivo</button>`;
+
+        return `
+          <div class="comp-card" style="flex-direction:column;align-items:stretch;gap:10px;">
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;">
+              <div class="comp-card-main">
+                <div class="comp-card-title">${escapeHtml(m.nombre)}</div>
+                <div class="comp-item-detalle">
+                  ${formatMoney(acumulado)} de ${formatMoney(objetivo)} (${pct}%)
+                  ${m.fecha_objetivo ? ` · Objetivo: ${fmtFechaMeta(m.fecha_objetivo)}` : ""}
+                </div>
+                ${ritmo ? `<div style="font-size:12px;font-weight:600;color:${ritmoColor};margin-top:4px;">${ritmo}</div>` : ""}
+              </div>
+              <span class="panel-note" style="white-space:nowrap;">${estadoLabel}</span>
+            </div>
+            <div style="height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden;">
+              <div style="height:100%;width:${pct}%;background:${estado === "Completada" ? "var(--income)" : "var(--accent, #2563eb)"};border-radius:999px;"></div>
+            </div>
+            <div class="comp-card-actions" style="flex-wrap:wrap;">
+              ${cerrada ? accionesCerrada : accionesActiva}
+              <button class="btn-cancel" type="button" data-action="ver-apartados" data-id="${m.id}" data-nombre="${escapeHtml(m.nombre)}">Ver apartados</button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderMetas() {
+        const activas = cacheMetas.filter(x => x.meta.estado === "Activa");
+        const cerradas = cacheMetas.filter(x => x.meta.estado !== "Activa");
+        $("metas-activas").innerHTML = activas.length
+          ? activas.map(renderMetaCard).join("")
+          : `<p class="plan-empty-line">No tenés metas activas. Creá una para empezar a apartar.</p>`;
+        $("metas-cerradas").innerHTML = cerradas.length
+          ? cerradas.map(renderMetaCard).join("")
+          : `<p class="plan-empty-line">No hay metas cerradas.</p>`;
+        $("metas-cerradas-wrap").style.display = cerradas.length ? "block" : "none";
+
+        document.querySelectorAll("#tab-metas [data-action]").forEach(btn => {
+          btn.addEventListener("click", () => manejarAccionMeta(btn));
+        });
+      }
+
+      async function manejarAccionMeta(btn) {
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        try {
+          if (action === "apartar") {
+            abrirModalApartado(id, btn.dataset.nombre || "");
+          } else if (action === "editar-meta") {
+            const meta = JSON.parse(decodeURIComponent(btn.dataset.meta));
+            abrirModalMeta(meta);
+          } else if (action === "cancelar-meta") {
+            if (!confirm("¿Archivar esta meta? Tus apartados se conservan, no se devuelven al disponible.")) return;
+            await invoke("cancelar_meta", { id });
+            toast("Meta archivada");
+            await cargarMetas();
+          } else if (action === "reactivar-meta") {
+            await invoke("reactivar_meta", { id });
+            toast("Meta reactivada");
+            await cargarMetas();
+          } else if (action === "ver-apartados") {
+            const movs = await invoke("get_history", {}) || [];
+            const apartados = movs.filter(m => m.tipo === "aporte" && m.meta_id === id);
+            if (!apartados.length) {
+              toast("Esta meta aún no tiene apartados");
+              return;
+            }
+            const nombre = btn.dataset.nombre || "la meta";
+            const lineas = apartados
+              .sort((a,b) => a.fecha < b.fecha ? 1 : (a.fecha > b.fecha ? -1 : String(b.creado_en||"").localeCompare(String(a.creado_en||""))))
+              .map(a => `${fechaCorta(a.fecha)} · ${formatMoney(a.monto_centavos)} · ${a.concepto}`)
+              .join("\n");
+            alert(`Apartados de ${nombre}:\n\n${lineas}`);
+          }
+        } catch (e) {
+          toast(typeof e === "string" ? e : "No se pudo completar la acción");
+        }
+      }
+
+      function abrirModalMeta(meta = null) {
+        $("meta-id").value = meta ? meta.id : "";
+        $("modal-meta-title").textContent = meta ? "Editar meta" : "Nueva meta";
+        $("meta-nombre").value = meta ? meta.nombre : "";
+        $("meta-monto").value = meta ? meta.monto_objetivo_centavos : "";
+        $("meta-fecha").value = meta && meta.fecha_objetivo ? meta.fecha_objetivo : "";
+        $("modal-meta").classList.add("open");
+        document.body.classList.add("modal-open");
+      }
+
+      function cerrarModalMeta() {
+        $("modal-meta").classList.remove("open");
+        document.body.classList.remove("modal-open");
+        $("form-meta").reset();
+        $("meta-id").value = "";
+      }
+
+      $("btn-nueva-meta").addEventListener("click", () => abrirModalMeta());
+      $("btn-cerrar-modal-meta").addEventListener("click", cerrarModalMeta);
+      $("btn-cancelar-meta").addEventListener("click", cerrarModalMeta);
+      $("modal-meta").addEventListener("click", (e) => { if (e.target === $("modal-meta")) cerrarModalMeta(); });
+
+      $("form-meta").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = $("meta-id").value || null;
+        const nombre = $("meta-nombre").value.trim();
+        const monto = parseInt($("meta-monto").value, 10);
+        const fecha = $("meta-fecha").value || null;
+        if (!nombre || !monto || monto <= 0) { toast("Completá el nombre y un monto objetivo válido"); return; }
+        try {
+          if (id) {
+            await invoke("update_meta", { id, nombre, monto_objetivo_centavos: monto, fecha_objetivo: fecha });
+            toast("Meta actualizada");
+          } else {
+            await invoke("add_meta", { nombre, monto_objetivo_centavos: monto, fecha_objetivo: fecha });
+            toast("Meta creada");
+          }
+          cerrarModalMeta();
+          await cargarMetas();
+        } catch (err) {
+          toast(typeof err === "string" ? err : "No se pudo guardar la meta");
+        }
+      });
+
+      function abrirModalApartado(metaId, metaNombre) {
+        $("apartado-id").value = "";
+        $("apartado-meta-id").value = metaId;
+        $("apartado-meta-nombre").textContent = metaNombre;
+        $("modal-apartado-title").textContent = "Apartar a meta";
+        $("apartado-monto").value = "";
+        $("apartado-fecha").value = todayStr();
+        $("apartado-concepto-row").style.display = "none";
+        $("btn-guardar-apartado").textContent = "Apartar";
+        $("modal-apartado").classList.add("open");
+        document.body.classList.add("modal-open");
+      }
+
+      function cerrarModalApartado() {
+        $("modal-apartado").classList.remove("open");
+        document.body.classList.remove("modal-open");
+        $("form-apartado").reset();
+      }
+
+      $("btn-cerrar-modal-apartado").addEventListener("click", cerrarModalApartado);
+      $("btn-cancelar-apartado").addEventListener("click", cerrarModalApartado);
+      $("modal-apartado").addEventListener("click", (e) => { if (e.target === $("modal-apartado")) cerrarModalApartado(); });
+
+      $("form-apartado").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const apartadoId = $("apartado-id").value || null;
+        const metaId = $("apartado-meta-id").value;
+        const monto = parseInt($("apartado-monto").value, 10);
+        const fecha = $("apartado-fecha").value;
+        if (!metaId || !monto || monto <= 0 || !fecha) { toast("Completá los datos del apartado"); return; }
+        try {
+          if (apartadoId) {
+            const concepto = $("apartado-concepto").value.trim();
+            await invoke("edit_apartado", { id: apartadoId, monto_centavos: monto, concepto, fecha });
+            toast("Apartado actualizado");
+          } else {
+            await invoke("add_apartado", { meta_id: metaId, monto_centavos: monto, fecha });
+            toast("Apartado registrado");
+          }
+          cerrarModalApartado();
+          await cargarMetas();
+          if (document.getElementById("tab-historial").classList.contains("active")) cargarHistorial();
+          if (document.getElementById("tab-planificacion").classList.contains("active")) cargarPlanificacion(planRango ? planRango.desde : null);
+          renderDashboard();
+        } catch (err) {
+          toast(typeof err === "string" ? err : "No se pudo guardar el apartado");
+        }
+      });
 
       window.addEventListener("DOMContentLoaded", () => {
         // Inicializar tema guardado o preferencia del sistema
