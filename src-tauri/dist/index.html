@@ -4798,8 +4798,8 @@
           // Recalculo inmediato con el nuevo corte, sobre el período mostrado.
           await cargarPlanificacion(planRango ? planRango.desde : null);
         } catch (e) {
-          // Rechazado (p. ej. fuera de 1..=28): invoke ya mostró el toast con el
-          // error; el valor anterior se conserva y la vista NO se recarga.
+          toast(typeof e === "string" ? e : "No se pudo guardar el día de corte");
+          // El valor anterior se conserva y la vista NO se recarga.
         }
       });
 

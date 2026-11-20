@@ -529,9 +529,12 @@ pub async fn get_planificacion(
     desde: Option<String>,
     hasta: Option<String>,
 ) -> Result<crate::planificacion::PlanQuincena, String> {
-    // La quincena se deriva de `desde` (o de hoy); `hasta` se acepta por la
-    // navegación de la UI pero el rango real lo define el día de corte.
-    let _ = hasta;
+    // La quincena se deriva de `desde` (o de hoy). Si se recibe `hasta`, debe
+    // coincidir con el fin del período calculado; no se acepta un rango ajeno.
+    let hasta = hasta
+        .map(|s| NaiveDate::parse_from_str(&s, "%Y-%m-%d"))
+        .transpose()
+        .map_err(|_| "Fecha inválida: se esperaba el formato YYYY-MM-DD".to_string())?;
     let referencia = desde
         .map(|s| NaiveDate::parse_from_str(&s, "%Y-%m-%d"))
         .transpose()
@@ -542,13 +545,22 @@ pub async fn get_planificacion(
             .map_err(|_| format!("El día de corte configurado no es válido: {valor}"))?,
         None => 15,
     };
-    crate::planificacion::plan_de_estado(
+    let plan = crate::planificacion::plan_de_estado(
         state.storage().as_ref(),
         state.compromisos().as_ref(),
         corte,
         referencia,
     )
-    .map_err(|e| e.to_string())
+    .map_err(|e| e.to_string())?;
+    if let Some(hasta) = hasta {
+        if hasta != plan.rango.hasta {
+            return Err(
+                "El parámetro 'hasta' no coincide con el rango de la quincena calculada"
+                    .to_string(),
+            );
+        }
+    }
+    Ok(plan)
 }
 
 /// Valida el día de corte (1..=28, FR-P01/FR-P07). Extraída del comando para
