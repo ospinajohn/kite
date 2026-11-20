@@ -1,5 +1,7 @@
 use crate::compromisos::port::CompromisosPort;
 use crate::config::ConfigPort;
+use crate::metas::port::MetasPort;
+use crate::metas::{domain::EstadoMeta, service::recalcular_estado_meta};
 use crate::models::{Movement, MovementOrigin, MovementType};
 use crate::parser::port::{ParsedProposal, ParserPort};
 use crate::storage::port::StoragePort;
@@ -18,6 +20,7 @@ pub struct AppState {
     parser: Arc<dyn ParserPort>,
     compromisos: Arc<dyn crate::compromisos::port::CompromisosPort>,
     config: Arc<dyn crate::config::ConfigPort>,
+    metas: Arc<dyn crate::metas::port::MetasPort>,
     pending_proposal: Mutex<Option<ParsedProposal>>,
 }
 
@@ -121,12 +124,15 @@ impl AppState {
         compromisos.migrate()?;
         let config = crate::config::SqliteConfigStorage::new(&db_path)?;
         config.migrate()?;
+        let metas = crate::metas::sqlite_impl::SqliteMetasStorage::new(&db_path)?;
+        metas.migrate()?;
 
         Ok(Self {
             storage: Arc::new(storage),
             parser: Arc::new(crate::parser::regex_impl::RegexParser::new()),
             compromisos: Arc::new(compromisos),
             config: Arc::new(config),
+            metas: Arc::new(metas),
             pending_proposal: Mutex::new(None),
         })
     }
@@ -145,6 +151,10 @@ impl AppState {
 
     pub fn config(&self) -> Arc<dyn crate::config::ConfigPort> {
         self.config.clone()
+    }
+
+    pub fn metas(&self) -> Arc<dyn crate::metas::port::MetasPort> {
+        self.metas.clone()
     }
 
     pub fn take_pending_proposal(&self) -> Option<ParsedProposal> {
@@ -403,7 +413,11 @@ pub async fn list_compromisos(
     for c in storage.list().map_err(|e| e.to_string())? {
         let pagados = storage.periodos_pagados(c.id).map_err(|e| e.to_string())?;
         let proximo = crate::compromisos::proximo_vencimiento(&c, hoy, &pagados);
-        items.push(CompromisoUI { compromiso: c, proximo, periodos_pagados: pagados });
+        items.push(CompromisoUI {
+            compromiso: c,
+            proximo,
+            periodos_pagados: pagados,
+        });
     }
     Ok(items)
 }
@@ -439,7 +453,10 @@ pub async fn update_compromiso(
     let actualizado = actual
         .update(concepto, monto_centavos, frecuencia, duracion)
         .map_err(|e| e.to_string())?;
-    state.compromisos().update(actualizado).map_err(|e| e.to_string())
+    state
+        .compromisos()
+        .update(actualizado)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -463,7 +480,10 @@ pub async fn set_compromiso_estado(
     } else {
         crate::models::EstadoCompromiso::Activo
     };
-    state.compromisos().set_estado(id, estado).map_err(|e| e.to_string())
+    state
+        .compromisos()
+        .set_estado(id, estado)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -557,6 +577,217 @@ pub async fn get_dia_corte(state: tauri::State<'_, AppState>) -> Result<u32, Str
             .map_err(|_| format!("El día de corte configurado no es válido: {valor}")),
         None => Ok(15),
     }
+}
+
+// --- Metas y apartados (feature 005), funciones libres testeables sin Tauri State ---
+
+pub fn listar_metas(
+    metas: &dyn MetasPort,
+) -> Result<Vec<crate::metas::domain::MetaUI>, crate::metas::domain::MetasError> {
+    crate::metas::service::listar_metas(metas)
+}
+
+pub fn alta_apartado(
+    movs: &dyn StoragePort,
+    metas: &dyn MetasPort,
+    meta_id: Uuid,
+    monto_centavos: i64,
+    fecha: NaiveDate,
+) -> Result<Movement, String> {
+    let meta = metas
+        .get_by_id(meta_id)
+        .map_err(|e| e.to_string())?
+        .ok_or_else(|| "Meta no encontrada".to_string())?;
+    if meta.estado != EstadoMeta::Activa {
+        return Err("La meta no acepta apartados".to_string());
+    }
+    let movimiento = Movement::new_apartado(
+        meta_id,
+        monto_centavos,
+        format!("Apartado · {}", meta.nombre),
+        fecha,
+    )
+    .map_err(|e| e.to_string())?;
+    let saved = movs.save(movimiento).map_err(|e| e.to_string())?;
+    recalcular_estado_meta(metas, meta_id).map_err(|e| e.to_string())?;
+    Ok(saved)
+}
+
+pub fn editar_apartado(
+    movs: &dyn StoragePort,
+    metas: &dyn MetasPort,
+    apartado_id: Uuid,
+    monto_centavos: i64,
+    concepto: String,
+    fecha: NaiveDate,
+) -> Result<Movement, String> {
+    let mov = movs
+        .get_by_id(apartado_id)
+        .map_err(|e| e.to_string())?
+        .ok_or_else(|| "Movimiento no encontrado".to_string())?;
+    if mov.tipo != MovementType::Aporte {
+        return Err("El movimiento no es un apartado".to_string());
+    }
+    let actualizado = mov
+        .update(monto_centavos, concepto, fecha)
+        .map_err(|e| e.to_string())?;
+    let saved = movs.update(actualizado).map_err(|e| e.to_string())?;
+    if let Some(meta_id) = saved.meta_id {
+        recalcular_estado_meta(metas, meta_id).map_err(|e| e.to_string())?;
+    }
+    Ok(saved)
+}
+
+pub fn borrar_apartado(
+    movs: &dyn StoragePort,
+    metas: &dyn MetasPort,
+    apartado_id: Uuid,
+) -> Result<bool, String> {
+    let mov = movs
+        .get_by_id(apartado_id)
+        .map_err(|e| e.to_string())?
+        .ok_or_else(|| "Movimiento no encontrado".to_string())?;
+    if mov.tipo != MovementType::Aporte {
+        return Err("El movimiento no es un apartado".to_string());
+    }
+    let meta_id = mov.meta_id;
+    let deleted = movs.delete(apartado_id).map_err(|e| e.to_string())?;
+    if let Some(meta_id) = meta_id {
+        recalcular_estado_meta(metas, meta_id).map_err(|e| e.to_string())?;
+    }
+    Ok(deleted)
+}
+
+pub fn actualizar_meta(
+    metas: &dyn MetasPort,
+    id: Uuid,
+    nombre: String,
+    monto_objetivo_centavos: i64,
+    fecha_objetivo: Option<NaiveDate>,
+) -> Result<crate::metas::domain::Meta, String> {
+    let meta = metas
+        .get_by_id(id)
+        .map_err(|e| e.to_string())?
+        .ok_or_else(|| "Meta no encontrada".to_string())?;
+    let actualizado = meta
+        .update(nombre, monto_objetivo_centavos, fecha_objetivo)
+        .map_err(|e| e.to_string())?;
+    metas.update(actualizado).map_err(|e| e.to_string())?;
+    recalcular_estado_meta(metas, id).map_err(|e| e.to_string())
+}
+
+// --- Tauri commands: metas ---
+
+#[tauri::command]
+pub async fn list_metas(
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<crate::metas::domain::MetaUI>, String> {
+    crate::metas::service::listar_metas(state.metas().as_ref()).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn add_meta(
+    state: tauri::State<'_, AppState>,
+    nombre: String,
+    monto_objetivo_centavos: i64,
+    fecha_objetivo: Option<String>,
+) -> Result<crate::metas::domain::Meta, String> {
+    let fecha = fecha_objetivo
+        .as_deref()
+        .map(|s| NaiveDate::parse_from_str(s, "%Y-%m-%d"))
+        .transpose()
+        .map_err(|e| e.to_string())?;
+    let meta = crate::metas::domain::Meta::new(nombre, monto_objetivo_centavos, fecha)
+        .map_err(|e| e.to_string())?;
+    state.metas().save(meta).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn update_meta(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    nombre: String,
+    monto_objetivo_centavos: i64,
+    fecha_objetivo: Option<String>,
+) -> Result<crate::metas::domain::Meta, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    let fecha = fecha_objetivo
+        .as_deref()
+        .map(|s| NaiveDate::parse_from_str(s, "%Y-%m-%d"))
+        .transpose()
+        .map_err(|e| e.to_string())?;
+    actualizar_meta(
+        state.metas().as_ref(),
+        id,
+        nombre,
+        monto_objetivo_centavos,
+        fecha,
+    )
+}
+
+#[tauri::command]
+pub async fn cancelar_meta(
+    state: tauri::State<'_, AppState>,
+    id: String,
+) -> Result<crate::metas::domain::Meta, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    state.metas().cancelar(id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn reactivar_meta(
+    state: tauri::State<'_, AppState>,
+    id: String,
+) -> Result<crate::metas::domain::Meta, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    state.metas().reactivar(id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn add_apartado(
+    state: tauri::State<'_, AppState>,
+    meta_id: String,
+    monto_centavos: i64,
+    fecha: String,
+) -> Result<crate::models::Movement, String> {
+    let meta_id = Uuid::parse_str(&meta_id).map_err(|e| e.to_string())?;
+    let fecha = NaiveDate::parse_from_str(&fecha, "%Y-%m-%d").map_err(|e| e.to_string())?;
+    alta_apartado(
+        state.storage().as_ref(),
+        state.metas().as_ref(),
+        meta_id,
+        monto_centavos,
+        fecha,
+    )
+}
+
+#[tauri::command]
+pub async fn edit_apartado(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    monto_centavos: i64,
+    concepto: String,
+    fecha: String,
+) -> Result<crate::models::Movement, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    let fecha = NaiveDate::parse_from_str(&fecha, "%Y-%m-%d").map_err(|e| e.to_string())?;
+    editar_apartado(
+        state.storage().as_ref(),
+        state.metas().as_ref(),
+        id,
+        monto_centavos,
+        concepto,
+        fecha,
+    )
+}
+
+#[tauri::command]
+pub async fn delete_apartado(
+    state: tauri::State<'_, AppState>,
+    id: String,
+) -> Result<bool, String> {
+    let id = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+    borrar_apartado(state.storage().as_ref(), state.metas().as_ref(), id)
 }
 
 #[tauri::command]

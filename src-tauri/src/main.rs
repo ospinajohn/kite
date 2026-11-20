@@ -13,9 +13,8 @@ async fn notificar_compromisos_del_dia(app: tauri::AppHandle) {
         Ok(vencimientos) => {
             for item in &vencimientos.hoy {
                 let concepto = &item.compromiso.concepto;
-                let cuerpo = format!(
-                    "«{concepto}» vence hoy. Registralo desde la pestaña Compromisos."
-                );
+                let cuerpo =
+                    format!("«{concepto}» vence hoy. Registralo desde la pestaña Compromisos.");
                 if let Err(e) = app
                     .notification()
                     .builder()
@@ -67,6 +66,14 @@ fn main() {
             kite::app::get_planificacion,
             kite::app::set_dia_corte,
             kite::app::get_dia_corte,
+            kite::app::list_metas,
+            kite::app::add_meta,
+            kite::app::update_meta,
+            kite::app::cancelar_meta,
+            kite::app::reactivar_meta,
+            kite::app::add_apartado,
+            kite::app::edit_apartado,
+            kite::app::delete_apartado,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
