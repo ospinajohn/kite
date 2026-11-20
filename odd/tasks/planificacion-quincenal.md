@@ -16,13 +16,15 @@ NO modificar módulos de compromisos (002) ni el modelo de movimientos (001); so
 ## Tasks
 
 - T1 [S1-S7] Spec + plan técnico escritos y aprobados (C1–C4). ✓
-- T2 [S2] `config` port + SQLite + migración 003 (`dia_corte`, default 15) — contract tests.
-- T3 [S3,S6] Cálculo puro `PlanQuincena` en `planificacion/service.rs` — unit tests primero (casos del spec: 700k, atrasado 100k→600k, pagado no descuenta, pausado/agotado, febrero corte 28, negativos).
-- T4 [S3,S5] Comando `get_planificacion(desde?, hasta?)` + navegación de quincena en el servicio — integration tests.
-- T5 [S4,S5,S7] UI: pestaña Planificación con navegación y desglose, editor del corte, tarjeta Dashboard — `node --check`.
+- T2 [S2] `config` port + SQLite + migración 003 (`dia_corte`, default 15) — contract tests. ✓ `06ff93c` (worker: 5 tests)
+- T3 [S3,S6] Cálculo puro `PlanQuincena` en `planificacion/service.rs` — unit tests primero (casos del spec: 700k, atrasado 100k→600k, pagado no descuenta, pausado/agotado, febrero corte 28, negativos). ✓ `06ff93c` (worker: 17 unit + dedup atrasados, salto febrero vacía)
+- T4 [S3,S5] Comando `get_planificacion(desde?, hasta?)` + navegación de quincena en el servicio — integration tests. ✓ `06ff93c` (worker: 9 integration; assess nativo high, revisión diferida por saldo)
+- T5 [S4,S5,S7] UI: pestaña Planificación con navegación y desglose, editor del corte, tarjeta Dashboard — `node --check`. ✓ `2fd57ba` (worker: set/get_dia_corte + validar_dia_corte testeado; verificado por el padre: JS OK, wording FR-P08 0 coincidencias, suite 147 verde)
 - T6 [S1-S7] README + ROADMAP + cierre del documento. Validación manual del líder registrada como pendiente.
 
 ## Log
 
 - L1 (2026-11-12): Feature elegida tras posponer la validación manual de la 002 (revisión nativa pendiente por saldo del proveedor). El líder eligió: corte configurable, ambos números, pestaña + tarjeta dashboard, actual + navegación.
 - L2 (2026-11-12): C1–C4 aprobadas vía sesión de clarificación; spec y plan escritos.
+- L3 (2026-11-12): Backend (T2–T4) implementado por worker delegado: migración 003, ConfigPort, cálculo puro y get_planificacion. Commit `06ff93c` (31 tests nuevos). Assess nativo: high (señal shell_process en main.rs) → revisión debida, DIFERIDA por saldo del proveedor (402) bajo decisión del líder; verificación del worker registrada (RED→GREEN, suite 145).
+- L4 (2026-11-12): UI (T5) implementada por worker delegado: pestaña Planificación + navegación + editor de corte + tarjeta Dashboard, comandos set/get_dia_corte. Commit `2fd57ba`. Verificado por el padre: node --check OK, 0 coincidencias de «saldo»/«dinero garantizado», suite 147 verde, clippy limpio. Pendiente del líder: validación manual (cargo tauri dev) — igual que la 002. T6 docs cerrados en el mismo flujo.

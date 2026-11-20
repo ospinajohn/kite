@@ -9,6 +9,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 - Corrección de movimientos (editar/eliminar con confirmación)
 - Resumen de período con totales (Balance registrado)
 - **Compromisos recurrentes** (arriendo, suscripciones, cuotas) con recordatorios y notificación de Windows
+- **Planificación por quincena**: día de corte configurable, «Libre de la quincena» y «Libre real» (estimados según lo registrado)
 - Persistencia local en SQLite (offline, sin servicios externos)
 - Un solo usuario, sin autenticación
 
@@ -34,6 +35,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 4. **Historial**: Ver movimientos ordenados por fecha, filtrar por rango.
 5. **Resumen**: Ver totales de ingresos, gastos y balance registrado.
 6. **Compromisos**: En la pestaña **Compromisos**, crear compromisos recurrentes (mensual o quincenal) con duración indefinida, fecha fin o N cuotas. Al abrir la app, los que vencen hoy generan una notificación de Windows; los atrasados y próximos (7 días) se listan con badge en la pestaña. «Registrar pago» propone el gasto con monto base corregible; se guarda solo tras confirmar.
+7. **Planificación**: En la pestaña **Planificación**, ver «Libre de la quincena» y «Libre real» con desglose (ingresos, gastos, compromisos pendientes y atrasados). Navegá quincenas con ‹ Anterior / Hoy / Siguiente › y configurá tu día de corte (1–28). El Dashboard muestra una tarjeta compacta con el «Libre real» de la quincena en curso.
 
 ## Interfaz
 
