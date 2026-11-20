@@ -69,7 +69,9 @@ impl PeriodSummary {
     pub fn range_description(&self) -> String {
         match (self.desde, self.hasta) {
             (Some(d), Some(h)) if d == h => format!("{}", d.format("%-d %b %Y")).to_lowercase(),
-            (Some(d), Some(h)) => format!("{} – {}", d.format("%-d %b"), h.format("%-d %b %Y")).to_lowercase(),
+            (Some(d), Some(h)) => {
+                format!("{} – {}", d.format("%-d %b"), h.format("%-d %b %Y")).to_lowercase()
+            }
             (Some(d), None) => format!("Desde {}", d.format("%-d %b %Y")).to_lowercase(),
             (None, Some(h)) => format!("Hasta {}", h.format("%-d %b %Y")).to_lowercase(),
             (None, None) => "Todo el historial (acumulado)".into(),
@@ -119,6 +121,9 @@ mod tests {
 
     #[test]
     fn label_oficial() {
-        assert_eq!(PeriodSummary::new(0,0,None,None).label(), "Balance registrado");
+        assert_eq!(
+            PeriodSummary::new(0, 0, None, None).label(),
+            "Balance registrado"
+        );
     }
 }

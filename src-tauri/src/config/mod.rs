@@ -35,7 +35,9 @@ impl SqliteConfigStorage {
         std::fs::create_dir_all(db_path.parent().unwrap())?;
         let conn = Connection::open(db_path)?;
         conn.execute_batch("PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL;")?;
-        Ok(Self { conn: Arc::new(Mutex::new(conn)) })
+        Ok(Self {
+            conn: Arc::new(Mutex::new(conn)),
+        })
     }
 
     fn init_schema(&self) -> Result<(), ConfigError> {

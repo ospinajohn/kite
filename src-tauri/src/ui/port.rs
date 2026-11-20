@@ -1,6 +1,6 @@
+use crate::models::summary::PeriodSummary;
 use crate::models::Movement;
 use crate::parser::port::ParsedProposal;
-use crate::models::summary::PeriodSummary;
 use chrono::NaiveDate;
 use uuid::Uuid;
 
@@ -23,7 +23,12 @@ pub trait UiNotifier: Send + Sync {
     fn show_movement_saved(&self, movement: &Movement);
     fn show_validation_error(&self, field: &str, message: &str);
     fn show_proposal(&self, proposal: &ParsedProposal);
-    fn show_history(&self, movements: &[Movement], desde: Option<NaiveDate>, hasta: Option<NaiveDate>);
+    fn show_history(
+        &self,
+        movements: &[Movement],
+        desde: Option<NaiveDate>,
+        hasta: Option<NaiveDate>,
+    );
     fn show_summary(&self, summary: &PeriodSummary);
     fn ask_confirmation(&self, title: &str, message: &str) -> bool;
     fn show_error(&self, message: &str);
@@ -37,7 +42,13 @@ pub trait AppCommand: Send + Sync {
     fn handle_confirm_proposal(&self, proposal: ParsedProposal);
     fn handle_open_history(&self, desde: Option<NaiveDate>, hasta: Option<NaiveDate>);
     fn handle_open_summary(&self, desde: Option<NaiveDate>, hasta: Option<NaiveDate>);
-    fn handle_edit_movement(&self, id: Uuid, monto_centavos: i64, concepto: String, fecha: NaiveDate);
+    fn handle_edit_movement(
+        &self,
+        id: Uuid,
+        monto_centavos: i64,
+        concepto: String,
+        fecha: NaiveDate,
+    );
     fn handle_delete_movement(&self, id: Uuid);
     fn shutdown(&self);
 }
@@ -45,11 +56,10 @@ pub trait AppCommand: Send + Sync {
 #[cfg(test)]
 mod contract_tests {
     use super::*;
-    use crate::models::{Movement, MovementType};
     use crate::models::summary::PeriodSummary;
+    use crate::models::{Movement, MovementType};
     use chrono::{Local, NaiveDate};
     use std::sync::Mutex;
-    
 
     #[derive(Default)]
     struct MockNotifier {
@@ -76,7 +86,10 @@ mod contract_tests {
             self.summaries.lock().unwrap().push(s.clone());
         }
         fn ask_confirmation(&self, title: &str, msg: &str) -> bool {
-            self.confirmations.lock().unwrap().push((title.to_string(), msg.to_string(), true));
+            self.confirmations
+                .lock()
+                .unwrap()
+                .push((title.to_string(), msg.to_string(), true));
             true
         }
         fn show_error(&self, msg: &str) {
@@ -94,7 +107,11 @@ mod contract_tests {
         assert_eq!(saved.tipo, MovementType::Gasto);
         assert_eq!(saved.monto_centavos, 18_000);
 
-        cmd.handle_new_income(1_500_000, "Pago quincena".into(), NaiveDate::from_ymd_opt(2026,10,15).unwrap());
+        cmd.handle_new_income(
+            1_500_000,
+            "Pago quincena".into(),
+            NaiveDate::from_ymd_opt(2026, 10, 15).unwrap(),
+        );
         assert!(notifier.saved.lock().unwrap().is_some());
 
         cmd.handle_parse_message("gasté 12 mil en transporte".into());

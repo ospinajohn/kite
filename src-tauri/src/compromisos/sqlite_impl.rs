@@ -17,7 +17,9 @@ impl SqliteCompromisosStorage {
         std::fs::create_dir_all(db_path.parent().unwrap())?;
         let conn = Connection::open(db_path)?;
         conn.execute_batch("PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL;")?;
-        Ok(Self { conn: Arc::new(Mutex::new(conn)) })
+        Ok(Self {
+            conn: Arc::new(Mutex::new(conn)),
+        })
     }
 
     fn init_schema(&self) -> Result<(), CompromisosError> {
@@ -109,8 +111,10 @@ fn row_to_compromiso_impl(row: &rusqlite::Row) -> Result<Compromiso, Compromisos
 
     let frecuencia = match frecuencia_str.as_str() {
         "mensual" => Frecuencia::Mensual(
-            u8::try_from(dia_mes.ok_or_else(|| CompromisosError::Integrity("mensual sin día".into()))?)
-                .map_err(|_| CompromisosError::Integrity("día fuera de rango".into()))?,
+            u8::try_from(
+                dia_mes.ok_or_else(|| CompromisosError::Integrity("mensual sin día".into()))?,
+            )
+            .map_err(|_| CompromisosError::Integrity("día fuera de rango".into()))?,
         ),
         "quincenal" => Frecuencia::Quincenal(match quincena_str.as_deref() {
             Some("primera") => Quincena::Primera,
@@ -122,15 +126,16 @@ fn row_to_compromiso_impl(row: &rusqlite::Row) -> Result<Compromiso, Compromisos
 
     let duracion = match duracion_tipo.as_str() {
         "indefinido" => Duracion::Indefinido,
-        "fecha_fin" => Duracion::FechaFin(
-            parse_fecha(&fecha_fin_str.ok_or_else(|| {
+        "fecha_fin" => {
+            Duracion::FechaFin(parse_fecha(&fecha_fin_str.ok_or_else(|| {
                 CompromisosError::Integrity("fecha_fin sin valor".into())
-            })?)?,
-        ),
+            })?)?)
+        }
         "cuotas" => Duracion::Cuotas(
-            u32::try_from(cuotas_total.ok_or_else(|| {
-                CompromisosError::Integrity("cuotas sin total".into())
-            })?)
+            u32::try_from(
+                cuotas_total
+                    .ok_or_else(|| CompromisosError::Integrity("cuotas sin total".into()))?,
+            )
             .map_err(|_| CompromisosError::Integrity("cuotas fuera de rango".into()))?,
         ),
         _ => return Err(CompromisosError::Integrity("duración inválida".into())),
@@ -181,7 +186,10 @@ impl CompromisosPort for SqliteCompromisosStorage {
                 fecha_fin,
                 cuotas_total,
                 compromiso.cuotas_confirmadas,
-                match compromiso.estado { EstadoCompromiso::Activo => "activo", EstadoCompromiso::Pausado => "pausado" },
+                match compromiso.estado {
+                    EstadoCompromiso::Activo => "activo",
+                    EstadoCompromiso::Pausado => "pausado",
+                },
                 compromiso.creado_en.to_rfc3339(),
                 compromiso.actualizado_en.to_rfc3339(),
             ],
@@ -213,7 +221,10 @@ impl CompromisosPort for SqliteCompromisosStorage {
                 dur_str,
                 fecha_fin,
                 cuotas_total,
-                match compromiso.estado { EstadoCompromiso::Activo => "activo", EstadoCompromiso::Pausado => "pausado" },
+                match compromiso.estado {
+                    EstadoCompromiso::Activo => "activo",
+                    EstadoCompromiso::Pausado => "pausado",
+                },
                 compromiso.actualizado_en.to_rfc3339(),
             ],
         )?;
@@ -226,7 +237,10 @@ impl CompromisosPort for SqliteCompromisosStorage {
 
     fn delete(&self, id: Uuid) -> Result<bool, CompromisosError> {
         let conn = self.conn.lock().unwrap();
-        let affected = conn.execute("DELETE FROM compromisos WHERE id = ?1", params![id.to_string()])?;
+        let affected = conn.execute(
+            "DELETE FROM compromisos WHERE id = ?1",
+            params![id.to_string()],
+        )?;
         Ok(affected > 0)
     }
 
@@ -244,9 +258,7 @@ impl CompromisosPort for SqliteCompromisosStorage {
 
     fn list(&self) -> Result<Vec<Compromiso>, CompromisosError> {
         let conn = self.conn.lock().unwrap();
-        let mut stmt = conn.prepare(
-            "SELECT * FROM compromisos ORDER BY creado_en DESC",
-        )?;
+        let mut stmt = conn.prepare("SELECT * FROM compromisos ORDER BY creado_en DESC")?;
         let rows = stmt
             .query_map([], Self::row_to_compromiso)?
             .collect::<Result<Vec<_>, _>>()?;
@@ -372,10 +384,22 @@ impl CompromisosPort for SqliteCompromisosStorage {
             .query_map(params![id.to_string()], |row| {
                 Ok(PagoCompromiso {
                     compromiso_id: Uuid::parse_str(&row.get::<_, String>("compromiso_id")?)
-                        .map_err(|_| rusqlite::Error::InvalidColumnType(0, "compromiso_id".into(), rusqlite::types::Type::Text))?,
+                        .map_err(|_| {
+                            rusqlite::Error::InvalidColumnType(
+                                0,
+                                "compromiso_id".into(),
+                                rusqlite::types::Type::Text,
+                            )
+                        })?,
                     periodo_key: row.get("periodo_key")?,
                     movimiento_id: Uuid::parse_str(&row.get::<_, String>("movimiento_id")?)
-                        .map_err(|_| rusqlite::Error::InvalidColumnType(0, "movimiento_id".into(), rusqlite::types::Type::Text))?,
+                        .map_err(|_| {
+                            rusqlite::Error::InvalidColumnType(
+                                0,
+                                "movimiento_id".into(),
+                                rusqlite::types::Type::Text,
+                            )
+                        })?,
                     monto_pagado: row.get("monto_pagado")?,
                     fecha_pago: parse_fecha(&row.get::<_, String>("fecha_pago")?)
                         .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?,

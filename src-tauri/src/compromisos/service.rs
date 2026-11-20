@@ -61,7 +61,9 @@ pub fn calcular_vencimientos(
         }
     }
     let orden = |a: &VencimientoUI, b: &VencimientoUI| {
-        a.fecha.cmp(&b.fecha).then(a.compromiso.concepto.cmp(&b.compromiso.concepto))
+        a.fecha
+            .cmp(&b.fecha)
+            .then(a.compromiso.concepto.cmp(&b.compromiso.concepto))
     };
     response.atrasados.sort_by(orden);
     response.hoy.sort_by(orden);
@@ -92,10 +94,7 @@ pub fn confirmar_pago(
     // Si ya estaba pagado, no se duplica (el mensaje amigable lo da el UNIQUE del storage).
     let pagados = compromisos.periodos_pagados(compromiso.id)?;
     if pagados.contains(&periodo_key) {
-        return Err(format!(
-            "El período {periodo_key} ya tiene un pago confirmado"
-        )
-        .into());
+        return Err(format!("El período {periodo_key} ya tiene un pago confirmado").into());
     }
 
     let movimiento = Movement::new(

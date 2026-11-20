@@ -1,3 +1,3 @@
 pub mod port;
 
-pub use port::{UiEventHandler, UiNotifier, AppCommand};
+pub use port::{AppCommand, UiEventHandler, UiNotifier};

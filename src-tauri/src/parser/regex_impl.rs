@@ -1,5 +1,5 @@
 use crate::models::MovementType;
-use crate::parser::port::{ParserPort, ParserError, ParsedProposal};
+use crate::parser::port::{ParsedProposal, ParserError, ParserPort};
 use regex::Regex;
 use std::sync::LazyLock;
 
@@ -55,7 +55,11 @@ impl ParserPort for RegexParser {
             if let Some(caps) = re.captures(trimmed) {
                 let monto_str = caps.name("monto").map(|m| m.as_str()).unwrap_or("");
                 let mag = caps.name("mag").map(|m| m.as_str());
-                let concepto = caps.name("concepto").map(|m| m.as_str().trim()).unwrap_or("").to_string();
+                let concepto = caps
+                    .name("concepto")
+                    .map(|m| m.as_str().trim())
+                    .unwrap_or("")
+                    .to_string();
 
                 if concepto.is_empty() {
                     continue;
@@ -117,7 +121,10 @@ mod tests {
     #[test]
     fn parse_ingreso() {
         let parser = RegexParser::new();
-        let r = parser.parse("recibí 1.500.000 de pago quincena").unwrap().unwrap();
+        let r = parser
+            .parse("recibí 1.500.000 de pago quincena")
+            .unwrap()
+            .unwrap();
         assert_eq!(r.tipo, MovementType::Ingreso);
         assert_eq!(r.monto_centavos, 1_500_000);
         assert_eq!(r.concepto, "pago quincena");
@@ -170,9 +177,30 @@ mod tests {
     #[test]
     fn parse_separadores() {
         let parser = RegexParser::new();
-        assert_eq!(parser.parse("gasté 1.200 en algo").unwrap().unwrap().monto_centavos, 1_200);
-        assert_eq!(parser.parse("gasté 1,200 en algo").unwrap().unwrap().monto_centavos, 1_200);
-        assert_eq!(parser.parse("gasté 1_200 en algo").unwrap().unwrap().monto_centavos, 1_200);
+        assert_eq!(
+            parser
+                .parse("gasté 1.200 en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
+            1_200
+        );
+        assert_eq!(
+            parser
+                .parse("gasté 1,200 en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
+            1_200
+        );
+        assert_eq!(
+            parser
+                .parse("gasté 1_200 en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
+            1_200
+        );
     }
 
     #[test]
@@ -191,7 +219,10 @@ mod tests {
     #[test]
     fn parse_con_ayer_gasto() {
         let parser = RegexParser::new();
-        let r = parser.parse("gasté ayer 18 mil en almuerzo").unwrap().unwrap();
+        let r = parser
+            .parse("gasté ayer 18 mil en almuerzo")
+            .unwrap()
+            .unwrap();
         assert_eq!(r.tipo, MovementType::Gasto);
         assert_eq!(r.monto_centavos, 18_000);
         assert_eq!(r.concepto, "almuerzo");
@@ -201,7 +232,10 @@ mod tests {
     #[test]
     fn parse_con_ayer_ingreso() {
         let parser = RegexParser::new();
-        let r = parser.parse("recibí ayer 1.500.000 de pago quincena").unwrap().unwrap();
+        let r = parser
+            .parse("recibí ayer 1.500.000 de pago quincena")
+            .unwrap()
+            .unwrap();
         assert_eq!(r.tipo, MovementType::Ingreso);
         assert_eq!(r.monto_centavos, 1_500_000);
         assert_eq!(r.concepto, "pago quincena");
@@ -211,7 +245,10 @@ mod tests {
     #[test]
     fn parse_con_ayer_prestamo() {
         let parser = RegexParser::new();
-        let r = parser.parse("le presté ayer 50 mil a carlos").unwrap().unwrap();
+        let r = parser
+            .parse("le presté ayer 50 mil a carlos")
+            .unwrap()
+            .unwrap();
         assert_eq!(r.tipo, MovementType::Gasto);
         assert_eq!(r.monto_centavos, 50_000);
         assert_eq!(r.concepto, "carlos");
@@ -222,7 +259,10 @@ mod tests {
     #[test]
     fn parse_millones_plural() {
         let parser = RegexParser::new();
-        let r = parser.parse("gasté 4 millones en celulares").unwrap().unwrap();
+        let r = parser
+            .parse("gasté 4 millones en celulares")
+            .unwrap()
+            .unwrap();
         assert_eq!(r.tipo, MovementType::Gasto);
         assert_eq!(r.monto_centavos, 4_000_000);
         assert_eq!(r.concepto, "celulares");
@@ -240,7 +280,10 @@ mod tests {
     #[test]
     fn parse_magnitud_sin_espacio_millones() {
         let parser = RegexParser::new();
-        let r = parser.parse("gasté 4millones en celulares").unwrap().unwrap();
+        let r = parser
+            .parse("gasté 4millones en celulares")
+            .unwrap()
+            .unwrap();
         assert_eq!(r.monto_centavos, 4_000_000);
         assert_eq!(r.concepto, "celulares");
     }

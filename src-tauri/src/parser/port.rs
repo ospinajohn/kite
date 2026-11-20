@@ -1,4 +1,4 @@
-use crate::models::{MovementType, MovementOrigin};
+use crate::models::{MovementOrigin, MovementType};
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 
@@ -67,13 +67,17 @@ mod contract_tests {
         assert_eq!(p.fecha, today);
         assert_eq!(p.confidence, 1.0);
 
-        let r = parser.parse("gasté 12.000 en transporte").expect("parse ok");
+        let r = parser
+            .parse("gasté 12.000 en transporte")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.monto_centavos, 12_000);
         assert_eq!(p.concepto, "transporte");
 
-        let r = parser.parse("recibí 1.500.000 de pago quincena").expect("parse ok");
+        let r = parser
+            .parse("recibí 1.500.000 de pago quincena")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.tipo, MovementType::Ingreso);
@@ -100,28 +104,52 @@ mod contract_tests {
 
     pub fn test_parser_edge_cases<P: ParserPort>(parser: &P) {
         assert_eq!(
-            parser.parse("gasté 1k en café").unwrap().unwrap().monto_centavos,
+            parser
+                .parse("gasté 1k en café")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
             1_000
         );
         assert_eq!(
-            parser.parse("gasté 2 M en casa").unwrap().unwrap().monto_centavos,
+            parser
+                .parse("gasté 2 M en casa")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
             2_000_000
         );
         assert_eq!(
-            parser.parse("gasté 1 millón en algo").unwrap().unwrap().monto_centavos,
+            parser
+                .parse("gasté 1 millón en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
             1_000_000
         );
 
         assert_eq!(
-            parser.parse("gasté 1.200 en algo").unwrap().unwrap().monto_centavos,
+            parser
+                .parse("gasté 1.200 en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
             1_200
         );
         assert_eq!(
-            parser.parse("gasté 1,200 en algo").unwrap().unwrap().monto_centavos,
+            parser
+                .parse("gasté 1,200 en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
             1_200
         );
         assert_eq!(
-            parser.parse("gasté 1_200 en algo").unwrap().unwrap().monto_centavos,
+            parser
+                .parse("gasté 1_200 en algo")
+                .unwrap()
+                .unwrap()
+                .monto_centavos,
             1_200
         );
 
@@ -132,7 +160,9 @@ mod contract_tests {
 
         // ESC-09: "ayer" → hoy (v1 usa fecha actual)
         let today = Local::now().date_naive();
-        let r = parser.parse("gasté ayer 18 mil en almuerzo").expect("parse ok");
+        let r = parser
+            .parse("gasté ayer 18 mil en almuerzo")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.tipo, MovementType::Gasto);
@@ -140,7 +170,9 @@ mod contract_tests {
         assert_eq!(p.concepto, "almuerzo");
         assert_eq!(p.fecha, today); // v1: "ayer" se trata como hoy
 
-        let r = parser.parse("recibí ayer 1.500.000 de pago quincena").expect("parse ok");
+        let r = parser
+            .parse("recibí ayer 1.500.000 de pago quincena")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.tipo, MovementType::Ingreso);
@@ -148,7 +180,9 @@ mod contract_tests {
         assert_eq!(p.concepto, "pago quincena");
         assert_eq!(p.fecha, today);
 
-        let r = parser.parse("le presté ayer 50 mil a carlos").expect("parse ok");
+        let r = parser
+            .parse("le presté ayer 50 mil a carlos")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.tipo, MovementType::Gasto);
@@ -157,13 +191,17 @@ mod contract_tests {
         assert_eq!(p.fecha, today);
 
         // Casos adicionales: plural "millones" y magnitudes sin espacio
-        let r = parser.parse("gasté 4 millones en celulares").expect("parse ok");
+        let r = parser
+            .parse("gasté 4 millones en celulares")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.monto_centavos, 4_000_000);
         assert_eq!(p.concepto, "celulares");
 
-        let r = parser.parse("gasté 4millones en celulares").expect("parse ok");
+        let r = parser
+            .parse("gasté 4millones en celulares")
+            .expect("parse ok");
         assert!(r.is_some());
         let p = r.unwrap();
         assert_eq!(p.monto_centavos, 4_000_000);

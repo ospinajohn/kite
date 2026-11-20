@@ -227,12 +227,20 @@ impl Compromiso {
         hoy: NaiveDate,
         periodos_pagados: &[String],
     ) -> Vec<Vencimiento> {
-        self.vencimientos_hasta(hoy + chrono::Days::new(VENTANA_PROXIMOS_DIAS as u64), periodos_pagados, usize::MAX)
+        self.vencimientos_hasta(
+            hoy + chrono::Days::new(VENTANA_PROXIMOS_DIAS as u64),
+            periodos_pagados,
+            usize::MAX,
+        )
     }
 
     /// Primer vencimiento sin pagar (cronológico), sin límite de ventana.
     /// Para la lista de gestión: si hay atrasado, es ese; si no, el próximo futuro.
-    pub fn primer_pendiente(&self, hoy: NaiveDate, periodos_pagados: &[String]) -> Option<Vencimiento> {
+    pub fn primer_pendiente(
+        &self,
+        hoy: NaiveDate,
+        periodos_pagados: &[String],
+    ) -> Option<Vencimiento> {
         self.vencimientos_hasta(hoy + chrono::Days::new(3660), periodos_pagados, 1)
             .into_iter()
             .next()
@@ -275,7 +283,10 @@ impl Compromiso {
             if fecha >= desde {
                 let key = self.periodo_key_en_mes(anio, mes);
                 if !periodos_pagados.contains(&key) {
-                    vencimientos.push(Vencimiento { periodo_key: key, fecha });
+                    vencimientos.push(Vencimiento {
+                        periodo_key: key,
+                        fecha,
+                    });
                     if vencimientos.len() >= max_items {
                         break;
                     }
@@ -346,7 +357,11 @@ mod tests {
             Duracion::Indefinido,
         )
         .unwrap();
-        c.creado_en = creado.and_hms_opt(10, 0, 0).unwrap().and_local_timezone(Local).unwrap();
+        c.creado_en = creado
+            .and_hms_opt(10, 0, 0)
+            .unwrap()
+            .and_local_timezone(Local)
+            .unwrap();
         c
     }
 
@@ -449,7 +464,11 @@ mod tests {
             Duracion::Indefinido,
         )
         .unwrap();
-        c.creado_en = creado.and_hms_opt(10, 0, 0).unwrap().and_local_timezone(Local).unwrap();
+        c.creado_en = creado
+            .and_hms_opt(10, 0, 0)
+            .unwrap()
+            .and_local_timezone(Local)
+            .unwrap();
         c
     }
 
@@ -510,7 +529,10 @@ mod tests {
         // Dos pagos: agotado, no se recuerda nada.
         c.cuotas_confirmadas = 2;
         assert!(c
-            .vencimientos_recordar(d(2026, 11, 12), &["2026-10".to_string(), "2026-11".to_string()])
+            .vencimientos_recordar(
+                d(2026, 11, 12),
+                &["2026-10".to_string(), "2026-11".to_string()]
+            )
             .is_empty());
     }
 
@@ -540,7 +562,12 @@ mod tests {
         let mut c = c;
         c.cuotas_confirmadas = 5;
         let upd = c
-            .update("Televisor cuota nueva".into(), 130_000, Frecuencia::Mensual(10), Duracion::Cuotas(12))
+            .update(
+                "Televisor cuota nueva".into(),
+                130_000,
+                Frecuencia::Mensual(10),
+                Duracion::Cuotas(12),
+            )
             .unwrap();
         assert_eq!(upd.cuotas_confirmadas, 5);
         assert_eq!(upd.concepto, "Televisor cuota nueva");
@@ -550,10 +577,7 @@ mod tests {
     fn proximos_seis_dias_y_siete_dias_en_ventana() {
         // Vence 2026-11-18; con hoy 11-12 está a 6 días → dentro de la ventana.
         let c = compromiso_mensual(18, d(2026, 11, 1));
-        assert_eq!(
-            c.vencimientos_recordar(d(2026, 11, 12), &[]).len(),
-            1
-        );
+        assert_eq!(c.vencimientos_recordar(d(2026, 11, 12), &[]).len(), 1);
         // Con hoy 11-11 está a 7 días → dentro; con hoy 11-10 está a 8 → fuera.
         assert_eq!(c.vencimientos_recordar(d(2026, 11, 11), &[]).len(), 1);
         assert!(c.vencimientos_recordar(d(2026, 11, 10), &[]).is_empty());

@@ -1,12 +1,10 @@
-use kite::compromisos::sqlite_impl::SqliteCompromisosStorage;
-use kite::compromisos::{calcular_vencimientos, confirmar_pago};
-use kite::models::{
-    Compromiso, Duracion, EstadoCompromiso, Frecuencia, Quincena,
-};
-use kite::storage::port::StoragePort;
-use kite::storage::sqlite_impl::SqliteStorage;
 use chrono::{Local, NaiveDate};
 use kite::compromisos::port::CompromisosPort;
+use kite::compromisos::sqlite_impl::SqliteCompromisosStorage;
+use kite::compromisos::{calcular_vencimientos, confirmar_pago};
+use kite::models::{Compromiso, Duracion, EstadoCompromiso, Frecuencia, Quincena};
+use kite::storage::port::StoragePort;
+use kite::storage::sqlite_impl::SqliteStorage;
 use tempfile::tempdir;
 
 fn d(y: i32, m: u32, day: u32) -> NaiveDate {
@@ -14,7 +12,13 @@ fn d(y: i32, m: u32, day: u32) -> NaiveDate {
 }
 
 fn compromiso_con_fecha(dia: u8, creado: NaiveDate, duracion: Duracion) -> Compromiso {
-    let mut c = Compromiso::new("Arriendo".into(), 500_000, Frecuencia::Mensual(dia), duracion).unwrap();
+    let mut c = Compromiso::new(
+        "Arriendo".into(),
+        500_000,
+        Frecuencia::Mensual(dia),
+        duracion,
+    )
+    .unwrap();
     c.creado_en = creado
         .and_hms_opt(10, 0, 0)
         .unwrap()
@@ -33,16 +37,28 @@ fn vencimientos_agrupa_atrasados_hoy_proximos() {
 
     // Atrasado: día de vencimiento de ayer.
     let ayer = hoy - chrono::Days::new(1);
-    let c_atrasado = compromiso_con_fecha(ayer.day() as u8, ayer - chrono::Days::new(3), Duracion::Indefinido);
+    let c_atrasado = compromiso_con_fecha(
+        ayer.day() as u8,
+        ayer - chrono::Days::new(3),
+        Duracion::Indefinido,
+    );
     storage.save(c_atrasado).unwrap();
 
     // Hoy: vence hoy.
-    let c_hoy = compromiso_con_fecha(hoy.day() as u8, hoy - chrono::Days::new(3), Duracion::Indefinido);
+    let c_hoy = compromiso_con_fecha(
+        hoy.day() as u8,
+        hoy - chrono::Days::new(3),
+        Duracion::Indefinido,
+    );
     storage.save(c_hoy).unwrap();
 
     // Próximo: vence en 5 días.
     let proximo = hoy + chrono::Days::new(5);
-    let c_prox = compromiso_con_fecha(proximo.day() as u8, hoy - chrono::Days::new(3), Duracion::Indefinido);
+    let c_prox = compromiso_con_fecha(
+        proximo.day() as u8,
+        hoy - chrono::Days::new(3),
+        Duracion::Indefinido,
+    );
     storage.save(c_prox).unwrap();
 
     let vencimientos = calcular_vencimientos(&storage, hoy).unwrap();
@@ -63,26 +79,25 @@ fn flujo_pago_completo_dedup_y_cuotas() {
 
     let hoy = Local::now().date_naive();
     let c = compromisos
-        .save(compromiso_con_fecha(hoy.day() as u8, hoy, Duracion::Cuotas(2)))
+        .save(compromiso_con_fecha(
+            hoy.day() as u8,
+            hoy,
+            Duracion::Cuotas(2),
+        ))
         .unwrap();
     let periodo = c.periodo_key_en_mes(hoy.year(), hoy.month());
 
     // Primer pago: crea el gasto y marca el período.
-    let mov = confirmar_pago(
-        &movements,
-        &compromisos,
-        &c,
-        periodo.clone(),
-        480_000,
-        hoy,
-    )
-    .unwrap();
+    let mov = confirmar_pago(&movements, &compromisos, &c, periodo.clone(), 480_000, hoy).unwrap();
     assert_eq!(mov.monto_centavos, 480_000);
     assert_eq!(mov.concepto, "Arriendo");
 
     // Aparece en el historial como gasto normal.
     assert_eq!(movements.query(None, None).unwrap().len(), 1);
-    assert_eq!(compromisos.periodos_pagados(c.id).unwrap(), vec![periodo.clone()]);
+    assert_eq!(
+        compromisos.periodos_pagados(c.id).unwrap(),
+        vec![periodo.clone()]
+    );
 
     // Segundo pago del mismo período → rechazado (FR-C07).
     let err = confirmar_pago(&movements, &compromisos, &c, periodo, 500_000, hoy).unwrap_err();
@@ -105,7 +120,9 @@ fn pausado_no_aparece_en_vencimientos() {
 
     let c = compromiso_con_fecha(hoy.day() as u8, hoy, Duracion::Indefinido);
     let saved = storage.save(c).unwrap();
-    storage.set_estado(saved.id, EstadoCompromiso::Pausado).unwrap();
+    storage
+        .set_estado(saved.id, EstadoCompromiso::Pausado)
+        .unwrap();
 
     let vencimientos = calcular_vencimientos(&storage, hoy).unwrap();
     assert_eq!(vencimientos.badge(), 0);
@@ -133,8 +150,19 @@ fn quincenal_vence_y_paga_en_su_periodo() {
     let saved = compromisos.save(c).unwrap();
     let periodo = saved.periodo_key_en_mes(hoy.year(), hoy.month());
 
-    confirmar_pago(&movements, &compromisos, &saved, periodo.clone(), 20_000, hoy).unwrap();
-    assert_eq!(compromisos.periodos_pagados(saved.id).unwrap(), vec![periodo]);
+    confirmar_pago(
+        &movements,
+        &compromisos,
+        &saved,
+        periodo.clone(),
+        20_000,
+        hoy,
+    )
+    .unwrap();
+    assert_eq!(
+        compromisos.periodos_pagados(saved.id).unwrap(),
+        vec![periodo]
+    );
     assert_eq!(movements.query(None, None).unwrap().len(), 1);
 }
 

@@ -1,5 +1,5 @@
-use crate::models::Movement;
 use crate::models::summary::PeriodSummary;
+use crate::models::Movement;
 use chrono::NaiveDate;
 use uuid::Uuid;
 
@@ -38,7 +38,7 @@ pub trait StoragePort: Send + Sync {
 #[cfg(test)]
 mod contract_tests {
     use super::*;
-    use crate::models::{Movement, MovementType, MovementOrigin};
+    use crate::models::{Movement, MovementOrigin, MovementType};
     use chrono::{Local, NaiveDate};
 
     pub fn test_storage_port<S: StoragePort>(storage: &S) {
@@ -50,7 +50,8 @@ mod contract_tests {
             "Pago de quincena".to_string(),
             NaiveDate::from_ymd_opt(2026, 10, 15).unwrap(),
             MovementOrigin::Formulario,
-        ).unwrap();
+        )
+        .unwrap();
         let saved = storage.save(ingreso.clone()).expect("save ingreso");
         assert_ne!(saved.id, Uuid::nil());
         assert_eq!(saved.tipo, MovementType::Ingreso);
@@ -62,7 +63,8 @@ mod contract_tests {
             "Almuerzo".to_string(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap();
+        )
+        .unwrap();
         let saved_gasto = storage.save(gasto.clone()).expect("save gasto");
         assert_eq!(saved_gasto.tipo, MovementType::Gasto);
 
@@ -70,10 +72,12 @@ mod contract_tests {
         assert_eq!(all.len(), 2);
         assert!(all[0].fecha >= all[1].fecha);
 
-        let filtered = storage.query(
-            Some(NaiveDate::from_ymd_opt(2026, 10, 1).unwrap()),
-            Some(NaiveDate::from_ymd_opt(2026, 10, 31).unwrap()),
-        ).expect("query range");
+        let filtered = storage
+            .query(
+                Some(NaiveDate::from_ymd_opt(2026, 10, 1).unwrap()),
+                Some(NaiveDate::from_ymd_opt(2026, 10, 31).unwrap()),
+            )
+            .expect("query range");
         assert!(filtered.len() <= 2);
 
         let summary = storage.summary(None, None).expect("summary all");

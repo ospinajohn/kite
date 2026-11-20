@@ -1,11 +1,11 @@
 //! Benchmarks for registration flow (SC-001: < 30s, ≤3 pasos)
 //! Run with: cargo bench --bench registration_bench
 
-use kite::models::{Movement, MovementType, MovementOrigin};
-use kite::parser::regex_impl::RegexParser;
-use kite::parser::port::ParserPort;
-use kite::storage::port::StoragePort;
 use chrono::Local;
+use kite::models::{Movement, MovementOrigin, MovementType};
+use kite::parser::port::ParserPort;
+use kite::parser::regex_impl::RegexParser;
+use kite::storage::port::StoragePort;
 use std::time::Instant;
 use tempfile::tempdir;
 
@@ -46,13 +46,18 @@ fn bench_registration_formulario_steps() {
         concepto.into(),
         fecha,
         MovementOrigin::Formulario,
-    ).unwrap();
+    )
+    .unwrap();
 
     // Paso 3: Guardar en storage
     paso += 1;
     storage.save(movimiento).unwrap();
 
-    assert!(paso <= 3, "Registro por formulario debe tomar ≤3 pasos, tomó {}", paso);
+    assert!(
+        paso <= 3,
+        "Registro por formulario debe tomar ≤3 pasos, tomó {}",
+        paso
+    );
 }
 
 #[test]
@@ -71,15 +76,23 @@ fn bench_registration_formulario_time() {
             "Almuerzo".into(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap();
+        )
+        .unwrap();
         storage.save(movimiento).unwrap();
     }
 
     let elapsed = start.elapsed();
     let per_registration = elapsed / 100;
 
-    println!("Tiempo promedio por registro (formulario): {:?}", per_registration);
-    assert!(per_registration.as_secs() < 30, "Registro debe tomar < 30s, tomó {:?}", per_registration);
+    println!(
+        "Tiempo promedio por registro (formulario): {:?}",
+        per_registration
+    );
+    assert!(
+        per_registration.as_secs() < 30,
+        "Registro debe tomar < 30s, tomó {:?}",
+        per_registration
+    );
 }
 
 #[test]
@@ -99,7 +112,11 @@ fn bench_registration_message_parse_time() {
     let per_parse = elapsed / 3000;
 
     println!("Tiempo promedio por parseo de mensaje: {:?}", per_parse);
-    assert!(per_parse.as_millis() < 10, "Parseo debe tomar < 10ms, tomó {:?}", per_parse);
+    assert!(
+        per_parse.as_millis() < 10,
+        "Parseo debe tomar < 10ms, tomó {:?}",
+        per_parse
+    );
 }
 
 #[test]
@@ -119,7 +136,8 @@ fn bench_full_message_flow_time() {
             proposal.concepto.clone(),
             proposal.fecha,
             proposal.origen,
-        ).unwrap();
+        )
+        .unwrap();
         storage.save(movimiento).unwrap();
     }
 
@@ -127,5 +145,9 @@ fn bench_full_message_flow_time() {
     let per_flow = elapsed / 100;
 
     println!("Tiempo promedio flujo mensaje completo: {:?}", per_flow);
-    assert!(per_flow.as_secs() < 30, "Flujo mensaje debe tomar < 30s, tomó {:?}", per_flow);
+    assert!(
+        per_flow.as_secs() < 30,
+        "Flujo mensaje debe tomar < 30s, tomó {:?}",
+        per_flow
+    );
 }

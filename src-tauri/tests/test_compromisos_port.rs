@@ -1,3 +1,4 @@
+use chrono::{Local, NaiveDate};
 use kite::compromisos::port::{CompromisosError, CompromisosPort};
 use kite::compromisos::sqlite_impl::SqliteCompromisosStorage;
 use kite::models::{
@@ -6,12 +7,17 @@ use kite::models::{
 };
 use kite::storage::port::StoragePort;
 use kite::storage::sqlite_impl::SqliteStorage;
-use chrono::{Local, NaiveDate};
 use tempfile::tempdir;
 use uuid::Uuid;
 
 fn nuevo_compromiso_mensual(dia: u8, duracion: Duracion) -> Compromiso {
-    Compromiso::new("Arriendo".into(), 500_000, Frecuencia::Mensual(dia), duracion).unwrap()
+    Compromiso::new(
+        "Arriendo".into(),
+        500_000,
+        Frecuencia::Mensual(dia),
+        duracion,
+    )
+    .unwrap()
 }
 
 fn movimiento_pago() -> Movement {
@@ -56,7 +62,10 @@ fn crud_roundtrip() {
     .unwrap();
     let saved_q = storage.save(cq.clone()).unwrap();
     let loaded_q = storage.get_by_id(saved_q.id).unwrap().unwrap();
-    assert_eq!(loaded_q.frecuencia, Frecuencia::Quincenal(Quincena::Segunda));
+    assert_eq!(
+        loaded_q.frecuencia,
+        Frecuencia::Quincenal(Quincena::Segunda)
+    );
     assert_eq!(loaded_q.duracion, Duracion::Cuotas(12));
 
     let cf = Compromiso::new(
@@ -68,13 +77,21 @@ fn crud_roundtrip() {
     .unwrap();
     let saved_f = storage.save(cf.clone()).unwrap();
     let loaded_f = storage.get_by_id(saved_f.id).unwrap().unwrap();
-    assert_eq!(loaded_f.duracion, Duracion::FechaFin(NaiveDate::from_ymd_opt(2027, 6, 30).unwrap()));
+    assert_eq!(
+        loaded_f.duracion,
+        Duracion::FechaFin(NaiveDate::from_ymd_opt(2027, 6, 30).unwrap())
+    );
 
     assert_eq!(storage.list().unwrap().len(), 3);
 
     // Update.
     let upd = loaded
-        .update("Arriendo nuevo".into(), 550_000, Frecuencia::Mensual(5), Duracion::Indefinido)
+        .update(
+            "Arriendo nuevo".into(),
+            550_000,
+            Frecuencia::Mensual(5),
+            Duracion::Indefinido,
+        )
         .unwrap();
     let saved_upd = storage.update(upd.clone()).unwrap();
     let reloaded = storage.get_by_id(saved_upd.id).unwrap().unwrap();
@@ -90,9 +107,13 @@ fn crud_roundtrip() {
     }
 
     // Pausar / reactivar.
-    let pausado = storage.set_estado(saved_upd.id, EstadoCompromiso::Pausado).unwrap();
+    let pausado = storage
+        .set_estado(saved_upd.id, EstadoCompromiso::Pausado)
+        .unwrap();
     assert_eq!(pausado.estado, EstadoCompromiso::Pausado);
-    let activo = storage.set_estado(saved_upd.id, EstadoCompromiso::Activo).unwrap();
+    let activo = storage
+        .set_estado(saved_upd.id, EstadoCompromiso::Activo)
+        .unwrap();
     assert_eq!(activo.estado, EstadoCompromiso::Activo);
     match storage.set_estado(Uuid::new_v4(), EstadoCompromiso::Pausado) {
         Err(CompromisosError::NotFound(_)) => {}
@@ -114,7 +135,9 @@ fn pago_duplicado_rechazado_y_historial() {
     let storage = SqliteCompromisosStorage::new(&db).unwrap();
     storage.migrate().unwrap();
 
-    let c = storage.save(nuevo_compromiso_mensual(5, Duracion::Cuotas(3))).unwrap();
+    let c = storage
+        .save(nuevo_compromiso_mensual(5, Duracion::Cuotas(3)))
+        .unwrap();
 
     let mov = movements.save(movimiento_pago()).unwrap();
     let pago1 = storage
@@ -131,9 +154,14 @@ fn pago_duplicado_rechazado_y_historial() {
 
     // Otro período sí pasa.
     let mov2 = movements.save(movimiento_pago()).unwrap();
-    storage.registrar_pago(c.id, "2026-12".into(), mov2).unwrap();
+    storage
+        .registrar_pago(c.id, "2026-12".into(), mov2)
+        .unwrap();
 
-    assert_eq!(storage.periodos_pagados(c.id).unwrap(), vec!["2026-11", "2026-12"]);
+    assert_eq!(
+        storage.periodos_pagados(c.id).unwrap(),
+        vec!["2026-11", "2026-12"]
+    );
     assert_eq!(storage.historial_pagos(c.id).unwrap().len(), 2);
 
     // El contador de cuotas incrementó con cada pago (FR-C11).
@@ -157,7 +185,9 @@ fn delete_cascada_pagos_y_contador_reinicia() {
     let storage = SqliteCompromisosStorage::new(&db).unwrap();
     storage.migrate().unwrap();
 
-    let c = storage.save(nuevo_compromiso_mensual(5, Duracion::Cuotas(3))).unwrap();
+    let c = storage
+        .save(nuevo_compromiso_mensual(5, Duracion::Cuotas(3)))
+        .unwrap();
     let mov = movements.save(movimiento_pago()).unwrap();
     storage.registrar_pago(c.id, "2026-11".into(), mov).unwrap();
 
@@ -179,6 +209,8 @@ fn migrate_bump_user_version() {
     storage.migrate().unwrap();
 
     let conn = rusqlite::Connection::open(&db).unwrap();
-    let version: i64 = conn.query_row("PRAGMA user_version", [], |r| r.get(0)).unwrap();
+    let version: i64 = conn
+        .query_row("PRAGMA user_version", [], |r| r.get(0))
+        .unwrap();
     assert!(version >= 2);
 }
