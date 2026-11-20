@@ -4399,7 +4399,7 @@
       }
 
       function etiquetaDuracion(c) {
-        if (c.duracion.indefinido !== undefined) return "Indefinido";
+        if (c.duracion === "indefinido" || c.duracion.indefinido !== undefined) return "Indefinido";
         if (c.duracion.fecha_fin) return `Hasta ${fmtFechaCorta(c.duracion.fecha_fin)}`;
         if (c.duracion.cuotas !== undefined) {
           const total = c.duracion.cuotas;
@@ -4558,7 +4558,7 @@
           $("comp-frecuencia").value = "quincenal";
           $("comp-quincena").value = c.frecuencia.quincenal;
         }
-        if (c.duracion.indefinido !== undefined) {
+        if (c.duracion === "indefinido" || c.duracion.indefinido !== undefined) {
           $("comp-duracion").value = "indefinido";
         } else if (c.duracion.fecha_fin) {
           $("comp-duracion").value = "fecha_fin";
@@ -4589,7 +4589,7 @@
           : { quincenal: $("comp-quincena").value };
         const tipoDur = $("comp-duracion").value;
         const duracion = tipoDur === "indefinido"
-          ? { indefinido: null }
+          ? "indefinido"
           : tipoDur === "fecha_fin"
             ? { fecha_fin: $("comp-fecha-fin").value }
             : { cuotas: parseInt($("comp-cuotas").value, 10) };
