@@ -16,14 +16,15 @@ decisión del líder (2026-11-12); esta es la feature siguiente.
 ## Tasks
 
 - T1 [S1-S5] Spec + plan escritos con decisiones C1–C4. ✓
-- T2 [S7] Migración 004 (reconstrucción de movements + tabla metas) con test de conservación de datos pre-poblados — RIESGO ALTO, commit propio.
-- T3 [S2,S6] Modelo: MovementType::Aporte + meta_id + validaciones + recalcular_estado puro — unit tests.
-- T4 [S2,S6] MetasPort SQLite (CRUD, estados, progreso) + comandos apartados — contract + integration tests.
-- T5 [S3] Planificación: componente «Apartado a metas» restando del libre — tests de regresión del cálculo.
-- T6 [S1-S6] UI: pestaña Metas (progreso, cerradas, modales), historial con tipo Apartado, desglose en Planificación — node --check.
-- T7 [S1-S6] README + ROADMAP + cierre; validación manual del líder registrada como pendiente.
+- T2 [S7] Migración 004 (reconstrucción de movements + tabla metas) con test de conservación de datos pre-poblados — RIESGO ALTO, commit propio. ✓
+- T3 [S2,S6] Modelo: MovementType::Aporte + meta_id + validaciones + recalcular_estado puro — unit tests. ✓
+- T4 [S2,S6] MetasPort SQLite (CRUD, estados, progreso) + comandos apartados — contract + integration tests. ✓
+- T5 [S3] Planificación: componente «Apartado a metas» restando del libre — tests de regresión del cálculo. ✓
+- T6 [S1-S6] UI: pestaña Metas (progreso, cerradas, modales), historial con tipo Apartado, desglose en Planificación. ✓
+- T7 [S1-S6] README + ROADMAP + cierre; validación manual del líder registrada como pendiente. ✓
 
 ## Log
 
 - L1 (2026-11-12): «elimina la spec 004, no me interesa por esto tiempos, prifiero continuar con la 005» — 004 POSPUESTA (`d67613f`).
 - L2 (2026-11-12): C1–C4 aprobadas: apartado tipo propio; resta del libre; fecha objetivo opcional; cancelar = solo archivar.
+- L3 (2026-11-19): Implementación backend (migración 004, metas/apartados, planificación, comandos) y UI completada y verificada (`cargo test --workspace`, `cargo clippy --workspace -- -D warnings`). Pendiente validación manual (`cargo tauri dev`). Revisiones nativas diferidas por saldo del proveedor (402). Se corrigió el bloque de persistencia de `tests/test_metas.rs` para conservar el TempDir al reabrir la BD.
