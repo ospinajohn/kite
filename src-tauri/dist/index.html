@@ -2359,6 +2359,13 @@
       .comp-card-meta { font-size: 12px; color: var(--ink-2); margin-top: 3px; line-height: 1.5; }
       .comp-card-actions { display: flex; gap: 6px; flex-shrink: 0; }
       .comp-card-actions button { font-size: 12px; padding: 6px 10px; }
+
+      /* Planificación quincenal (feature 003) */
+      .plan-dash-card { cursor: pointer; }
+      .plan-corte-row { max-width: 320px; margin-bottom: 0; }
+      .plan-corte-controls { display: flex; align-items: center; gap: var(--s-2); }
+      .plan-corte-controls input { width: 90px; }
+      .plan-empty-line { color: var(--ink-2); font-size: var(--fs-sm); padding: 4px 0 8px; margin: 0; }
     </style>
   </head>
   <body>
@@ -2407,6 +2414,9 @@
             </button>
             <button class="island-tab-btn" id="tab-btn-compromisos" data-tab="compromisos" role="tab" aria-selected="false">
               Compromisos<span class="compromiso-badge" id="badge-compromisos" style="display:none;">0</span>
+            </button>
+            <button class="island-tab-btn" id="tab-btn-planificacion" data-tab="planificacion" role="tab" aria-selected="false">
+              Planificación
             </button>
           </nav>
 
@@ -2584,6 +2594,15 @@
                 </div>
               </div>
 
+              <!-- Libre real de la quincena (feature 003): estimado según lo registrado -->
+              <div class="pastel-card blue plan-dash-card" id="dash-libre-card" role="button" tabindex="0" title="Ver Planificación">
+                <div class="pastel-card-top">
+                  <span class="pastel-card-title">Libre real</span>
+                </div>
+                <div class="pastel-card-amount" id="dash-libre-real">$ 0</div>
+                <div class="pastel-card-foot" id="dash-libre-foot">de la quincena · estimado</div>
+              </div>
+
               <!-- Promedio diario -->
               <div class="celeste-card">
                 <div class="celeste-header">Promedio diario</div>
@@ -2718,6 +2737,68 @@
 
             <div class="comp-list" id="comp-lista">
               <!-- JS: tarjetas de gestión -->
+            </div>
+          </div>
+        </section>
+
+        <!-- VISTA 5: PLANIFICACIÓN (feature 003) -->
+        <section class="tab-content" id="tab-planificacion" role="tabpanel">
+          <div class="white-panel">
+            <div class="panel-header-clean">
+              <h2 class="panel-title-clean">Planificación</h2>
+              <span class="panel-note">Estimado según lo registrado</span>
+            </div>
+
+            <div class="period-row">
+              <div class="quick-period-pills">
+                <button class="quick-pill-btn" id="btn-plan-anterior" type="button">&lsaquo; Anterior</button>
+                <button class="quick-pill-btn" id="btn-plan-hoy" type="button">Hoy</button>
+                <button class="quick-pill-btn" id="btn-plan-siguiente" type="button">Siguiente &rsaquo;</button>
+              </div>
+              <span class="panel-note" id="plan-rango">&mdash;</span>
+            </div>
+
+            <div class="pastel-cards-grid">
+              <div class="pastel-card green">
+                <span class="pastel-card-title">Libre de la quincena</span>
+                <div class="pastel-card-amount" id="plan-libre-quincena">+ $ 0</div>
+                <div class="pastel-card-foot">Ingresos menos gastos y compromisos del período</div>
+              </div>
+              <div class="pastel-card blue">
+                <span class="pastel-card-title">Libre real</span>
+                <div class="pastel-card-amount" id="plan-libre-real">+ $ 0</div>
+                <div class="pastel-card-foot">Descuenta además los atrasados de quincenas anteriores</div>
+              </div>
+            </div>
+
+            <div class="comp-group" id="plan-desglose">
+              <div class="comp-group-title">Desglose</div>
+              <div class="comp-item">
+                <div class="comp-item-main">
+                  <div class="comp-item-concepto">Ingresos del período</div>
+                </div>
+                <div class="comp-item-monto" id="plan-ingresos">+ $ 0</div>
+              </div>
+              <div class="comp-item">
+                <div class="comp-item-main">
+                  <div class="comp-item-concepto">Gastos del período</div>
+                </div>
+                <div class="comp-item-monto" id="plan-gastos">− $ 0</div>
+              </div>
+              <div id="plan-pendientes"></div>
+              <div id="plan-atrasados"></div>
+            </div>
+
+            <div class="comp-group">
+              <div class="comp-group-title">Día de corte de la quincena</div>
+              <div class="form-row plan-corte-row">
+                <label for="plan-corte-input">Día de corte (1 a 28)</label>
+                <div class="plan-corte-controls">
+                  <input type="number" id="plan-corte-input" min="1" max="28" step="1" aria-label="Día de corte, entre 1 y 28" />
+                  <button class="btn-submit" id="btn-plan-guardar-corte" type="button">Guardar</button>
+                </div>
+              </div>
+              <p class="plan-empty-line">Primera quincena: del 1 al corte. Segunda: del corte+1 al fin de mes.</p>
             </div>
           </div>
         </section>
@@ -3581,6 +3662,22 @@
         } catch (e) {
           console.error("No se pudo cargar el dashboard", e);
         }
+
+        // Tarjeta compacta de dinero libre (feature 003): quincena en curso.
+        // Es un estimado según lo registrado; si falla, queda en $ 0 con «—».
+        try {
+          const plan = await invoke("get_planificacion");
+          if (plan) {
+            tweenFigure($("dash-libre-real"), Number(plan.libre_real_centavos) || 0, formatSigned);
+            $("dash-libre-foot").textContent = "de la quincena · estimado";
+          } else {
+            $("dash-libre-real").textContent = formatMoney(0);
+            $("dash-libre-foot").textContent = "—";
+          }
+        } catch (e) {
+          $("dash-libre-real").textContent = formatMoney(0);
+          $("dash-libre-foot").textContent = "—";
+        }
       }
 
       let chartMode = "bars"; // 'bars' | 'curve'
@@ -3623,6 +3720,7 @@
         if (tabId === "historial") cargarHistorial();
         if (tabId === "resumen") cargarResumen();
         if (tabId === "compromisos") cargarCompromisos();
+        if (tabId === "planificacion") abrirPlanificacion();
       }
 
       document.querySelectorAll(".island-tab-btn").forEach(btn => {
@@ -4427,6 +4525,144 @@
       $("btn-cancelar-comp").addEventListener("click", cerrarModalCompromiso);
       $("btn-cerrar-pago-comp").addEventListener("click", cerrarModalPagoCompromiso);
       $("btn-cancelar-pago-comp").addEventListener("click", cerrarModalPagoCompromiso);
+
+      // =======================================================================
+      // PLANIFICACIÓN QUINCENAL (feature 003)
+      // =======================================================================
+      let planCorte = 15;   // día de corte vigente (lo confirma el backend)
+      let planRango = null; // { desde, hasta } ISO de la quincena mostrada
+
+      // Quincena que contiene a `fecha` según el corte (mismo criterio que el backend).
+      function planQuincenaDeFecha(fecha, corte) {
+        const y = fecha.getFullYear();
+        const m = fecha.getMonth();
+        const ultimo = new Date(y, m + 1, 0).getDate();
+        if (fecha.getDate() <= corte) {
+          return { desde: fechaISO(y, m, 1), hasta: fechaISO(y, m, corte) };
+        }
+        return { desde: fechaISO(y, m, corte + 1), hasta: fechaISO(y, m, ultimo) };
+      }
+
+      // Anterior: segunda → primera del mismo mes; primera → segunda del mes
+      // previo (o primera si la segunda quedaría vacía, p. ej. febrero con corte 28).
+      function planQuincenaAnterior(rango, corte) {
+        const [y, m, d] = rango.desde.split("-").map(Number);
+        if (d > 1) {
+          return { desde: fechaISO(y, m - 1, 1), hasta: fechaISO(y, m - 1, corte) };
+        }
+        const ultimoPrev = new Date(y, m - 1, 0);
+        const py = ultimoPrev.getFullYear();
+        const pm = ultimoPrev.getMonth();
+        if (corte < ultimoPrev.getDate()) {
+          return { desde: fechaISO(py, pm, corte + 1), hasta: fechaISO(py, pm, ultimoPrev.getDate()) };
+        }
+        return { desde: fechaISO(py, pm, 1), hasta: fechaISO(py, pm, corte) };
+      }
+
+      // Siguiente: primera → segunda del mismo mes (si no queda vacía); segunda →
+      // primera del mes próximo.
+      function planQuincenaSiguiente(rango, corte) {
+        const [y, m, d] = rango.desde.split("-").map(Number);
+        const ultimo = new Date(y, m, 0).getDate();
+        if (d === 1 && corte < ultimo) {
+          return { desde: fechaISO(y, m - 1, corte + 1), hasta: fechaISO(y, m - 1, ultimo) };
+        }
+        return planQuincenaDeFecha(new Date(y, m, 1), corte);
+      }
+
+      function listaPlanCompromisos(titulo, items, clase) {
+        const filas = items.length
+          ? items.map(p => `
+              <div class="comp-item ${clase}">
+                <div class="comp-item-main">
+                  <div class="comp-item-concepto">${escapeHtml(p.concepto)}</div>
+                  <div class="comp-item-detalle">Vence ${fmtFechaCorta(p.fecha)}</div>
+                </div>
+                <div class="comp-item-monto">− ${formatMoney(p.monto_centavos)}</div>
+              </div>`).join("")
+          : `<p class="plan-empty-line">Ninguno.</p>`;
+        return `<div class="comp-group-title">${titulo}</div>${filas}`;
+      }
+
+      function renderPlanificacion(plan) {
+        planRango = plan.rango;
+        $("plan-rango").textContent = `${fmtFechaCorta(plan.rango.desde)} — ${fmtFechaCorta(plan.rango.hasta)}`;
+        tweenFigure($("plan-libre-quincena"), Number(plan.libre_quincena_centavos) || 0, formatSigned);
+        tweenFigure($("plan-libre-real"), Number(plan.libre_real_centavos) || 0, formatSigned);
+        $("plan-ingresos").textContent = formatSigned(Number(plan.ingresos_centavos) || 0);
+        $("plan-gastos").textContent = formatSigned(-(Number(plan.gastos_centavos) || 0));
+        $("plan-pendientes").innerHTML = listaPlanCompromisos(
+          "Compromisos del período (sin pagar)", plan.pendientes_periodo || [], "");
+        $("plan-atrasados").innerHTML = listaPlanCompromisos(
+          "Atrasados de quincenas anteriores", plan.atrasados || [], "atrasado");
+        const enCurso = planQuincenaDeFecha(new Date(), planCorte);
+        $("btn-plan-hoy").classList.toggle("active",
+          plan.rango.desde === enCurso.desde && plan.rango.hasta === enCurso.hasta);
+      }
+
+      // Sin `desde`: quincena en curso. Con `desde`: el backend deriva el rango
+      // de la quincena que contiene ese día.
+      async function cargarPlanificacion(desde = null) {
+        try {
+          const plan = await invoke("get_planificacion", desde ? { desde } : {});
+          if (plan) renderPlanificacion(plan);
+        } catch (e) {
+          console.error("No se pudo cargar la planificación", e);
+        }
+      }
+
+      async function precargarCorte() {
+        try {
+          const valor = await invoke("get_dia_corte");
+          planCorte = Number(valor) || 15;
+          $("plan-corte-input").value = planCorte;
+        } catch (e) {
+          console.error("No se pudo cargar el día de corte", e);
+        }
+      }
+
+      // La vista siempre abre en la quincena en curso (C4).
+      async function abrirPlanificacion() {
+        await precargarCorte();
+        await cargarPlanificacion();
+      }
+
+      $("btn-plan-anterior").addEventListener("click", () => {
+        if (!planRango) return;
+        cargarPlanificacion(planQuincenaAnterior(planRango, planCorte).desde);
+      });
+      $("btn-plan-siguiente").addEventListener("click", () => {
+        if (!planRango) return;
+        cargarPlanificacion(planQuincenaSiguiente(planRango, planCorte).desde);
+      });
+      $("btn-plan-hoy").addEventListener("click", () => cargarPlanificacion());
+
+      $("btn-plan-guardar-corte").addEventListener("click", async () => {
+        const valor = parseInt($("plan-corte-input").value, 10);
+        if (!Number.isFinite(valor)) {
+          toast("Ingresá un día de corte entre 1 y 28");
+          return;
+        }
+        try {
+          await invoke("set_dia_corte", { valor });
+          planCorte = valor;
+          toast("Día de corte guardado");
+          // Recalculo inmediato con el nuevo corte, sobre el período mostrado.
+          await cargarPlanificacion(planRango ? planRango.desde : null);
+        } catch (e) {
+          // Rechazado (p. ej. fuera de 1..=28): invoke ya mostró el toast con el
+          // error; el valor anterior se conserva y la vista NO se recarga.
+        }
+      });
+
+      // Tarjeta compacta del Dashboard → pestaña Planificación (C3).
+      $("dash-libre-card").addEventListener("click", () => switchTab("planificacion"));
+      $("dash-libre-card").addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          switchTab("planificacion");
+        }
+      });
 
       // =======================================================================
       // MODO OSCURO (DARK MODE PERSISTENTE)

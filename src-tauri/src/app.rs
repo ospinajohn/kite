@@ -531,6 +531,34 @@ pub async fn get_planificacion(
     .map_err(|e| e.to_string())
 }
 
+/// Valida el día de corte (1..=28, FR-P01/FR-P07). Extraída del comando para
+/// poder testearla sin Tauri State.
+pub fn validar_dia_corte(valor: u32) -> Result<u32, String> {
+    if !(1..=28).contains(&valor) {
+        return Err("El día de corte debe estar entre 1 y 28".into());
+    }
+    Ok(valor)
+}
+
+#[tauri::command]
+pub async fn set_dia_corte(state: tauri::State<'_, AppState>, valor: u32) -> Result<(), String> {
+    let valor = validar_dia_corte(valor)?;
+    state
+        .config()
+        .set("dia_corte", &valor.to_string())
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn get_dia_corte(state: tauri::State<'_, AppState>) -> Result<u32, String> {
+    match state.config().get("dia_corte").map_err(|e| e.to_string())? {
+        Some(valor) => valor
+            .parse::<u32>()
+            .map_err(|_| format!("El día de corte configurado no es válido: {valor}")),
+        None => Ok(15),
+    }
+}
+
 #[tauri::command]
 pub async fn minimize_window(window: tauri::Window) -> Result<(), String> {
     window.minimize().map_err(|e| e.to_string())
@@ -636,5 +664,20 @@ mod tests {
         assert_eq!(movements.len(), 1);
         assert_eq!(movements[0].monto_centavos, 18_000);
         assert_eq!(movements[0].concepto, "Almuerzo");
+    }
+
+    #[test]
+    fn dia_corte_valido_se_acepta() {
+        assert_eq!(validar_dia_corte(1).unwrap(), 1);
+        assert_eq!(validar_dia_corte(15).unwrap(), 15);
+        assert_eq!(validar_dia_corte(28).unwrap(), 28);
+    }
+
+    #[test]
+    fn dia_corte_fuera_de_rango_se_rechaza() {
+        for valor in [0u32, 29, 100] {
+            let err = validar_dia_corte(valor).unwrap_err();
+            assert_eq!(err, "El día de corte debe estar entre 1 y 28");
+        }
     }
 }
