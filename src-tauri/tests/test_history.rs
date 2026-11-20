@@ -1,6 +1,6 @@
-use kite::models::{Movement, MovementType, MovementOrigin};
-use kite::storage::port::StoragePort;
 use chrono::{Local, NaiveDate};
+use kite::models::{Movement, MovementOrigin, MovementType};
+use kite::storage::port::StoragePort;
 use tempfile::tempdir;
 
 fn create_test_storage() -> kite::storage::sqlite_impl::SqliteStorage {
@@ -17,8 +17,22 @@ fn test_history_query_all() {
     let hoy = Local::now().date_naive();
     let ayer = hoy.pred_opt().unwrap();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Ingreso, 100_000, "Ayer ingreso".into(), ayer, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Ingreso,
+        100_000,
+        "Ayer ingreso".into(),
+        ayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();
@@ -39,9 +53,30 @@ fn test_history_query_with_desde() {
     let ayer = hoy.pred_opt().unwrap();
     let anteayer = ayer.pred_opt().unwrap();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Gasto, 20_000, "Ayer".into(), ayer, MovementOrigin::Formulario).unwrap();
-    let m3 = Movement::new(MovementType::Gasto, 30_000, "Anteayer".into(), anteayer, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Gasto,
+        20_000,
+        "Ayer".into(),
+        ayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m3 = Movement::new(
+        MovementType::Gasto,
+        30_000,
+        "Anteayer".into(),
+        anteayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();
@@ -68,9 +103,30 @@ fn test_history_query_with_hasta() {
     let ayer = hoy.pred_opt().unwrap();
     let anteayer = ayer.pred_opt().unwrap();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Gasto, 20_000, "Ayer".into(), ayer, MovementOrigin::Formulario).unwrap();
-    let m3 = Movement::new(MovementType::Gasto, 30_000, "Anteayer".into(), anteayer, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Gasto,
+        20_000,
+        "Ayer".into(),
+        ayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m3 = Movement::new(
+        MovementType::Gasto,
+        30_000,
+        "Anteayer".into(),
+        anteayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();
@@ -92,9 +148,30 @@ fn test_history_query_range_exact() {
     let ayer = hoy.pred_opt().unwrap();
     let anteayer = ayer.pred_opt().unwrap();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Gasto, 20_000, "Ayer".into(), ayer, MovementOrigin::Formulario).unwrap();
-    let m3 = Movement::new(MovementType::Gasto, 30_000, "Anteayer".into(), anteayer, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Gasto,
+        20_000,
+        "Ayer".into(),
+        ayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m3 = Movement::new(
+        MovementType::Gasto,
+        30_000,
+        "Anteayer".into(),
+        anteayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();
@@ -115,8 +192,22 @@ fn test_history_query_single_day() {
 
     let hoy = Local::now().date_naive();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy 1".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Gasto, 20_000, "Hoy 2".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy 1".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Gasto,
+        20_000,
+        "Hoy 2".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();
@@ -136,11 +227,20 @@ fn test_history_query_empty_range() {
     let hoy = Local::now().date_naive();
     let futuro = hoy + chrono::Duration::days(30);
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m1).unwrap();
 
     // Rango futuro -> vacío
-    let rango_futuro = storage.query(Some(futuro), Some(futuro + chrono::Duration::days(1))).unwrap();
+    let rango_futuro = storage
+        .query(Some(futuro), Some(futuro + chrono::Duration::days(1)))
+        .unwrap();
     assert_eq!(rango_futuro.len(), 0);
 }
 
@@ -152,8 +252,22 @@ fn test_history_query_inverted_range() {
     let hoy = Local::now().date_naive();
     let ayer = hoy.pred_opt().unwrap();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Gasto, 20_000, "Ayer".into(), ayer, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Gasto,
+        20_000,
+        "Ayer".into(),
+        ayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();
@@ -171,7 +285,12 @@ fn test_history_query_very_old_date() {
 
     let muy_antigua = NaiveDate::from_ymd_opt(1800, 1, 1).unwrap();
 
-    let rango_antiguo = storage.query(Some(muy_antigua), Some(muy_antigua + chrono::Duration::days(1))).unwrap();
+    let rango_antiguo = storage
+        .query(
+            Some(muy_antigua),
+            Some(muy_antigua + chrono::Duration::days(1)),
+        )
+        .unwrap();
     assert_eq!(rango_antiguo.len(), 0);
 }
 
@@ -184,9 +303,30 @@ fn test_history_order_fecha_desc_creado_desc() {
     let ayer = hoy.pred_opt().unwrap();
 
     // Insertar en orden: hoy, ayer, hoy (de nuevo)
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Hoy 1".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Gasto, 20_000, "Ayer".into(), ayer, MovementOrigin::Formulario).unwrap();
-    let m3 = Movement::new(MovementType::Gasto, 30_000, "Hoy 2".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Hoy 1".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Gasto,
+        20_000,
+        "Ayer".into(),
+        ayer,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m3 = Movement::new(
+        MovementType::Gasto,
+        30_000,
+        "Hoy 2".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1).unwrap();
     storage.save(m2).unwrap();

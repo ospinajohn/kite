@@ -39,7 +39,9 @@ pub fn quincena_de_fecha(fecha: NaiveDate, dia_corte: u32) -> RangoQuincena {
     if fecha.day() <= dia_corte {
         RangoQuincena {
             desde: fecha.with_day(1).expect("día 1 siempre válido"),
-            hasta: fecha.with_day(dia_corte).expect("corte <= 28 siempre válido"),
+            hasta: fecha
+                .with_day(dia_corte)
+                .expect("corte <= 28 siempre válido"),
         }
     } else {
         RangoQuincena {
@@ -80,8 +82,12 @@ pub fn quincena_siguiente(rango: RangoQuincena) -> RangoQuincena {
     let ultimo_actual = ultimo_dia_mes(primero_actual.year(), primero_actual.month());
     if es_primera(&rango) && corte < ultimo_actual {
         RangoQuincena {
-            desde: primero_actual.with_day(corte + 1).expect("segunda no vacía"),
-            hasta: primero_actual.with_day(ultimo_actual).expect("fin de mes válido"),
+            desde: primero_actual
+                .with_day(corte + 1)
+                .expect("segunda no vacía"),
+            hasta: primero_actual
+                .with_day(ultimo_actual)
+                .expect("fin de mes válido"),
         }
     } else {
         let primero_proximo = primero_actual
@@ -223,8 +229,7 @@ pub fn plan_de_estado(
         a.fecha.cmp(&b.fecha).then(a.concepto.cmp(&b.concepto))
     };
     pendientes.sort_by(orden);
-    let mut atrasados: Vec<PendienteCompromiso> =
-        atrasados_por_compromiso.into_values().collect();
+    let mut atrasados: Vec<PendienteCompromiso> = atrasados_por_compromiso.into_values().collect();
     atrasados.sort_by(orden);
 
     Ok(calcular_plan(rango, &movimientos, &pendientes, &atrasados))

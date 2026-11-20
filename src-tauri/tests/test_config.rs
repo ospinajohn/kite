@@ -15,7 +15,9 @@ fn migracion_idempotente_y_user_version_3() {
     assert_eq!(config.get("dia_corte").unwrap(), Some("15".to_string()));
 
     let conn = rusqlite::Connection::open(&db).unwrap();
-    let version: i64 = conn.query_row("PRAGMA user_version", [], |r| r.get(0)).unwrap();
+    let version: i64 = conn
+        .query_row("PRAGMA user_version", [], |r| r.get(0))
+        .unwrap();
     assert_eq!(version, 3);
 }
 

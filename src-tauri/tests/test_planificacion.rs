@@ -2,9 +2,9 @@
 //! Unit del cálculo puro + integration del ensamblado con SQLite real.
 
 use chrono::{Datelike, Local, NaiveDate};
+use kite::compromisos::confirmar_pago;
 use kite::compromisos::port::CompromisosPort;
 use kite::compromisos::sqlite_impl::SqliteCompromisosStorage;
-use kite::compromisos::confirmar_pago;
 use kite::config::{ConfigPort, SqliteConfigStorage};
 use kite::models::{
     Compromiso, Duracion, EstadoCompromiso, Frecuencia, Movement, MovementOrigin, MovementType,
@@ -90,8 +90,14 @@ fn corte_28_en_febrero() {
 
 #[test]
 fn hasta_es_el_ultimo_dia_real_del_mes() {
-    assert_eq!(quincena_de_fecha(d(2026, 10, 20), 15).hasta, d(2026, 10, 31));
-    assert_eq!(quincena_de_fecha(d(2026, 11, 20), 15).hasta, d(2026, 11, 30));
+    assert_eq!(
+        quincena_de_fecha(d(2026, 10, 20), 15).hasta,
+        d(2026, 10, 31)
+    );
+    assert_eq!(
+        quincena_de_fecha(d(2026, 11, 20), 15).hasta,
+        d(2026, 11, 30)
+    );
     assert_eq!(quincena_de_fecha(d(2026, 2, 20), 15).hasta, d(2026, 2, 28));
     assert_eq!(quincena_de_fecha(d(2028, 2, 20), 15).hasta, d(2028, 2, 29));
 }
@@ -113,40 +119,64 @@ fn corte_29_es_invalido() {
 #[test]
 fn anterior_dentro_del_mismo_mes() {
     let segunda = quincena_de_fecha(d(2026, 11, 20), 15);
-    assert_eq!(quincena_anterior(segunda), rango(d(2026, 11, 1), d(2026, 11, 15)));
+    assert_eq!(
+        quincena_anterior(segunda),
+        rango(d(2026, 11, 1), d(2026, 11, 15))
+    );
 }
 
 #[test]
 fn anterior_de_la_primera_cruza_al_mes_previo() {
     let primera = quincena_de_fecha(d(2026, 11, 10), 15);
-    assert_eq!(quincena_anterior(primera), rango(d(2026, 10, 16), d(2026, 10, 31)));
+    assert_eq!(
+        quincena_anterior(primera),
+        rango(d(2026, 10, 16), d(2026, 10, 31))
+    );
     // Cruce de año.
     let enero = quincena_de_fecha(d(2027, 1, 5), 15);
-    assert_eq!(quincena_anterior(enero), rango(d(2026, 12, 16), d(2026, 12, 31)));
+    assert_eq!(
+        quincena_anterior(enero),
+        rango(d(2026, 12, 16), d(2026, 12, 31))
+    );
 }
 
 #[test]
 fn siguiente_dentro_del_mismo_mes() {
     let primera = quincena_de_fecha(d(2026, 11, 10), 15);
-    assert_eq!(quincena_siguiente(primera), rango(d(2026, 11, 16), d(2026, 11, 30)));
+    assert_eq!(
+        quincena_siguiente(primera),
+        rango(d(2026, 11, 16), d(2026, 11, 30))
+    );
 }
 
 #[test]
 fn siguiente_de_la_segunda_cruza_al_mes_proximo() {
     let segunda = quincena_de_fecha(d(2026, 11, 20), 15);
-    assert_eq!(quincena_siguiente(segunda), rango(d(2026, 12, 1), d(2026, 12, 15)));
+    assert_eq!(
+        quincena_siguiente(segunda),
+        rango(d(2026, 12, 1), d(2026, 12, 15))
+    );
     // Cruce de año.
     let diciembre = quincena_de_fecha(d(2026, 12, 20), 15);
-    assert_eq!(quincena_siguiente(diciembre), rango(d(2027, 1, 1), d(2027, 1, 15)));
+    assert_eq!(
+        quincena_siguiente(diciembre),
+        rango(d(2027, 1, 1), d(2027, 1, 15))
+    );
 }
 
 #[test]
 fn navegacion_salta_la_segunda_vacia_de_febrero_con_corte_28() {
     // Febrero 2026 tiene 28 días: la segunda quincena (29..28) no existe y se salta.
     let primera_feb = quincena_de_fecha(d(2026, 2, 10), 28);
-    assert_eq!(quincena_siguiente(primera_feb), rango(d(2026, 3, 1), d(2026, 3, 28)));
+    assert_eq!(
+        quincena_siguiente(primera_feb),
+        rango(d(2026, 3, 1), d(2026, 3, 28))
+    );
     let primera_mar = quincena_de_fecha(d(2026, 3, 10), 28);
-    assert_eq!(quincena_anterior(primera_mar), rango(d(2026, 2, 1), d(2026, 2, 28)));
+    assert_eq!(
+        quincena_anterior(primera_mar),
+        rango(d(2026, 2, 1), d(2026, 2, 28))
+    );
 }
 
 // --- Unit: calcular_plan (S3, casos del spec) ---
@@ -276,17 +306,40 @@ fn entorno() -> Entorno {
     comps.migrate().unwrap();
     let config = SqliteConfigStorage::new(&db).unwrap();
     config.migrate().unwrap();
-    Entorno { movs, comps, config, _dir: dir }
+    Entorno {
+        movs,
+        comps,
+        config,
+        _dir: dir,
+    }
 }
 
-fn compromiso_mensual(concepto: &str, monto: i64, dia: u8, creado: NaiveDate, duracion: Duracion) -> Compromiso {
-    let mut c = Compromiso::new(concepto.into(), monto, Frecuencia::Mensual(dia), duracion).unwrap();
-    c.creado_en = creado.and_hms_opt(10, 0, 0).unwrap().and_local_timezone(Local).unwrap();
+fn compromiso_mensual(
+    concepto: &str,
+    monto: i64,
+    dia: u8,
+    creado: NaiveDate,
+    duracion: Duracion,
+) -> Compromiso {
+    let mut c =
+        Compromiso::new(concepto.into(), monto, Frecuencia::Mensual(dia), duracion).unwrap();
+    c.creado_en = creado
+        .and_hms_opt(10, 0, 0)
+        .unwrap()
+        .and_local_timezone(Local)
+        .unwrap();
     c
 }
 
 fn guardar_movimiento(movs: &SqliteStorage, tipo: MovementType, monto: i64, fecha: NaiveDate) {
-    let m = Movement::new(tipo, monto, "Prueba".into(), fecha, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        tipo,
+        monto,
+        "Prueba".into(),
+        fecha,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     movs.save(m).unwrap();
 }
 
@@ -312,7 +365,13 @@ fn caso_spec_con_sqlite_real() {
     guardar_movimiento(&e.movs, MovementType::Ingreso, 1_500_000, r.desde);
     guardar_movimiento(&e.movs, MovementType::Gasto, 300_000, r.desde);
     // Vence hoy (dentro de la quincena en curso), sin pagar.
-    let c = compromiso_mensual("Arriendo", 500_000, hoy.day() as u8, hoy, Duracion::Indefinido);
+    let c = compromiso_mensual(
+        "Arriendo",
+        500_000,
+        hoy.day() as u8,
+        hoy,
+        Duracion::Indefinido,
+    );
     e.comps.save(c).unwrap();
 
     let plan = plan_de_estado(&e.movs, &e.comps, 15, Some(hoy)).unwrap();
@@ -336,7 +395,13 @@ fn pagado_no_descuenta_como_pendiente() {
     let r = quincena_de_fecha(hoy, 15);
     guardar_movimiento(&e.movs, MovementType::Ingreso, 1_500_000, r.desde);
     guardar_movimiento(&e.movs, MovementType::Gasto, 300_000, r.desde);
-    let c = compromiso_mensual("Arriendo", 500_000, hoy.day() as u8, hoy, Duracion::Indefinido);
+    let c = compromiso_mensual(
+        "Arriendo",
+        500_000,
+        hoy.day() as u8,
+        hoy,
+        Duracion::Indefinido,
+    );
     let saved = e.comps.save(c).unwrap();
     let periodo = saved.periodo_key_en_mes(hoy.year(), hoy.month());
     confirmar_pago(&e.movs, &e.comps, &saved, periodo, 500_000, hoy).unwrap();
@@ -353,9 +418,17 @@ fn pagado_no_descuenta_como_pendiente() {
 fn pausado_no_descuenta() {
     let e = entorno();
     let hoy = Local::now().date_naive();
-    let c = compromiso_mensual("Arriendo", 500_000, hoy.day() as u8, hoy, Duracion::Indefinido);
+    let c = compromiso_mensual(
+        "Arriendo",
+        500_000,
+        hoy.day() as u8,
+        hoy,
+        Duracion::Indefinido,
+    );
     let saved = e.comps.save(c).unwrap();
-    e.comps.set_estado(saved.id, EstadoCompromiso::Pausado).unwrap();
+    e.comps
+        .set_estado(saved.id, EstadoCompromiso::Pausado)
+        .unwrap();
 
     let plan = plan_de_estado(&e.movs, &e.comps, 15, Some(hoy)).unwrap();
     assert!(plan.pendientes_periodo.is_empty());
@@ -367,7 +440,13 @@ fn pausado_no_descuenta() {
 fn cuotas_agotadas_no_descuenta() {
     let e = entorno();
     let hoy = Local::now().date_naive();
-    let c = compromiso_mensual("Televisor", 120_000, hoy.day() as u8, hoy, Duracion::Cuotas(1));
+    let c = compromiso_mensual(
+        "Televisor",
+        120_000,
+        hoy.day() as u8,
+        hoy,
+        Duracion::Cuotas(1),
+    );
     let saved = e.comps.save(c).unwrap();
     let periodo = saved.periodo_key_en_mes(hoy.year(), hoy.month());
     confirmar_pago(&e.movs, &e.comps, &saved, periodo, 120_000, hoy).unwrap();
@@ -400,7 +479,10 @@ fn atrasado_de_varios_periodos_se_descuenta_una_sola_vez() {
     assert_eq!(plan.atrasados.len(), 1);
     assert_eq!(plan.atrasados[0].fecha, *previas.iter().max().unwrap());
     assert_eq!(plan.atrasados[0].monto_centavos, 100_000);
-    assert_eq!(plan.libre_real_centavos, plan.libre_quincena_centavos - 100_000);
+    assert_eq!(
+        plan.libre_real_centavos,
+        plan.libre_quincena_centavos - 100_000
+    );
 }
 
 #[test]
@@ -419,7 +501,13 @@ fn corte_configurado_reasigna_por_fecha_real() {
         Duracion::Indefinido,
     )
     .unwrap();
-    c.creado_en = hoy.with_day(1).unwrap().and_hms_opt(10, 0, 0).unwrap().and_local_timezone(Local).unwrap();
+    c.creado_en = hoy
+        .with_day(1)
+        .unwrap()
+        .and_hms_opt(10, 0, 0)
+        .unwrap()
+        .and_local_timezone(Local)
+        .unwrap();
     let saved = e.comps.save(c).unwrap();
 
     let plan14 = plan_de_estado(&e.movs, &e.comps, corte, Some(hoy)).unwrap();
@@ -481,6 +569,9 @@ fn corte_invalido_se_rechaza_con_mensaje() {
     let e = entorno();
     for corte in [0u32, 29] {
         let err = plan_de_estado(&e.movs, &e.comps, corte, None).unwrap_err();
-        assert!(err.to_string().contains("entre 1 y 28"), "mensaje inesperado: {err}");
+        assert!(
+            err.to_string().contains("entre 1 y 28"),
+            "mensaje inesperado: {err}"
+        );
     }
 }

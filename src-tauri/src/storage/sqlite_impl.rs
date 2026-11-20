@@ -1,5 +1,5 @@
-use crate::models::{Movement, MovementType, MovementOrigin, PeriodSummary};
-use crate::storage::port::{StoragePort, StorageError};
+use crate::models::{Movement, MovementOrigin, MovementType, PeriodSummary};
+use crate::storage::port::{StorageError, StoragePort};
 use chrono::{DateTime, Local, NaiveDate};
 use rusqlite::{params, Connection, OptionalExtension};
 use std::path::Path;
@@ -15,7 +15,9 @@ impl SqliteStorage {
         std::fs::create_dir_all(db_path.parent().unwrap())?;
         let conn = Connection::open(db_path)?;
         conn.execute_batch("PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL;")?;
-        Ok(Self { conn: Arc::new(Mutex::new(conn)) })
+        Ok(Self {
+            conn: Arc::new(Mutex::new(conn)),
+        })
     }
 
     fn row_to_movement(row: &rusqlite::Row) -> Result<Movement, rusqlite::Error> {
@@ -27,15 +29,52 @@ impl SqliteStorage {
         let meta_id: Option<String> = row.get("meta_id")?;
 
         Ok(Movement {
-            id: Uuid::parse_str(&row.get::<_, String>("id")?).map_err(|_| rusqlite::Error::InvalidColumnType(0, "id".into(), rusqlite::types::Type::Text))?,
-            tipo: Self::parse_movement_type(&tipo_str).map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?,
+            id: Uuid::parse_str(&row.get::<_, String>("id")?).map_err(|_| {
+                rusqlite::Error::InvalidColumnType(0, "id".into(), rusqlite::types::Type::Text)
+            })?,
+            tipo: Self::parse_movement_type(&tipo_str)
+                .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?,
             monto_centavos: row.get("monto_centavos")?,
             concepto: row.get("concepto")?,
-            fecha: NaiveDate::parse_from_str(&row.get::<_, String>("fecha")?, "%Y-%m-%d").map_err(|_| rusqlite::Error::InvalidColumnType(0, "fecha".into(), rusqlite::types::Type::Text))?,
-            origen: Self::parse_origin(&origen_str).map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?,
-            meta_id: meta_id.map(|s| Uuid::parse_str(&s)).transpose().map_err(|_| rusqlite::Error::InvalidColumnType(0, "meta_id".into(), rusqlite::types::Type::Text))?,
-            creado_en: DateTime::parse_from_rfc3339(&creado_en_str).map_err(|_| rusqlite::Error::InvalidColumnType(0, "creado_en".into(), rusqlite::types::Type::Text))?.with_timezone(&Local),
-            actualizado_en: DateTime::parse_from_rfc3339(&actualizado_en_str).map_err(|_| rusqlite::Error::InvalidColumnType(0, "actualizado_en".into(), rusqlite::types::Type::Text))?.with_timezone(&Local),
+            fecha: NaiveDate::parse_from_str(&row.get::<_, String>("fecha")?, "%Y-%m-%d").map_err(
+                |_| {
+                    rusqlite::Error::InvalidColumnType(
+                        0,
+                        "fecha".into(),
+                        rusqlite::types::Type::Text,
+                    )
+                },
+            )?,
+            origen: Self::parse_origin(&origen_str)
+                .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?,
+            meta_id: meta_id
+                .map(|s| Uuid::parse_str(&s))
+                .transpose()
+                .map_err(|_| {
+                    rusqlite::Error::InvalidColumnType(
+                        0,
+                        "meta_id".into(),
+                        rusqlite::types::Type::Text,
+                    )
+                })?,
+            creado_en: DateTime::parse_from_rfc3339(&creado_en_str)
+                .map_err(|_| {
+                    rusqlite::Error::InvalidColumnType(
+                        0,
+                        "creado_en".into(),
+                        rusqlite::types::Type::Text,
+                    )
+                })?
+                .with_timezone(&Local),
+            actualizado_en: DateTime::parse_from_rfc3339(&actualizado_en_str)
+                .map_err(|_| {
+                    rusqlite::Error::InvalidColumnType(
+                        0,
+                        "actualizado_en".into(),
+                        rusqlite::types::Type::Text,
+                    )
+                })?
+                .with_timezone(&Local),
         })
     }
 
@@ -43,7 +82,8 @@ impl SqliteStorage {
         let tipo_str: String = row.get("tipo").map_err(StorageError::Database)?;
         let origen_str: String = row.get("origen").map_err(StorageError::Database)?;
         let creado_en_str: String = row.get("creado_en").map_err(StorageError::Database)?;
-        let actualizado_en_str: String = row.get("actualizado_en").map_err(StorageError::Database)?;
+        let actualizado_en_str: String =
+            row.get("actualizado_en").map_err(StorageError::Database)?;
 
         let meta_id: Option<String> = row.get("meta_id").map_err(StorageError::Database)?;
 
@@ -53,14 +93,23 @@ impl SqliteStorage {
             tipo: Self::parse_movement_type(&tipo_str)?,
             monto_centavos: row.get("monto_centavos").map_err(StorageError::Database)?,
             concepto: row.get("concepto").map_err(StorageError::Database)?,
-            fecha: NaiveDate::parse_from_str(&row.get::<_, String>("fecha").map_err(StorageError::Database)?, "%Y-%m-%d")
-                .map_err(|_| StorageError::Integrity("Invalid date format".into()))?,
+            fecha: NaiveDate::parse_from_str(
+                &row.get::<_, String>("fecha")
+                    .map_err(StorageError::Database)?,
+                "%Y-%m-%d",
+            )
+            .map_err(|_| StorageError::Integrity("Invalid date format".into()))?,
             origen: Self::parse_origin(&origen_str)?,
-            meta_id: meta_id.map(|s| Uuid::parse_str(&s)).transpose().map_err(|_| StorageError::Integrity("Invalid meta_id".into()))?,
+            meta_id: meta_id
+                .map(|s| Uuid::parse_str(&s))
+                .transpose()
+                .map_err(|_| StorageError::Integrity("Invalid meta_id".into()))?,
             creado_en: DateTime::parse_from_rfc3339(&creado_en_str)
-                .map_err(|_| StorageError::Integrity("Invalid created_at format".into()))?.with_timezone(&Local),
+                .map_err(|_| StorageError::Integrity("Invalid created_at format".into()))?
+                .with_timezone(&Local),
             actualizado_en: DateTime::parse_from_rfc3339(&actualizado_en_str)
-                .map_err(|_| StorageError::Integrity("Invalid updated_at format".into()))?.with_timezone(&Local),
+                .map_err(|_| StorageError::Integrity("Invalid updated_at format".into()))?
+                .with_timezone(&Local),
         })
     }
 }
@@ -142,12 +191,13 @@ impl StoragePort for SqliteStorage {
 
     fn get_by_id(&self, id: Uuid) -> Result<Option<Movement>, StorageError> {
         let conn = self.conn.lock().unwrap();
-        let mut stmt = conn.prepare(
-            "SELECT * FROM movements WHERE id = ?1"
-        )?;
-        let movement = stmt.query_row(params![id.to_string()], |row| {
-            self.row_to_movement_storage(row).map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
-        }).optional()?;
+        let mut stmt = conn.prepare("SELECT * FROM movements WHERE id = ?1")?;
+        let movement = stmt
+            .query_row(params![id.to_string()], |row| {
+                self.row_to_movement_storage(row)
+                    .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+            })
+            .optional()?;
         Ok(movement)
     }
 
@@ -178,8 +228,14 @@ impl StoragePort for SqliteStorage {
         sql.push_str(" ORDER BY fecha DESC, creado_en DESC");
 
         let mut stmt = conn.prepare(&sql)?;
-        let param_refs: Vec<&dyn rusqlite::ToSql> = params_vec.iter().map(|s| s as &dyn rusqlite::ToSql).collect();
-        let rows = stmt.query_map(rusqlite::params_from_iter(param_refs), SqliteStorage::row_to_movement)?;
+        let param_refs: Vec<&dyn rusqlite::ToSql> = params_vec
+            .iter()
+            .map(|s| s as &dyn rusqlite::ToSql)
+            .collect();
+        let rows = stmt.query_map(
+            rusqlite::params_from_iter(param_refs),
+            SqliteStorage::row_to_movement,
+        )?;
 
         let mut movements = Vec::new();
         for row in rows {
@@ -200,7 +256,7 @@ impl StoragePort for SqliteStorage {
                 COALESCE(SUM(CASE WHEN tipo = 'ingreso' THEN monto_centavos ELSE 0 END), 0) as ingresos,
                 COALESCE(SUM(CASE WHEN tipo = 'gasto' THEN monto_centavos ELSE 0 END), 0) as gastos
             FROM movements
-            "#
+            "#,
         );
         let mut params_vec = Vec::new();
         let mut conditions = Vec::new();
@@ -220,11 +276,14 @@ impl StoragePort for SqliteStorage {
         }
 
         let mut stmt = conn.prepare(&sql)?;
-        let param_refs: Vec<&dyn rusqlite::ToSql> = params_vec.iter().map(|s| s as &dyn rusqlite::ToSql).collect();
-        let (ingresos, gastos): (i64, i64) = stmt.query_row(
-            rusqlite::params_from_iter(param_refs),
-            |row| Ok((row.get(0)?, row.get(1)?))
-        )?;
+        let param_refs: Vec<&dyn rusqlite::ToSql> = params_vec
+            .iter()
+            .map(|s| s as &dyn rusqlite::ToSql)
+            .collect();
+        let (ingresos, gastos): (i64, i64) = stmt
+            .query_row(rusqlite::params_from_iter(param_refs), |row| {
+                Ok((row.get(0)?, row.get(1)?))
+            })?;
 
         Ok(PeriodSummary::new(ingresos, gastos, desde, hasta))
     }
@@ -308,9 +367,14 @@ impl StoragePort for SqliteStorage {
             rebuild?;
             // Integridad referencial tras el rebuild (compromisos_pagos → movements).
             let mut fk_stmt = conn.prepare("PRAGMA foreign_key_check")?;
-            let rotas = fk_stmt.query_map([], |_| Ok(())).map(|rows| rows.count()).unwrap_or(0);
+            let rotas = fk_stmt
+                .query_map([], |_| Ok(()))
+                .map(|rows| rows.count())
+                .unwrap_or(0);
             if rotas > 0 {
-                return Err(StorageError::Migration("FKs rotas tras la migración 004".into()));
+                return Err(StorageError::Migration(
+                    "FKs rotas tras la migración 004".into(),
+                ));
             }
         } else {
             // Ya en v4+: asegurar esquema idempotente.
@@ -382,7 +446,7 @@ impl SqliteStorage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::{Movement, MovementType, MovementOrigin};
+    use crate::models::{Movement, MovementOrigin, MovementType};
     use chrono::{Local, NaiveDate};
     use tempfile::tempdir;
 
@@ -409,7 +473,8 @@ mod tests {
             "Almuerzo".into(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap();
+        )
+        .unwrap();
 
         let saved = storage.save(movement.clone()).unwrap();
         assert_eq!(saved.id, movement.id);
@@ -425,9 +490,30 @@ mod tests {
         let storage = create_test_storage();
         storage.migrate().unwrap();
 
-        let m1 = Movement::new(MovementType::Ingreso, 1_500_000, "Pago".into(), NaiveDate::from_ymd_opt(2026,10,15).unwrap(), MovementOrigin::Formulario).unwrap();
-        let m2 = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), Local::now().date_naive(), MovementOrigin::Formulario).unwrap();
-        let m3 = Movement::new(MovementType::Gasto, 12_000, "Transporte".into(), Local::now().date_naive(), MovementOrigin::Mensaje).unwrap();
+        let m1 = Movement::new(
+            MovementType::Ingreso,
+            1_500_000,
+            "Pago".into(),
+            NaiveDate::from_ymd_opt(2026, 10, 15).unwrap(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
+        let m2 = Movement::new(
+            MovementType::Gasto,
+            18_000,
+            "Almuerzo".into(),
+            Local::now().date_naive(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
+        let m3 = Movement::new(
+            MovementType::Gasto,
+            12_000,
+            "Transporte".into(),
+            Local::now().date_naive(),
+            MovementOrigin::Mensaje,
+        )
+        .unwrap();
 
         storage.save(m1.clone()).unwrap();
         storage.save(m2.clone()).unwrap();
@@ -444,18 +530,41 @@ mod tests {
         let storage = create_test_storage();
         storage.migrate().unwrap();
 
-        let m1 = Movement::new(MovementType::Gasto, 1000, "A".into(), NaiveDate::from_ymd_opt(2020,10,1).unwrap(), MovementOrigin::Formulario).unwrap();
-        let m2 = Movement::new(MovementType::Gasto, 2000, "B".into(), NaiveDate::from_ymd_opt(2020,10,15).unwrap(), MovementOrigin::Formulario).unwrap();
-        let m3 = Movement::new(MovementType::Gasto, 3000, "C".into(), NaiveDate::from_ymd_opt(2020,11,1).unwrap(), MovementOrigin::Formulario).unwrap();
+        let m1 = Movement::new(
+            MovementType::Gasto,
+            1000,
+            "A".into(),
+            NaiveDate::from_ymd_opt(2020, 10, 1).unwrap(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
+        let m2 = Movement::new(
+            MovementType::Gasto,
+            2000,
+            "B".into(),
+            NaiveDate::from_ymd_opt(2020, 10, 15).unwrap(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
+        let m3 = Movement::new(
+            MovementType::Gasto,
+            3000,
+            "C".into(),
+            NaiveDate::from_ymd_opt(2020, 11, 1).unwrap(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
 
         storage.save(m1).unwrap();
         storage.save(m2).unwrap();
         storage.save(m3).unwrap();
 
-        let oct = storage.query(
-            Some(NaiveDate::from_ymd_opt(2020,10,1).unwrap()),
-            Some(NaiveDate::from_ymd_opt(2020,10,31).unwrap()),
-        ).unwrap();
+        let oct = storage
+            .query(
+                Some(NaiveDate::from_ymd_opt(2020, 10, 1).unwrap()),
+                Some(NaiveDate::from_ymd_opt(2020, 10, 31).unwrap()),
+            )
+            .unwrap();
         assert_eq!(oct.len(), 2);
     }
 
@@ -464,9 +573,42 @@ mod tests {
         let storage = create_test_storage();
         storage.migrate().unwrap();
 
-        storage.save(Movement::new(MovementType::Ingreso, 1_500_000, "Pago".into(), NaiveDate::from_ymd_opt(2026,10,15).unwrap(), MovementOrigin::Formulario).unwrap()).unwrap();
-        storage.save(Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), Local::now().date_naive(), MovementOrigin::Formulario).unwrap()).unwrap();
-        storage.save(Movement::new(MovementType::Gasto, 12_000, "Transporte".into(), Local::now().date_naive(), MovementOrigin::Mensaje).unwrap()).unwrap();
+        storage
+            .save(
+                Movement::new(
+                    MovementType::Ingreso,
+                    1_500_000,
+                    "Pago".into(),
+                    NaiveDate::from_ymd_opt(2026, 10, 15).unwrap(),
+                    MovementOrigin::Formulario,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        storage
+            .save(
+                Movement::new(
+                    MovementType::Gasto,
+                    18_000,
+                    "Almuerzo".into(),
+                    Local::now().date_naive(),
+                    MovementOrigin::Formulario,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        storage
+            .save(
+                Movement::new(
+                    MovementType::Gasto,
+                    12_000,
+                    "Transporte".into(),
+                    Local::now().date_naive(),
+                    MovementOrigin::Mensaje,
+                )
+                .unwrap(),
+            )
+            .unwrap();
 
         let summary = storage.summary(None, None).unwrap();
         assert_eq!(summary.ingresos_centavos, 1_500_000);
@@ -479,10 +621,19 @@ mod tests {
         let storage = create_test_storage();
         storage.migrate().unwrap();
 
-        let mut m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), Local::now().date_naive(), MovementOrigin::Formulario).unwrap();
+        let mut m = Movement::new(
+            MovementType::Gasto,
+            18_000,
+            "Almuerzo".into(),
+            Local::now().date_naive(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
         storage.save(m.clone()).unwrap();
 
-        m = m.update(19_000, "Almuerzo corregido".into(), m.fecha).unwrap();
+        m = m
+            .update(19_000, "Almuerzo corregido".into(), m.fecha)
+            .unwrap();
         storage.update(m.clone()).unwrap();
 
         let retrieved = storage.get_by_id(m.id).unwrap().unwrap();
@@ -495,7 +646,14 @@ mod tests {
         let storage = create_test_storage();
         storage.migrate().unwrap();
 
-        let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), Local::now().date_naive(), MovementOrigin::Formulario).unwrap();
+        let m = Movement::new(
+            MovementType::Gasto,
+            18_000,
+            "Almuerzo".into(),
+            Local::now().date_naive(),
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
         storage.save(m.clone()).unwrap();
 
         let deleted = storage.delete(m.id).unwrap();
@@ -516,7 +674,14 @@ mod tests {
         {
             let storage = SqliteStorage::new(&db_path).unwrap();
             storage.migrate().unwrap();
-            let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), Local::now().date_naive(), MovementOrigin::Formulario).unwrap();
+            let m = Movement::new(
+                MovementType::Gasto,
+                18_000,
+                "Almuerzo".into(),
+                Local::now().date_naive(),
+                MovementOrigin::Formulario,
+            )
+            .unwrap();
             storage.save(m).unwrap();
         }
 

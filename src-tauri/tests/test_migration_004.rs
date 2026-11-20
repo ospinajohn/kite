@@ -193,11 +193,14 @@ fn crear_base_v3(db: &Path) {
 
 fn user_version(db: &Path) -> i64 {
     let conn = rusqlite::Connection::open(db).unwrap();
-    conn.query_row("PRAGMA user_version", [], |r| r.get(0)).unwrap()
+    conn.query_row("PRAGMA user_version", [], |r| r.get(0))
+        .unwrap()
 }
 
 fn ts(s: &str) -> DateTime<Local> {
-    DateTime::parse_from_rfc3339(s).unwrap().with_timezone(&Local)
+    DateTime::parse_from_rfc3339(s)
+        .unwrap()
+        .with_timezone(&Local)
 }
 
 /// Verifica fila por fila que cada movimiento sembrado sobrevivió EXACTAMENTE.
@@ -209,9 +212,16 @@ fn verificar_movimientos_conservados(storage: &SqliteStorage) {
             .unwrap_or_else(|| panic!("movimiento {} desapareció tras migrar", f.id));
         assert_eq!(m.id, f.id);
         assert_eq!(m.tipo, f.tipo, "tipo cambió en {}", f.id);
-        assert_eq!(m.monto_centavos, f.monto_centavos, "monto cambió en {}", f.id);
+        assert_eq!(
+            m.monto_centavos, f.monto_centavos,
+            "monto cambió en {}",
+            f.id
+        );
         assert_eq!(m.concepto, f.concepto, "concepto cambió en {}", f.id);
-        assert_eq!(m.fecha, NaiveDate::parse_from_str(f.fecha, "%Y-%m-%d").unwrap());
+        assert_eq!(
+            m.fecha,
+            NaiveDate::parse_from_str(f.fecha, "%Y-%m-%d").unwrap()
+        );
         assert_eq!(m.origen, f.origen, "origen cambió en {}", f.id);
         assert_eq!(m.creado_en, ts(f.creado_en), "creado_en cambió en {}", f.id);
         assert_eq!(
@@ -235,7 +245,11 @@ fn migracion_004_conserva_todos_los_datos_de_una_base_v3() {
     let storage = SqliteStorage::new(&db).unwrap();
     storage.migrate().unwrap();
 
-    assert_eq!(user_version(&db), 4, "la migración 004 debe dejar user_version=4");
+    assert_eq!(
+        user_version(&db),
+        4,
+        "la migración 004 debe dejar user_version=4"
+    );
     verificar_movimientos_conservados(&storage);
 
     // El resumen de la 001 no cambia con los mismos datos (S7/FR-M09).
@@ -255,7 +269,10 @@ fn migracion_004_conserva_todos_los_datos_de_una_base_v3() {
     assert_eq!(lista[0].actualizado_en, ts(COMPROMISO_ACTUALIZADO));
     let pagos = comps.historial_pagos(lista[0].id).unwrap();
     assert_eq!(pagos.len(), 1);
-    assert_eq!(pagos[0].movimiento_id.to_string(), "22222222-2222-4222-8222-222222222222");
+    assert_eq!(
+        pagos[0].movimiento_id.to_string(),
+        "22222222-2222-4222-8222-222222222222"
+    );
     assert_eq!(pagos[0].periodo_key, "2026-10");
     assert_eq!(pagos[0].monto_pagado, 500_000);
 
@@ -321,7 +338,10 @@ fn migracion_004_conserva_todos_los_datos_de_una_base_v3() {
 
     // Integridad referencial tras el rebuild (compromisos_pagos → movements).
     let mut stmt = conn.prepare("PRAGMA foreign_key_check").unwrap();
-    let rotas = stmt.query_map([], |r| r.get::<_, String>(0)).unwrap().count();
+    let rotas = stmt
+        .query_map([], |r| r.get::<_, String>(0))
+        .unwrap()
+        .count();
     assert_eq!(rotas, 0, "la reconstrucción no puede dejar FKs rotas");
 }
 
@@ -350,7 +370,10 @@ fn migracion_004_es_idempotente() {
     comps.migrate().unwrap();
     assert_eq!(comps.list().unwrap().len(), 1);
     assert_eq!(
-        comps.historial_pagos(comps.list().unwrap()[0].id).unwrap().len(),
+        comps
+            .historial_pagos(comps.list().unwrap()[0].id)
+            .unwrap()
+            .len(),
         1
     );
 }

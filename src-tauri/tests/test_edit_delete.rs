@@ -1,6 +1,6 @@
-use kite::models::{Movement, MovementType, MovementOrigin};
-use kite::storage::port::StoragePort;
 use chrono::Local;
+use kite::models::{Movement, MovementOrigin, MovementType};
+use kite::storage::port::StoragePort;
 use tempfile::tempdir;
 use uuid::Uuid;
 
@@ -17,7 +17,14 @@ fn test_edit_movement_updates_summary() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        MovementType::Gasto,
+        18_000,
+        "Almuerzo".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     // Verificar resumen inicial
@@ -48,7 +55,14 @@ fn test_edit_movement_preserves_id_type_origen() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Ingreso, 100_000, "Pago".into(), hoy, MovementOrigin::Mensaje).unwrap();
+    let m = Movement::new(
+        MovementType::Ingreso,
+        100_000,
+        "Pago".into(),
+        hoy,
+        MovementOrigin::Mensaje,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     let mut updated = m.clone();
@@ -69,7 +83,14 @@ fn test_edit_movement_refresca_actualizado_en() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Gasto, 10_000, "Test".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Test".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     let original_actualizado = m.actualizado_en;
@@ -82,9 +103,12 @@ fn test_edit_movement_refresca_actualizado_en() {
 
     let retrieved = storage.get_by_id(m.id).unwrap().unwrap();
     // actualizado_en debe ser estrictamente mayor (diferencia >= 1 segundo)
-    assert!(retrieved.actualizado_en > original_actualizado, 
-        "actualizado_en debe refrescarse: original={:?}, nuevo={:?}", 
-        original_actualizado, retrieved.actualizado_en);
+    assert!(
+        retrieved.actualizado_en > original_actualizado,
+        "actualizado_en debe refrescarse: original={:?}, nuevo={:?}",
+        original_actualizado,
+        retrieved.actualizado_en
+    );
 }
 
 #[test]
@@ -94,7 +118,14 @@ fn test_delete_movement_with_confirmation() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        MovementType::Gasto,
+        18_000,
+        "Almuerzo".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     // Verificar que existe
@@ -121,7 +152,14 @@ fn test_delete_movement_cancelled_persists() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        MovementType::Gasto,
+        18_000,
+        "Almuerzo".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     // Simular cancelación: no llamamos a delete
@@ -147,7 +185,14 @@ fn test_edit_last_movement_period_summary_zeros() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Gasto, 10_000, "Último".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Último".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     // Verificar resumen antes
@@ -171,7 +216,14 @@ fn test_edit_movement_invalid_validation() {
 
     let hoy = Local::now().date_naive();
 
-    let m = Movement::new(MovementType::Gasto, 18_000, "Almuerzo".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m = Movement::new(
+        MovementType::Gasto,
+        18_000,
+        "Almuerzo".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
     storage.save(m.clone()).unwrap();
 
     // Intentar editar con monto inválido (0)
@@ -190,8 +242,22 @@ fn test_delete_movement_updates_summary() {
 
     let hoy = Local::now().date_naive();
 
-    let m1 = Movement::new(MovementType::Gasto, 10_000, "Gasto 1".into(), hoy, MovementOrigin::Formulario).unwrap();
-    let m2 = Movement::new(MovementType::Ingreso, 50_000, "Ingreso 1".into(), hoy, MovementOrigin::Formulario).unwrap();
+    let m1 = Movement::new(
+        MovementType::Gasto,
+        10_000,
+        "Gasto 1".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
+    let m2 = Movement::new(
+        MovementType::Ingreso,
+        50_000,
+        "Ingreso 1".into(),
+        hoy,
+        MovementOrigin::Formulario,
+    )
+    .unwrap();
 
     storage.save(m1.clone()).unwrap();
     storage.save(m2.clone()).unwrap();

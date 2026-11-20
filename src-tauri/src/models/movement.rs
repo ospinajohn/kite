@@ -101,7 +101,13 @@ impl Movement {
         concepto: String,
         fecha: NaiveDate,
     ) -> Result<Self, MovementError> {
-        let mut m = Self::new(MovementType::Aporte, monto_centavos, concepto, fecha, MovementOrigin::Formulario)?;
+        let mut m = Self::new(
+            MovementType::Aporte,
+            monto_centavos,
+            concepto,
+            fecha,
+            MovementOrigin::Formulario,
+        )?;
         m.meta_id = Some(meta_id);
         Ok(m)
     }
@@ -211,7 +217,8 @@ mod tests {
             "Almuerzo".into(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap();
+        )
+        .unwrap();
         assert_eq!(m.tipo, MovementType::Gasto);
         assert_eq!(m.monto_centavos, 18_000);
         assert_eq!(m.concepto, "Almuerzo");
@@ -226,7 +233,8 @@ mod tests {
             "Pago quincena".into(),
             NaiveDate::from_ymd_opt(2026, 10, 15).unwrap(),
             MovementOrigin::Mensaje,
-        ).unwrap();
+        )
+        .unwrap();
         assert_eq!(m.tipo, MovementType::Ingreso);
         assert_eq!(m.format_monto(), "+ $1.500.000");
     }
@@ -239,7 +247,8 @@ mod tests {
             "Test".into(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap_err();
+        )
+        .unwrap_err();
         assert!(matches!(err, MovementError::InvalidAmount(_)));
     }
 
@@ -251,7 +260,8 @@ mod tests {
             "   ".into(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap_err();
+        )
+        .unwrap_err();
         assert!(matches!(err, MovementError::InvalidConcept(_)));
     }
 
@@ -264,7 +274,8 @@ mod tests {
             "Test".into(),
             tomorrow,
             MovementOrigin::Formulario,
-        ).unwrap_err();
+        )
+        .unwrap_err();
         assert!(matches!(err, MovementError::InvalidDate(_)));
     }
 
@@ -276,12 +287,15 @@ mod tests {
             "Almuerzo".into(),
             Local::now().date_naive(),
             MovementOrigin::Formulario,
-        ).unwrap();
+        )
+        .unwrap();
         let old_updated = m.actualizado_en;
 
         std::thread::sleep(std::time::Duration::from_millis(10));
 
-        m = m.update(19_000, "Almuerzo corregido".into(), m.fecha).unwrap();
+        m = m
+            .update(19_000, "Almuerzo corregido".into(), m.fecha)
+            .unwrap();
         assert_eq!(m.monto_centavos, 19_000);
         assert_eq!(m.concepto, "Almuerzo corregido");
         assert!(m.actualizado_en > old_updated);
@@ -295,7 +309,8 @@ mod tests {
             "Test".into(),
             Local::now().date_naive(),
             MovementOrigin::Mensaje,
-        ).unwrap();
+        )
+        .unwrap();
         let updated = m.update(20_000, "Nuevo".into(), m.fecha).unwrap();
         assert_eq!(updated.tipo, MovementType::Gasto);
         assert_eq!(updated.origen, MovementOrigin::Mensaje);
@@ -304,9 +319,23 @@ mod tests {
     #[test]
     fn sort_key_ordena_fecha_desc_luego_creado_desc() {
         let today = Local::now().date_naive();
-        let m1 = Movement::new(MovementType::Gasto, 1000, "A".into(), today, MovementOrigin::Formulario).unwrap();
+        let m1 = Movement::new(
+            MovementType::Gasto,
+            1000,
+            "A".into(),
+            today,
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
         std::thread::sleep(std::time::Duration::from_millis(10));
-        let m2 = Movement::new(MovementType::Gasto, 2000, "B".into(), today, MovementOrigin::Formulario).unwrap();
+        let m2 = Movement::new(
+            MovementType::Gasto,
+            2000,
+            "B".into(),
+            today,
+            MovementOrigin::Formulario,
+        )
+        .unwrap();
         assert!(m2.sort_key() > m1.sort_key());
     }
 }
