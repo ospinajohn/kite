@@ -8,6 +8,7 @@ use uuid::Uuid;
 pub enum MovementType {
     Ingreso,
     Gasto,
+    Aporte,
 }
 
 impl MovementType {
@@ -15,12 +16,14 @@ impl MovementType {
         match self {
             MovementType::Ingreso => 1,
             MovementType::Gasto => -1,
+            MovementType::Aporte => 0,
         }
     }
     pub fn label(&self) -> &'static str {
         match self {
             MovementType::Ingreso => "ingreso",
             MovementType::Gasto => "gasto",
+            MovementType::Aporte => "aporte",
         }
     }
 }
@@ -40,6 +43,8 @@ pub struct Movement {
     pub concepto: String,
     pub fecha: NaiveDate,
     pub origen: MovementOrigin,
+    /// Meta de ahorro asociada (solo en movimientos de tipo Aporte).
+    pub meta_id: Option<Uuid>,
     pub creado_en: DateTime<Local>,
     pub actualizado_en: DateTime<Local>,
 }
@@ -83,9 +88,22 @@ impl Movement {
             concepto: concepto_trim.to_string(),
             fecha,
             origen,
+            meta_id: None,
             creado_en: now,
             actualizado_en: now,
         })
+    }
+
+    /// Apartado a una meta: mismo tipo de validación que cualquier movimiento.
+    pub fn new_apartado(
+        meta_id: Uuid,
+        monto_centavos: i64,
+        concepto: String,
+        fecha: NaiveDate,
+    ) -> Result<Self, MovementError> {
+        let mut m = Self::new(MovementType::Aporte, monto_centavos, concepto, fecha, MovementOrigin::Formulario)?;
+        m.meta_id = Some(meta_id);
+        Ok(m)
     }
 
     pub fn update(
@@ -124,6 +142,7 @@ impl Movement {
             concepto: concepto_trim.to_string(),
             fecha,
             origen: self.origen,
+            meta_id: self.meta_id,
             creado_en: self.creado_en,
             actualizado_en: Local::now(),
         })
@@ -133,7 +152,11 @@ impl Movement {
         if self.monto_centavos == 0 {
             return "+ $0".to_string();
         }
-        let sign = if self.tipo == MovementType::Ingreso { "+" } else { "−" };
+        let sign = match self.tipo {
+            MovementType::Ingreso => "+",
+            MovementType::Gasto => "−",
+            MovementType::Aporte => "→",
+        };
         let abs = self.monto_centavos.abs();
         let s = abs.to_string();
         let mut result = String::new();

@@ -114,6 +114,9 @@ pub struct PlanQuincena {
     pub gastos_centavos: i64,
     pub pendientes_periodo: Vec<PendienteCompromiso>,
     pub atrasados: Vec<PendienteCompromiso>,
+    /// Suma de apartados a metas del período (tipo Aporte), resta del libre (S3/005).
+    #[serde(default)]
+    pub apartados_periodo_centavos: i64,
     pub libre_quincena_centavos: i64,
     pub libre_real_centavos: i64,
 }
@@ -121,8 +124,8 @@ pub struct PlanQuincena {
 /// Cálculo puro (sin DB): solo cuenta lo que cae en el rango.
 /// `pendientes` son vencimientos no pagados del período; `atrasados`, de
 /// quincenas anteriores (fecha < desde, ya deduplicados por el ensamblado).
-/// `libre_quincena = ingresos − gastos − pendientes`; `libre_real` resta además
-/// los atrasados. Los negativos se conservan tal cual (US1.5).
+/// `libre_quincena = ingresos − gastos − pendientes − apartados`; `libre_real`
+/// resta además los atrasados. Los negativos se conservan tal cual (US1.5).
 pub fn calcular_plan(
     rango: RangoQuincena,
     movimientos: &[Movement],
@@ -138,6 +141,7 @@ pub fn calcular_plan(
     };
     let ingresos_centavos = suma_movimientos(MovementType::Ingreso);
     let gastos_centavos = suma_movimientos(MovementType::Gasto);
+    let apartados_periodo_centavos = suma_movimientos(MovementType::Aporte);
 
     let pendientes_periodo: Vec<PendienteCompromiso> = pendientes
         .iter()
@@ -152,7 +156,8 @@ pub fn calcular_plan(
 
     let total_pendientes: i64 = pendientes_periodo.iter().map(|p| p.monto_centavos).sum();
     let total_atrasados: i64 = atrasados_previos.iter().map(|p| p.monto_centavos).sum();
-    let libre_quincena_centavos = ingresos_centavos - gastos_centavos - total_pendientes;
+    let libre_quincena_centavos =
+        ingresos_centavos - gastos_centavos - total_pendientes - apartados_periodo_centavos;
     let libre_real_centavos = libre_quincena_centavos - total_atrasados;
 
     PlanQuincena {
@@ -161,6 +166,7 @@ pub fn calcular_plan(
         gastos_centavos,
         pendientes_periodo,
         atrasados: atrasados_previos,
+        apartados_periodo_centavos,
         libre_quincena_centavos,
         libre_real_centavos,
     }

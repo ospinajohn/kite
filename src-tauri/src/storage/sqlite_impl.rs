@@ -18,32 +18,13 @@ impl SqliteStorage {
         Ok(Self { conn: Arc::new(Mutex::new(conn)) })
     }
 
-    fn init_schema(&self) -> Result<(), StorageError> {
-        let conn = self.conn.lock().unwrap();
-        conn.execute_batch(
-            r#"
-            CREATE TABLE IF NOT EXISTS movements (
-                id TEXT PRIMARY KEY,
-                tipo TEXT NOT NULL CHECK(tipo IN ('ingreso','gasto')),
-                monto_centavos INTEGER NOT NULL CHECK(monto_centavos > 0),
-                concepto TEXT NOT NULL CHECK(trim(concepto) != ''),
-                fecha TEXT NOT NULL,
-                origen TEXT NOT NULL CHECK(origen IN ('formulario','mensaje')) DEFAULT 'formulario',
-                creado_en TEXT NOT NULL,
-                actualizado_en TEXT NOT NULL
-            );
-            CREATE INDEX IF NOT EXISTS idx_movements_fecha ON movements(fecha DESC, creado_en DESC);
-            CREATE INDEX IF NOT EXISTS idx_movements_tipo_fecha ON movements(tipo, fecha DESC);
-            "#
-        )?;
-        Ok(())
-    }
-
     fn row_to_movement(row: &rusqlite::Row) -> Result<Movement, rusqlite::Error> {
         let tipo_str: String = row.get("tipo")?;
         let origen_str: String = row.get("origen")?;
         let creado_en_str: String = row.get("creado_en")?;
         let actualizado_en_str: String = row.get("actualizado_en")?;
+
+        let meta_id: Option<String> = row.get("meta_id")?;
 
         Ok(Movement {
             id: Uuid::parse_str(&row.get::<_, String>("id")?).map_err(|_| rusqlite::Error::InvalidColumnType(0, "id".into(), rusqlite::types::Type::Text))?,
@@ -52,6 +33,7 @@ impl SqliteStorage {
             concepto: row.get("concepto")?,
             fecha: NaiveDate::parse_from_str(&row.get::<_, String>("fecha")?, "%Y-%m-%d").map_err(|_| rusqlite::Error::InvalidColumnType(0, "fecha".into(), rusqlite::types::Type::Text))?,
             origen: Self::parse_origin(&origen_str).map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?,
+            meta_id: meta_id.map(|s| Uuid::parse_str(&s)).transpose().map_err(|_| rusqlite::Error::InvalidColumnType(0, "meta_id".into(), rusqlite::types::Type::Text))?,
             creado_en: DateTime::parse_from_rfc3339(&creado_en_str).map_err(|_| rusqlite::Error::InvalidColumnType(0, "creado_en".into(), rusqlite::types::Type::Text))?.with_timezone(&Local),
             actualizado_en: DateTime::parse_from_rfc3339(&actualizado_en_str).map_err(|_| rusqlite::Error::InvalidColumnType(0, "actualizado_en".into(), rusqlite::types::Type::Text))?.with_timezone(&Local),
         })
@@ -63,6 +45,8 @@ impl SqliteStorage {
         let creado_en_str: String = row.get("creado_en").map_err(StorageError::Database)?;
         let actualizado_en_str: String = row.get("actualizado_en").map_err(StorageError::Database)?;
 
+        let meta_id: Option<String> = row.get("meta_id").map_err(StorageError::Database)?;
+
         Ok(Movement {
             id: Uuid::parse_str(&row.get::<_, String>("id").map_err(StorageError::Database)?)
                 .map_err(|_| StorageError::Integrity("Invalid UUID".into()))?,
@@ -72,6 +56,7 @@ impl SqliteStorage {
             fecha: NaiveDate::parse_from_str(&row.get::<_, String>("fecha").map_err(StorageError::Database)?, "%Y-%m-%d")
                 .map_err(|_| StorageError::Integrity("Invalid date format".into()))?,
             origen: Self::parse_origin(&origen_str)?,
+            meta_id: meta_id.map(|s| Uuid::parse_str(&s)).transpose().map_err(|_| StorageError::Integrity("Invalid meta_id".into()))?,
             creado_en: DateTime::parse_from_rfc3339(&creado_en_str)
                 .map_err(|_| StorageError::Integrity("Invalid created_at format".into()))?.with_timezone(&Local),
             actualizado_en: DateTime::parse_from_rfc3339(&actualizado_en_str)
@@ -94,8 +79,8 @@ impl StoragePort for SqliteStorage {
 
         tx.execute(
             r#"
-            INSERT INTO movements (id, tipo, monto_centavos, concepto, fecha, origen, creado_en, actualizado_en)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+            INSERT INTO movements (id, tipo, monto_centavos, concepto, fecha, origen, meta_id, creado_en, actualizado_en)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
             "#,
             params![
                 id_str,
@@ -104,6 +89,7 @@ impl StoragePort for SqliteStorage {
                 movement.concepto,
                 fecha_str,
                 origen_str,
+                movement.meta_id.map(|id| id.to_string()),
                 creado_en_str,
                 actualizado_en_str
             ],
@@ -244,11 +230,116 @@ impl StoragePort for SqliteStorage {
     }
 
     fn migrate(&self) -> Result<(), StorageError> {
-        self.init_schema()?;
-        let conn = self.conn.lock().unwrap();
+        let mut conn = self.conn.lock().unwrap();
         let version: i64 = conn.query_row("PRAGMA user_version", [], |row| row.get(0))?;
-        if version < 1 {
-            conn.execute("PRAGMA user_version = 1", [])?;
+        if version < 4 {
+            // PRAGMA foreign_keys debe estar OFF fuera de la transacción: al reconstruir
+            // movements, compromisos_pagos referencia movements(id) y el DROP fallaría.
+            conn.execute_batch("PRAGMA foreign_keys = OFF;")?;
+            let rebuild = (|| -> Result<(), StorageError> {
+                let tx = conn.transaction()?;
+                // Detectar si existe una tabla movements antigua (v1-v3) que reconstruir.
+                let tiene_movements: bool = tx.query_row(
+                    "SELECT COUNT(*) > 0 FROM sqlite_master WHERE type='table' AND name='movements'",
+                    [],
+                    |row| row.get(0),
+                )?;
+                if tiene_movements {
+                    tx.execute_batch(
+                        r#"
+                        CREATE TABLE movements_new (
+                            id TEXT PRIMARY KEY,
+                            tipo TEXT NOT NULL CHECK(tipo IN ('ingreso','gasto','aporte')),
+                            monto_centavos INTEGER NOT NULL CHECK(monto_centavos > 0),
+                            concepto TEXT NOT NULL CHECK(trim(concepto) != ''),
+                            fecha TEXT NOT NULL,
+                            origen TEXT NOT NULL CHECK(origen IN ('formulario','mensaje')) DEFAULT 'formulario',
+                            meta_id TEXT,
+                            creado_en TEXT NOT NULL,
+                            actualizado_en TEXT NOT NULL
+                        );
+                        INSERT INTO movements_new
+                            (id, tipo, monto_centavos, concepto, fecha, origen, meta_id, creado_en, actualizado_en)
+                        SELECT id, tipo, monto_centavos, concepto, fecha, origen, NULL, creado_en, actualizado_en
+                        FROM movements;
+                        DROP TABLE movements;
+                        ALTER TABLE movements_new RENAME TO movements;
+                        CREATE INDEX idx_movements_fecha ON movements(fecha DESC, creado_en DESC);
+                        CREATE INDEX idx_movements_tipo_fecha ON movements(tipo, fecha DESC);
+                        "#,
+                    )?;
+                } else {
+                    tx.execute_batch(
+                        r#"
+                        CREATE TABLE IF NOT EXISTS movements (
+                            id TEXT PRIMARY KEY,
+                            tipo TEXT NOT NULL CHECK(tipo IN ('ingreso','gasto','aporte')),
+                            monto_centavos INTEGER NOT NULL CHECK(monto_centavos > 0),
+                            concepto TEXT NOT NULL CHECK(trim(concepto) != ''),
+                            fecha TEXT NOT NULL,
+                            origen TEXT NOT NULL CHECK(origen IN ('formulario','mensaje')) DEFAULT 'formulario',
+                            meta_id TEXT,
+                            creado_en TEXT NOT NULL,
+                            actualizado_en TEXT NOT NULL
+                        );
+                        CREATE INDEX IF NOT EXISTS idx_movements_fecha ON movements(fecha DESC, creado_en DESC);
+                        CREATE INDEX IF NOT EXISTS idx_movements_tipo_fecha ON movements(tipo, fecha DESC);
+                        "#,
+                    )?;
+                }
+                tx.execute_batch(
+                    r#"
+                    CREATE TABLE IF NOT EXISTS metas (
+                        id TEXT PRIMARY KEY,
+                        nombre TEXT NOT NULL CHECK(trim(nombre) != ''),
+                        monto_objetivo_centavos INTEGER NOT NULL CHECK(monto_objetivo_centavos > 0),
+                        fecha_objetivo TEXT,
+                        estado TEXT NOT NULL CHECK(estado IN ('activa','completada','cancelada')),
+                        creado_en TEXT NOT NULL,
+                        actualizado_en TEXT NOT NULL
+                    );
+                    PRAGMA user_version = 4;
+                    "#,
+                )?;
+                tx.commit()?;
+                Ok(())
+            })();
+            conn.execute_batch("PRAGMA foreign_keys = ON;")?;
+            rebuild?;
+            // Integridad referencial tras el rebuild (compromisos_pagos → movements).
+            let mut fk_stmt = conn.prepare("PRAGMA foreign_key_check")?;
+            let rotas = fk_stmt.query_map([], |_| Ok(())).map(|rows| rows.count()).unwrap_or(0);
+            if rotas > 0 {
+                return Err(StorageError::Migration("FKs rotas tras la migración 004".into()));
+            }
+        } else {
+            // Ya en v4+: asegurar esquema idempotente.
+            conn.execute_batch(
+                r#"
+                CREATE TABLE IF NOT EXISTS movements (
+                    id TEXT PRIMARY KEY,
+                    tipo TEXT NOT NULL CHECK(tipo IN ('ingreso','gasto','aporte')),
+                    monto_centavos INTEGER NOT NULL CHECK(monto_centavos > 0),
+                    concepto TEXT NOT NULL CHECK(trim(concepto) != ''),
+                    fecha TEXT NOT NULL,
+                    origen TEXT NOT NULL CHECK(origen IN ('formulario','mensaje')) DEFAULT 'formulario',
+                    meta_id TEXT,
+                    creado_en TEXT NOT NULL,
+                    actualizado_en TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_movements_fecha ON movements(fecha DESC, creado_en DESC);
+                CREATE INDEX IF NOT EXISTS idx_movements_tipo_fecha ON movements(tipo, fecha DESC);
+                CREATE TABLE IF NOT EXISTS metas (
+                    id TEXT PRIMARY KEY,
+                    nombre TEXT NOT NULL CHECK(trim(nombre) != ''),
+                    monto_objetivo_centavos INTEGER NOT NULL CHECK(monto_objetivo_centavos > 0),
+                    fecha_objetivo TEXT,
+                    estado TEXT NOT NULL CHECK(estado IN ('activa','completada','cancelada')),
+                    creado_en TEXT NOT NULL,
+                    actualizado_en TEXT NOT NULL
+                );
+                "#,
+            )?;
         }
         Ok(())
     }
@@ -259,6 +350,7 @@ impl SqliteStorage {
         match t {
             MovementType::Ingreso => "ingreso",
             MovementType::Gasto => "gasto",
+            MovementType::Aporte => "aporte",
         }
     }
 
@@ -266,6 +358,7 @@ impl SqliteStorage {
         match s {
             "ingreso" => Ok(MovementType::Ingreso),
             "gasto" => Ok(MovementType::Gasto),
+            "aporte" => Ok(MovementType::Aporte),
             _ => Err(StorageError::Integrity(format!("Tipo inválido: {}", s))),
         }
     }

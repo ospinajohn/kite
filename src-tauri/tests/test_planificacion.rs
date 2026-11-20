@@ -36,6 +36,7 @@ fn mov(tipo: MovementType, monto: i64, fecha: NaiveDate) -> Movement {
         concepto: "Prueba".into(),
         fecha,
         origen: MovementOrigin::Formulario,
+        meta_id: None,
         creado_en: Local::now(),
         actualizado_en: Local::now(),
     }
