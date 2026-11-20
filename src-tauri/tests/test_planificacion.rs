@@ -404,7 +404,7 @@ fn pagado_no_descuenta_como_pendiente() {
     );
     let saved = e.comps.save(c).unwrap();
     let periodo = saved.periodo_key_en_mes(hoy.year(), hoy.month());
-    confirmar_pago(&e.movs, &e.comps, &saved, periodo, 500_000, hoy).unwrap();
+    confirmar_pago(&e.comps, &saved, periodo, 500_000, hoy).unwrap();
 
     let plan = plan_de_estado(&e.movs, &e.comps, 15, Some(hoy)).unwrap();
     assert!(plan.pendientes_periodo.is_empty());
@@ -449,7 +449,7 @@ fn cuotas_agotadas_no_descuenta() {
     );
     let saved = e.comps.save(c).unwrap();
     let periodo = saved.periodo_key_en_mes(hoy.year(), hoy.month());
-    confirmar_pago(&e.movs, &e.comps, &saved, periodo, 120_000, hoy).unwrap();
+    confirmar_pago(&e.comps, &saved, periodo, 120_000, hoy).unwrap();
 
     let plan = plan_de_estado(&e.movs, &e.comps, 15, Some(hoy)).unwrap();
     assert!(plan.pendientes_periodo.is_empty());

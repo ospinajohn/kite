@@ -3,7 +3,6 @@
 
 use crate::compromisos::port::{CompromisosError, CompromisosPort};
 use crate::models::{Compromiso, Movement, MovementOrigin, MovementType, Vencimiento};
-use crate::storage::port::StoragePort;
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 
@@ -83,20 +82,14 @@ pub fn proximo_vencimiento(
 /// Confirma el pago de un compromiso para su período: crea el movimiento gasto,
 /// registra el vínculo (dedup) e incrementa el contador de cuotas si aplica.
 /// El monto puede diferir del monto base (corrección puntual, C3).
+/// La operación es atómica: movimiento, registro de pago y cuotas se confirman juntos.
 pub fn confirmar_pago(
-    storage: &dyn StoragePort,
     compromisos: &dyn CompromisosPort,
     compromiso: &Compromiso,
     periodo_key: String,
     monto_centavos: i64,
     fecha: NaiveDate,
 ) -> Result<Movement, Box<dyn std::error::Error>> {
-    // Si ya estaba pagado, no se duplica (el mensaje amigable lo da el UNIQUE del storage).
-    let pagados = compromisos.periodos_pagados(compromiso.id)?;
-    if pagados.contains(&periodo_key) {
-        return Err(format!("El período {periodo_key} ya tiene un pago confirmado").into());
-    }
-
     let movimiento = Movement::new(
         MovementType::Gasto,
         monto_centavos,
@@ -104,7 +97,5 @@ pub fn confirmar_pago(
         fecha,
         MovementOrigin::Formulario,
     )?;
-    let saved = storage.save(movimiento)?;
-    compromisos.registrar_pago(compromiso.id, periodo_key, saved.clone())?;
-    Ok(saved)
+    Ok(compromisos.confirmar_pago_atomico(compromiso.id, periodo_key, movimiento)?)
 }

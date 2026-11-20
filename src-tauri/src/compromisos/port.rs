@@ -51,6 +51,16 @@ pub trait CompromisosPort: Send + Sync {
         movimiento: Movement,
     ) -> Result<PagoCompromiso, CompromisosError>;
 
+    /// Confirma un pago de forma atómica: verifica deduplicación, inserta el
+    /// movimiento gasto, registra el vínculo del período e incrementa cuotas si
+    /// aplica, todo en una sola transacción.
+    fn confirmar_pago_atomico(
+        &self,
+        compromiso_id: Uuid,
+        periodo_key: String,
+        movimiento: Movement,
+    ) -> Result<Movement, CompromisosError>;
+
     fn historial_pagos(&self, id: Uuid) -> Result<Vec<PagoCompromiso>, CompromisosError>;
 
     fn migrate(&self) -> Result<(), CompromisosError>;

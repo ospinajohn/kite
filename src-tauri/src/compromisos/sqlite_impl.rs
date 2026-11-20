@@ -372,6 +372,100 @@ impl CompromisosPort for SqliteCompromisosStorage {
         Ok(pago)
     }
 
+    fn confirmar_pago_atomico(
+        &self,
+        compromiso_id: Uuid,
+        periodo_key: String,
+        movimiento: Movement,
+    ) -> Result<Movement, CompromisosError> {
+        let mut conn = self.conn.lock().unwrap();
+        let tx = conn.transaction()?;
+
+        let duracion_tipo: String = tx
+            .query_row(
+                "SELECT duracion_tipo FROM compromisos WHERE id = ?1",
+                params![compromiso_id.to_string()],
+                |row| row.get(0),
+            )
+            .optional()?
+            .ok_or(CompromisosError::NotFound(compromiso_id))?;
+
+        let ya_pagado: bool = tx.query_row(
+            "SELECT EXISTS(SELECT 1 FROM compromisos_pagos WHERE compromiso_id = ?1 AND periodo_key = ?2)",
+            params![compromiso_id.to_string(), periodo_key.clone()],
+            |row| row.get(0),
+        )?;
+        if ya_pagado {
+            return Err(CompromisosError::Integrity(format!(
+                "El período {periodo_key} ya tiene un pago confirmado"
+            )));
+        }
+
+        let tipo_str = match movimiento.tipo {
+            crate::models::MovementType::Ingreso => "ingreso",
+            crate::models::MovementType::Gasto => "gasto",
+            crate::models::MovementType::Aporte => "aporte",
+        };
+        let origen_str = match movimiento.origen {
+            crate::models::MovementOrigin::Formulario => "formulario",
+            crate::models::MovementOrigin::Mensaje => "mensaje",
+        };
+
+        tx.execute(
+            r#"
+            INSERT INTO movements (id, tipo, monto_centavos, concepto, fecha, origen, meta_id, creado_en, actualizado_en)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+            "#,
+            params![
+                movimiento.id.to_string(),
+                tipo_str,
+                movimiento.monto_centavos,
+                movimiento.concepto,
+                movimiento.fecha.format("%Y-%m-%d").to_string(),
+                origen_str,
+                movimiento.meta_id.map(|id| id.to_string()),
+                movimiento.creado_en.to_rfc3339(),
+                movimiento.actualizado_en.to_rfc3339(),
+            ],
+        )?;
+
+        tx.execute(
+            r#"
+            INSERT INTO compromisos_pagos (
+                id, compromiso_id, periodo_key, movimiento_id, monto_pagado, fecha_pago
+            ) VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+            "#,
+            params![
+                Uuid::new_v4().to_string(),
+                compromiso_id.to_string(),
+                periodo_key.clone(),
+                movimiento.id.to_string(),
+                movimiento.monto_centavos,
+                movimiento.fecha.format("%Y-%m-%d").to_string(),
+            ],
+        )
+        .map_err(|e| match e {
+            rusqlite::Error::SqliteFailure(err, _)
+                if err.code == rusqlite::ErrorCode::ConstraintViolation =>
+            {
+                CompromisosError::Integrity(format!(
+                    "El período {periodo_key} ya tiene un pago confirmado"
+                ))
+            }
+            other => CompromisosError::Database(other),
+        })?;
+
+        if duracion_tipo == "cuotas" {
+            tx.execute(
+                "UPDATE compromisos SET cuotas_confirmadas = cuotas_confirmadas + 1, actualizado_en = ?2 WHERE id = ?1",
+                params![compromiso_id.to_string(), Local::now().to_rfc3339()],
+            )?;
+        }
+
+        tx.commit()?;
+        Ok(movimiento)
+    }
+
     fn historial_pagos(&self, id: Uuid) -> Result<Vec<PagoCompromiso>, CompromisosError> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(

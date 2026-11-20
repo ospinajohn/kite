@@ -511,7 +511,6 @@ pub async fn confirmar_pago_compromiso(
         .map_err(|e| e.to_string())?
         .ok_or("Compromiso no encontrado")?;
     crate::compromisos::confirmar_pago(
-        state.storage().as_ref(),
         state.compromisos().as_ref(),
         &compromiso,
         periodo_key,

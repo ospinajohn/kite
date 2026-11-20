@@ -7,10 +7,6 @@ use kite::storage::port::StoragePort;
 use kite::storage::sqlite_impl::SqliteStorage;
 use tempfile::tempdir;
 
-fn d(y: i32, m: u32, day: u32) -> NaiveDate {
-    NaiveDate::from_ymd_opt(y, m, day).unwrap()
-}
-
 fn compromiso_con_fecha(dia: u8, creado: NaiveDate, duracion: Duracion) -> Compromiso {
     let mut c = Compromiso::new(
         "Arriendo".into(),
@@ -88,7 +84,7 @@ fn flujo_pago_completo_dedup_y_cuotas() {
     let periodo = c.periodo_key_en_mes(hoy.year(), hoy.month());
 
     // Primer pago: crea el gasto y marca el período.
-    let mov = confirmar_pago(&movements, &compromisos, &c, periodo.clone(), 480_000, hoy).unwrap();
+    let mov = confirmar_pago(&compromisos, &c, periodo.clone(), 480_000, hoy).unwrap();
     assert_eq!(mov.monto_centavos, 480_000);
     assert_eq!(mov.concepto, "Arriendo");
 
@@ -100,7 +96,7 @@ fn flujo_pago_completo_dedup_y_cuotas() {
     );
 
     // Segundo pago del mismo período → rechazado (FR-C07).
-    let err = confirmar_pago(&movements, &compromisos, &c, periodo, 500_000, hoy).unwrap_err();
+    let err = confirmar_pago(&compromisos, &c, periodo, 500_000, hoy).unwrap_err();
     assert!(err.to_string().contains("ya tiene un pago"));
     // No se guardó ningún movimiento extra.
     assert_eq!(movements.query(None, None).unwrap().len(), 1);
@@ -150,15 +146,7 @@ fn quincenal_vence_y_paga_en_su_periodo() {
     let saved = compromisos.save(c).unwrap();
     let periodo = saved.periodo_key_en_mes(hoy.year(), hoy.month());
 
-    confirmar_pago(
-        &movements,
-        &compromisos,
-        &saved,
-        periodo.clone(),
-        20_000,
-        hoy,
-    )
-    .unwrap();
+    confirmar_pago(&compromisos, &saved, periodo.clone(), 20_000, hoy).unwrap();
     assert_eq!(
         compromisos.periodos_pagados(saved.id).unwrap(),
         vec![periodo]
