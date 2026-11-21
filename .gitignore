@@ -38,9 +38,16 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+*.pyc
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+/scratch/
 
 # Others
 
 .agents/
 .opencode/
 .specify/
+design/
