@@ -427,7 +427,7 @@ fn flujo_spec_meta_apartados_progreso_completada_y_plan() {
         EstadoMeta::Activa
     );
 
-    // US2.2: el Resumen NO incluye el apartado (S2/FR-M02).
+    // El apartado es gasto ligado a meta: cuenta en gastos/balance, no en ingresos.
     let summary_despues = e.movs.summary(None, None).unwrap();
     assert_eq!(
         summary_despues.ingresos_centavos,
@@ -435,7 +435,7 @@ fn flujo_spec_meta_apartados_progreso_completada_y_plan() {
     );
     assert_eq!(
         summary_despues.gastos_centavos,
-        summary_antes.gastos_centavos
+        summary_antes.gastos_centavos + 200_000
     );
 
     // US2.3 / S3: Planificación resta el apartado del libre (números exactos).
@@ -529,7 +529,7 @@ fn flujo_spec_meta_apartados_progreso_completada_y_plan() {
         "mensaje inesperado: {err}"
     );
     let summary_cancelada = e.movs.summary(None, None).unwrap();
-    assert_eq!(summary_cancelada.gastos_centavos, 300_000); // sin devolución
+    assert_eq!(summary_cancelada.gastos_centavos, 800_000); // sin devolución: apartados siguen contando como gasto ligado a meta
     e.metas.reactivar(meta.id).unwrap();
     let acumulado: i64 = e
         .metas

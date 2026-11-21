@@ -320,10 +320,10 @@ fn migracion_004_conserva_todos_los_datos_de_una_base_v3() {
         .unwrap();
     assert_eq!(tipo_leido, "aporte");
     assert_eq!(meta_leida.as_deref(), Some(meta_id.to_string().as_str()));
-    // El aporte NO infla ingresos ni gastos (S2).
+    // El aporte se registra como gasto ligado a meta: cuenta en gastos/balance, no en ingresos.
     let summary2 = storage.summary(None, None).unwrap();
     assert_eq!(summary2.ingresos_centavos, 1_500_000);
-    assert_eq!(summary2.gastos_centavos, 518_000);
+    assert_eq!(summary2.gastos_centavos, 518_000 + 200_000);
 
     for idx in ["idx_movements_fecha", "idx_movements_tipo_fecha"] {
         let existe: bool = conn
@@ -414,7 +414,7 @@ fn instalacion_nueva_queda_directamente_en_version_4() {
     let leido = storage.get_by_id(aporte_id).unwrap().unwrap();
     assert_eq!(leido.monto_centavos, 100_000);
 
-    // Los ingresos/gastos siguen funcionando igual.
+    // Gastos normales y apartados (aporte ligado a meta) cuentan como egresos en el resumen.
     let gasto = kite::models::Movement::new(
         MovementType::Gasto,
         18_000,
@@ -428,5 +428,5 @@ fn instalacion_nueva_queda_directamente_en_version_4() {
     assert_eq!(leido.monto_centavos, 18_000);
     let summary = storage.summary(None, None).unwrap();
     assert_eq!(summary.ingresos_centavos, 0);
-    assert_eq!(summary.gastos_centavos, 18_000);
+    assert_eq!(summary.gastos_centavos, 118_000);
 }

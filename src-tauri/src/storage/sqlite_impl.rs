@@ -254,7 +254,7 @@ impl StoragePort for SqliteStorage {
             r#"
             SELECT
                 COALESCE(SUM(CASE WHEN tipo = 'ingreso' THEN monto_centavos ELSE 0 END), 0) as ingresos,
-                COALESCE(SUM(CASE WHEN tipo = 'gasto' THEN monto_centavos ELSE 0 END), 0) as gastos
+                COALESCE(SUM(CASE WHEN tipo IN ('gasto','aporte') THEN monto_centavos ELSE 0 END), 0) as gastos
             FROM movements
             "#,
         );

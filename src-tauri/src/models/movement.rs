@@ -16,7 +16,7 @@ impl MovementType {
         match self {
             MovementType::Ingreso => 1,
             MovementType::Gasto => -1,
-            MovementType::Aporte => 0,
+            MovementType::Aporte => -1,
         }
     }
     pub fn label(&self) -> &'static str {
