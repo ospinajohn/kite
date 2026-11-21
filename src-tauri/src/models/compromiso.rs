@@ -246,6 +246,17 @@ impl Compromiso {
             .next()
     }
 
+    /// Vencimientos sin pagar con fecha <= `limite_fecha`, respetando duración,
+    /// estado y períodos ya pagados. Expone el cálculo para usos que necesitan un
+    /// horizonte mayor que la ventana de recordatorio (p. ej. simulación).
+    pub fn vencimientos_hasta_fecha(
+        &self,
+        limite_fecha: NaiveDate,
+        periodos_pagados: &[String],
+    ) -> Vec<Vencimiento> {
+        self.vencimientos_hasta(limite_fecha, periodos_pagados, usize::MAX)
+    }
+
     fn vencimientos_hasta(
         &self,
         limite_fecha: NaiveDate,
