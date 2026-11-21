@@ -4233,7 +4233,7 @@
       }
 
       .custom-select-option:hover {
-        background: #f1f4f8;
+        background: #f1f3f5;
       }
 
       .custom-select-option.selected {
@@ -4264,7 +4264,7 @@
       }
 
       .custom-datepicker-trigger:hover {
-        background: #ffffff;
+        background: #f1f3f5;
         border-color: #cbd5e1;
       }
 
@@ -4323,7 +4323,7 @@
       }
 
       .cal-nav-btn:hover {
-        background: #f1f4f8;
+        background: #f1f3f5;
         color: var(--ink);
       }
 
@@ -4363,8 +4363,8 @@
       }
 
       .cal-cell:hover:not(.empty) {
-        background: #eff6ff;
-        color: var(--blue);
+        background: #f1f3f5;
+        color: var(--ink);
       }
 
       .cal-cell.today {
@@ -4398,7 +4398,7 @@
       }
 
       :root[data-theme='dark'] .custom-select-option:hover {
-        background: rgba(255, 255, 255, 0.06) !important;
+        background: #1c1c1c !important;
       }
 
       :root[data-theme='dark'] .custom-select-option.selected {
@@ -4407,12 +4407,12 @@
       }
 
       :root[data-theme='dark'] .cal-nav-btn:hover {
-        background: rgba(255, 255, 255, 0.08) !important;
+        background: #1c1c1c !important;
       }
 
       :root[data-theme='dark'] .cal-cell:hover:not(.empty) {
-        background: rgba(96, 165, 250, 0.2) !important;
-        color: #93c5fd !important;
+        background: #1c1c1c !important;
+        color: #f3f6fb !important;
       }
 
       /* ==========================================================================
@@ -4594,9 +4594,9 @@
       }
 
       .k-cal-btn:hover {
-        background: var(--blue);
-        color: #ffffff;
-        border-color: var(--blue);
+        background: #f1f3f5;
+        color: var(--ink);
+        border-color: var(--line-strong);
       }
 
       :root[data-theme='dark'] .k-cal-btn {
@@ -4641,8 +4641,8 @@
       }
 
       .k-cal-cell:hover:not(.empty) {
-        background: #eff6ff;
-        color: var(--blue);
+        background: #f1f3f5;
+        color: var(--ink);
       }
 
       .k-cal-cell.today {
@@ -4732,12 +4732,83 @@
       }
 
       .k-cal-foot-btn:hover {
-        background: #eff6ff;
+        background: #f1f3f5;
       }
 
       :root[data-theme='dark'] .k-cal-cell:hover:not(.empty) {
-        background: rgba(96, 165, 250, 0.2);
-        color: #93c5fd;
+        background: #1c1c1c;
+        color: #f3f6fb;
+      }
+
+      :root[data-theme='dark'] .k-cal-btn:hover,
+      :root[data-theme='dark'] .k-cal-foot-btn:hover {
+        background: #1c1c1c;
+        color: #f3f6fb;
+        border-color: rgba(255, 255, 255, 0.14);
+      }
+
+      #btn-filtrar-fechas {
+        background: var(--ink) !important;
+        border-color: var(--ink) !important;
+        color: var(--ink-invert) !important;
+      }
+
+      #btn-filtrar-fechas:hover {
+        background: var(--ink-2) !important;
+        border-color: var(--ink-2) !important;
+        color: var(--ink-invert) !important;
+      }
+
+      #btn-limpiar-filtros {
+        background: var(--surface) !important;
+        border-color: var(--line-strong) !important;
+        color: var(--ink-2) !important;
+      }
+
+      #btn-limpiar-filtros:hover {
+        background: var(--surface-2) !important;
+        border-color: var(--ink-3) !important;
+        color: var(--ink) !important;
+      }
+
+      #k-cal-clear {
+        color: var(--ink-2);
+      }
+
+      #k-cal-today {
+        background: var(--ink) !important;
+        color: var(--ink-invert) !important;
+        padding: 5px 10px;
+        border-radius: 8px;
+      }
+
+      #k-cal-today:hover {
+        background: var(--ink-2) !important;
+        color: var(--ink-invert) !important;
+      }
+
+      :root[data-theme='dark'] #k-cal-today {
+        background: #f3f4f6 !important;
+        color: #111111 !important;
+      }
+
+      :root[data-theme='dark'] #k-cal-today:hover {
+        background: #d4d4d8 !important;
+        color: #111111 !important;
+      }
+
+      .k-cal-cell.selected:hover,
+      .k-cal-cell.range-start:hover,
+      .k-cal-cell.range-end:hover {
+        background: var(--blue) !important;
+        color: #ffffff !important;
+      }
+
+      :root[data-theme='dark'] .k-cal-cell.selected:hover,
+      :root[data-theme='dark'] .k-cal-cell.range-start:hover,
+      :root[data-theme='dark'] .k-cal-cell.range-end:hover {
+        background: var(--blue) !important;
+        color: #ffffff !important;
       }
 
       /* ==========================================================================
@@ -6178,25 +6249,53 @@
               />
             </div>
             <div class="form-row">
-              <label>Frecuencia</label>
+              <label for="comp-frecuencia">Frecuencia</label>
               <div style="display: flex; gap: 10px; align-items: center">
                 <select id="comp-frecuencia" aria-label="Frecuencia">
                   <option value="mensual">Mensual</option>
                   <option value="quincenal">Quincenal</option>
                 </select>
-                <input
-                  type="number"
-                  id="comp-dia"
-                  placeholder="Día"
-                  min="1"
-                  max="31"
-                  style="width: 80px"
-                />
+                <select id="comp-dia" aria-label="Día del mes" style="width: 132px">
+                  <option value="1">Día 1</option>
+                  <option value="2">Día 2</option>
+                  <option value="3">Día 3</option>
+                  <option value="4">Día 4</option>
+                  <option value="5">Día 5</option>
+                  <option value="6">Día 6</option>
+                  <option value="7">Día 7</option>
+                  <option value="8">Día 8</option>
+                  <option value="9">Día 9</option>
+                  <option value="10">Día 10</option>
+                  <option value="11">Día 11</option>
+                  <option value="12">Día 12</option>
+                  <option value="13">Día 13</option>
+                  <option value="14">Día 14</option>
+                  <option value="15">Día 15</option>
+                  <option value="16">Día 16</option>
+                  <option value="17">Día 17</option>
+                  <option value="18">Día 18</option>
+                  <option value="19">Día 19</option>
+                  <option value="20">Día 20</option>
+                  <option value="21">Día 21</option>
+                  <option value="22">Día 22</option>
+                  <option value="23">Día 23</option>
+                  <option value="24">Día 24</option>
+                  <option value="25">Día 25</option>
+                  <option value="26">Día 26</option>
+                  <option value="27">Día 27</option>
+                  <option value="28">Día 28</option>
+                  <option value="29">Día 29</option>
+                  <option value="30">Día 30</option>
+                  <option value="31">Día 31</option>
+                </select>
                 <select id="comp-quincena" aria-label="Quincena" style="display: none">
                   <option value="primera">Primera (día 15)</option>
                   <option value="segunda">Segunda (fin de mes)</option>
                 </select>
               </div>
+              <small style="display: block; margin-top: 6px; color: var(--ink-3)"
+                >El día 31 se ajusta al último día en meses más cortos.</small
+              >
             </div>
             <div class="form-row">
               <label>Duración</label>
@@ -6346,6 +6445,67 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-lista-apartados" aria-hidden="true">
+      <div
+        class="modal-card"
+        style="width: min(520px, 94vw)"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-lista-apartados-title"
+      >
+        <div class="modal-head">
+          <div>
+            <h3 class="modal-title" id="modal-lista-apartados-title">Apartados</h3>
+            <p class="panel-note" id="modal-lista-apartados-subtitle" style="margin: 4px 0 0">
+              Movimientos destinados a esta meta
+            </p>
+          </div>
+          <button
+            class="modal-close"
+            id="btn-cerrar-modal-lista-apartados"
+            type="button"
+            aria-label="Cerrar apartados"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div
+            id="lista-apartados-resumen"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: end;
+              gap: 16px;
+              padding: 14px 16px;
+              margin-bottom: 16px;
+              background: var(--surface-2);
+              border: 1px solid var(--line);
+              border-radius: 12px;
+            "
+          >
+            <div>
+              <div class="panel-note">Total apartado</div>
+              <strong
+                id="lista-apartados-total"
+                class="num"
+                style="display: block; font-size: 1.55rem; margin-top: 3px"
+                >$ 0</strong
+              >
+            </div>
+            <div id="lista-apartados-cantidad" class="panel-note">0 movimientos</div>
+          </div>
+          <div
+            id="lista-apartados-items"
+            style="display: grid; gap: 8px; max-height: 340px; overflow: auto"
+          ></div>
+          <div class="modal-actions" style="margin-top: 18px">
+            <button type="button" class="btn-cancel" id="btn-cerrar-lista-apartados">Cerrar</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -6748,7 +6908,7 @@
                 .filter((x) => x.tipo === 'ingreso')
                 .reduce((a, x) => a + Number(x.monto_centavos || 0), 0);
               const gastos = lista
-                .filter((x) => x.tipo === 'gasto')
+                .filter((x) => x.tipo === 'gasto' || x.tipo === 'aporte')
                 .reduce((a, x) => a + Number(x.monto_centavos || 0), 0);
               return {
                 ingresos_centavos: ingresos,
@@ -7043,7 +7203,9 @@
           const balance = Number(resumen && resumen.diferencia_centavos) || ingresos - gastos;
 
           const ingresosCount = movimientos.filter((x) => x.tipo === 'ingreso').length;
-          const gastosCount = movimientos.filter((x) => x.tipo === 'gasto').length;
+          const gastosCount = movimientos.filter(
+            (x) => x.tipo === 'gasto' || x.tipo === 'aporte',
+          ).length;
 
           // Panel protagonista
           tweenFigure($('dash-balance'), balance, formatSigned);
@@ -7063,7 +7225,12 @@
           semanas.forEach((s) => {
             s.actual = hoyISO >= s.desde && hoyISO <= s.hasta;
             s.gasto = movimientos
-              .filter((x) => x.tipo === 'gasto' && x.fecha >= s.desde && x.fecha <= s.hasta)
+              .filter(
+                (x) =>
+                  (x.tipo === 'gasto' || x.tipo === 'aporte') &&
+                  x.fecha >= s.desde &&
+                  x.fecha <= s.hasta,
+              )
               .reduce((acc, x) => acc + (Number(x.monto_centavos) || 0), 0);
           });
 
@@ -7358,7 +7525,7 @@
 
       function setModalTipo(tipo) {
         modalTipoActual = tipo;
-        const isExpense = tipo === 'gasto';
+        const isExpense = tipo === 'gasto' || tipo === 'aporte';
         $('switch-btn-gasto').classList.toggle('active', isExpense);
         $('switch-btn-ingreso').classList.toggle('active', !isExpense);
         $('modal-registro-title').textContent = isExpense ? 'Registrar Gasto' : 'Registrar Ingreso';
@@ -7438,10 +7605,10 @@
 
         try {
           if (modalTipoActual === 'gasto') {
-            await invoke('register_expense', { monto_centavos: monto, concepto, fecha });
+            await invoke('register_expense', { montoCentavos: monto, concepto, fecha });
             toast('Gasto registrado con éxito');
           } else {
-            await invoke('register_income', { monto_centavos: monto, concepto, fecha });
+            await invoke('register_income', { montoCentavos: monto, concepto, fecha });
             toast('Ingreso registrado con éxito');
           }
           closeModalRegistro();
@@ -7812,10 +7979,10 @@
 
         try {
           if (editandoEsAporte) {
-            await invoke('edit_apartado', { id, monto_centavos: monto, concepto, fecha });
+            await invoke('edit_apartado', { id, montoCentavos: monto, concepto, fecha });
             toast('Apartado actualizado');
           } else {
-            await invoke('edit_movement', { id, monto_centavos: monto, concepto, fecha });
+            await invoke('edit_movement', { id, montoCentavos: monto, concepto, fecha });
             toast('Movimiento actualizado');
           }
           cerrarEditarTx();
@@ -7847,7 +8014,7 @@
           const balance = Number(r && r.diferencia_centavos) || ingresos - gastos;
           const lista = Array.isArray(historial) ? historial : [];
           const ingresosCount = lista.filter((x) => x.tipo === 'ingreso').length;
-          const gastosList = lista.filter((x) => x.tipo === 'gasto');
+          const gastosList = lista.filter((x) => x.tipo === 'gasto' || x.tipo === 'aporte');
           const gastosCount = gastosList.length;
 
           $('resumen-ingresos').textContent = formatSigned(ingresos);
@@ -8081,6 +8248,7 @@
           }
           if ($('modal-compromiso').classList.contains('open')) cerrarModalCompromiso();
           if ($('modal-pago-compromiso').classList.contains('open')) cerrarModalPagoCompromiso();
+          if ($('modal-lista-apartados').classList.contains('open')) cerrarModalListaApartados();
         }
       });
 
@@ -8273,7 +8441,7 @@
         $('comp-concepto').value = '';
         $('comp-monto').value = '';
         $('comp-frecuencia').value = 'mensual';
-        $('comp-dia').value = '1';
+        $('comp-dia').value = String(new Date().getDate());
         $('comp-quincena').value = 'primera';
         $('comp-duracion').value = 'indefinido';
         $('comp-fecha-fin').value = '';
@@ -8875,12 +9043,12 @@
         const acumulado = Number(item.acumulado_centavos) || 0;
         const objetivo = Number(m.monto_objetivo_centavos) || 0;
         const pct = objetivo > 0 ? Math.min(100, Math.round((acumulado / objetivo) * 100)) : 0;
-        const estado = m.estado;
-        const cerrada = estado !== 'Activa';
+        const estado = String(m.estado || '').toLowerCase();
+        const cerrada = estado !== 'activa';
         const ritmo = ritmoTexto(item.a_ritmo, m.fecha_objetivo);
         const ritmoColor = item.a_ritmo === false ? 'var(--expense)' : 'var(--income)';
         const estadoLabel =
-          estado === 'Completada' ? 'Completada' : estado === 'Cancelada' ? 'Cancelada' : 'Activa';
+          estado === 'completada' ? 'Completada' : estado === 'cancelada' ? 'Cancelada' : 'Activa';
         const metaJson = encodeURIComponent(JSON.stringify(m));
 
         const accionesActiva = `
@@ -8889,7 +9057,7 @@
           <button class="btn-cancel" type="button" data-action="cancelar-meta" data-id="${m.id}">Archivar</button>
         `;
         const accionesCerrada =
-          estado === 'Cancelada'
+          estado === 'cancelada'
             ? `<button class="btn-cancel" type="button" data-action="reactivar-meta" data-id="${m.id}">Reactivar</button>`
             : `<button class="btn-cancel" type="button" data-action="editar-meta" data-meta="${metaJson}">Ajustar objetivo</button>`;
 
@@ -8907,7 +9075,7 @@
               <span class="panel-note" style="white-space:nowrap;">${estadoLabel}</span>
             </div>
             <div style="height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden;">
-              <div style="height:100%;width:${pct}%;background:${estado === 'Completada' ? 'var(--income)' : 'var(--accent, #2563eb)'};border-radius:999px;"></div>
+              <div style="height:100%;width:${pct}%;background:${estado === 'completada' ? 'var(--income)' : 'var(--accent, #2563eb)'};border-radius:999px;"></div>
             </div>
             <div class="comp-card-actions" style="flex-wrap:wrap;">
               ${cerrada ? accionesCerrada : accionesActiva}
@@ -8918,8 +9086,12 @@
       }
 
       function renderMetas() {
-        const activas = cacheMetas.filter((x) => x.meta.estado === 'Activa');
-        const cerradas = cacheMetas.filter((x) => x.meta.estado !== 'Activa');
+        const activas = cacheMetas.filter(
+          (x) => String(x.meta.estado || '').toLowerCase() === 'activa',
+        );
+        const cerradas = cacheMetas.filter(
+          (x) => String(x.meta.estado || '').toLowerCase() !== 'activa',
+        );
         $('metas-activas').innerHTML = activas.length
           ? activas.map(renderMetaCard).join('')
           : `<p class="plan-empty-line">No tenés metas activas. Creá una para empezar a apartar.</p>`;
@@ -8964,24 +9136,57 @@
               return;
             }
             const nombre = btn.dataset.nombre || 'la meta';
-            const lineas = apartados
-              .sort((a, b) =>
-                a.fecha < b.fecha
-                  ? 1
-                  : a.fecha > b.fecha
-                    ? -1
-                    : String(b.creado_en || '').localeCompare(String(a.creado_en || '')),
-              )
-              .map(
-                (a) => `${fechaCorta(a.fecha)} · ${formatMoney(a.monto_centavos)} · ${a.concepto}`,
-              )
-              .join('\n');
-            alert(`Apartados de ${nombre}:\n\n${lineas}`);
+            const ordenados = apartados.sort((a, b) =>
+              a.fecha < b.fecha
+                ? 1
+                : a.fecha > b.fecha
+                  ? -1
+                  : String(b.creado_en || '').localeCompare(String(a.creado_en || '')),
+            );
+            abrirModalListaApartados(nombre, ordenados);
           }
         } catch (e) {
           toast(typeof e === 'string' ? e : 'No se pudo completar la acción');
         }
       }
+
+      function abrirModalListaApartados(nombre, apartados) {
+        const total = apartados.reduce(
+          (sum, apartado) => sum + (Number(apartado.monto_centavos) || 0),
+          0,
+        );
+        $('modal-lista-apartados-title').textContent = `Apartados de ${nombre}`;
+        $('modal-lista-apartados-subtitle').textContent = 'Movimientos destinados a esta meta';
+        $('lista-apartados-total').textContent = formatMoney(total);
+        $('lista-apartados-cantidad').textContent =
+          `${apartados.length} ${apartados.length === 1 ? 'movimiento' : 'movimientos'}`;
+        $('lista-apartados-items').innerHTML = apartados
+          .map(
+            (apartado) => `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);">
+                <div style="min-width:0;">
+                  <strong style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(apartado.concepto || 'Apartado')}</strong>
+                  <span class="panel-note">${fechaCorta(apartado.fecha)}</span>
+                </div>
+                <strong class="num" style="white-space:nowrap;">${formatMoney(apartado.monto_centavos)}</strong>
+              </div>`,
+          )
+          .join('');
+        $('modal-lista-apartados').classList.add('open');
+        document.body.classList.add('modal-open');
+      }
+
+      function cerrarModalListaApartados() {
+        $('modal-lista-apartados').classList.remove('open');
+        document.body.classList.remove('modal-open');
+        $('lista-apartados-items').innerHTML = '';
+      }
+
+      $('btn-cerrar-modal-lista-apartados').addEventListener('click', cerrarModalListaApartados);
+      $('btn-cerrar-lista-apartados').addEventListener('click', cerrarModalListaApartados);
+      $('modal-lista-apartados').addEventListener('click', (e) => {
+        if (e.target === $('modal-lista-apartados')) cerrarModalListaApartados();
+      });
 
       function abrirModalMeta(meta = null) {
         $('meta-id').value = meta ? meta.id : '';
@@ -9022,15 +9227,15 @@
             await invoke('update_meta', {
               id,
               nombre,
-              monto_objetivo_centavos: monto,
-              fecha_objetivo: fecha,
+              montoObjetivoCentavos: monto,
+              fechaObjetivo: fecha,
             });
             toast('Meta actualizada');
           } else {
             await invoke('add_meta', {
               nombre,
-              monto_objetivo_centavos: monto,
-              fecha_objetivo: fecha,
+              montoObjetivoCentavos: monto,
+              fechaObjetivo: fecha,
             });
             toast('Meta creada');
           }
@@ -9081,13 +9286,13 @@
             const concepto = $('apartado-concepto').value.trim();
             await invoke('edit_apartado', {
               id: apartadoId,
-              monto_centavos: monto,
+              montoCentavos: monto,
               concepto,
               fecha,
             });
             toast('Apartado actualizado');
           } else {
-            await invoke('add_apartado', { meta_id: metaId, monto_centavos: monto, fecha });
+            await invoke('add_apartado', { metaId: metaId, montoCentavos: monto, fecha });
             toast('Apartado registrado');
           }
           cerrarModalApartado();
