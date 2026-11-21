@@ -19,6 +19,9 @@
          ========================================================================== */
 
       :root {
+        --blue: #2563eb;
+        --chart-line: #111111;
+        --chart-area: rgba(17, 17, 17, 0.08);
         /* Espaciado: escala de 4px */
         --s-1: 4px;
         --s-2: 8px;
@@ -44,53 +47,52 @@
         --lh-text: 20px;
         --lh-title: 28px;
 
-        /* Radios */
-        --r-xs: 4px;
-        --r-sm: 8px;
-        --r-btn: 10px;
-        --r-card: 16px;
-        --r-panel: 20px;
+        /* Radios (Ref. 6: superficies redondeadas, cotidianas) */
+        --r-xs: 6px;
+        --r-sm: 10px;
+        --r-btn: 12px;
+        --r-card: 18px;
+        --r-panel: 22px;
 
-        /* Neutros: Fintech Slate & Crisp Porcelain (Light Mode 2026) */
-        --canvas: #f8fafc;
+        /* Ref. 6 — lienzo y superficies */
+        --canvas: #e2e7ef;
         --surface: #ffffff;
-        --surface-2: #f1f5f9;
-        --raised: #e2e8f0;
-        --line: rgba(15, 23, 42, 0.08);
-        --grid-line: rgba(15, 23, 42, 0.035);
-        --line-strong: rgba(15, 23, 42, 0.15);
-        --ink: #0f172a;
-        --ink-2: #475569;
-        --ink-3: #94a3b8;
+        --surface-2: #f1f4f8;
+        --raised: #e8edf4;
+        --line: #e5e9f0;
+        --grid-line: transparent;
+        --line-strong: #d7dde8;
+        --ink: #111111;
+        --ink-2: #3f4652;
+        --ink-3: #6b7280;
         --ink-invert: #ffffff;
 
-        /* Acento: NeuroBank Electric Cobalt */
-        --accent: #2563eb;
-        --accent-ink: #1d4ed8;
+        /* Acento y semánticos (claros, financieros) */
+        --accent: #3b82f6;
+        --accent-ink: #2563eb;
         --accent-soft: #eff6ff;
-        --accent-glow: rgba(37, 99, 235, 0.22);
+        --accent-glow: rgba(59, 130, 246, 0.18);
 
-        /* Semánticos: Emerald & Rose */
-        --income: #059669;
-        --expense: #e11d48;
+        --income: #16a34a;
+        --expense: #dc2626;
 
-        /* Panel protagonista: Deep Indigo Tech */
-        --hero-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        /* Tarjeta ancla oscura (libre real) */
+        --hero-bg: linear-gradient(145deg, #2b2b2b 0%, #1a1a1a 100%);
         --hero-ink: #ffffff;
-        --hero-ink-2: rgba(248, 250, 252, 0.7);
-        --hero-line: rgba(255, 255, 255, 0.12);
+        --hero-ink-2: #b7beca;
+        --hero-line: rgba(255, 255, 255, 0.1);
 
         /* Tarjetas de métrica */
-        --metric-income-bg: #ecfdf5;
-        --metric-expense-bg: #fff1f2;
-        --metric-neutral-bg: #f8fafc;
+        --metric-income-bg: #f3faf5;
+        --metric-expense-bg: #fff5f5;
+        --metric-neutral-bg: #f1f4f8;
 
         /* Gráfica */
-        --chart-bar: rgba(15, 23, 42, 0.12);
+        --chart-bar: #d8dee8;
 
-        --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
-        --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-        --shadow-lg: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
+        --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.04), 0 1px 2px rgba(17, 24, 39, 0.03);
+        --shadow-md: 0 8px 24px rgba(17, 24, 39, 0.06);
+        --shadow-lg: 0 20px 44px rgba(15, 23, 42, 0.1);
 
         --font-main: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         --font-serif: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -101,44 +103,47 @@
         --t-base: 240ms;
       }
 
-      /* Dark "tinta y tiza": la misma libreta de noche. Canvas cálido casi negro,
-         superficies un paso arriba, y un único momento claro: el hero vuelve a papel. */
+      /* Dark Ref. 6: lienzo profundo, superficies limpias, ancla contrastada */
       :root[data-theme="dark"] {
-        --canvas: #090a0f;
-        --surface: #10121a;
-        --surface-2: #171b26;
-        --raised: #212636;
+        --blue: #3b82f6;
+        --chart-line: #ffffff;
+        --chart-area: rgba(255, 255, 255, 0.12);
+        /* OBSIDIAN PITCH BLACK (VERCEL / SUPERHUMAN PRO) — CERO AZUL */
+        --canvas: #000000;
+        --surface: #0a0a0a;
+        --surface-2: #141414;
+        --raised: #1c1c1c;
         --line: rgba(255, 255, 255, 0.08);
-        --grid-line: rgba(255, 255, 255, 0.032);
+        --grid-line: transparent;
         --line-strong: rgba(255, 255, 255, 0.16);
-        --ink: #f8fafc;
-        --ink-2: #94a3b8;
-        --ink-3: #64748b;
-        --ink-invert: #090a0f;
+        --ink: #ffffff;
+        --ink-2: #a1a1aa;
+        --ink-3: #71717a;
+        --ink-invert: #000000;
 
-        --accent: #3b82f6;
-        --accent-ink: #60a5fa;
-        --accent-soft: rgba(59, 130, 246, 0.15);
-        --accent-glow: rgba(59, 130, 246, 0.35);
+        --accent: #ffffff;
+        --accent-ink: #ffffff;
+        --accent-soft: rgba(255, 255, 255, 0.12);
+        --accent-glow: rgba(255, 255, 255, 0.2);
 
         --income: #10b981;
-        --expense: #f43f5e;
+        --expense: #ef4444;
 
-        /* Hero Dark: Obsidian Glass con luz interior */
-        --hero-bg: linear-gradient(135deg, #141824 0%, #0c0e15 100%);
+        --hero-bg: linear-gradient(145deg, #161616 0%, #0a0a0a 100%);
         --hero-ink: #ffffff;
-        --hero-ink-2: rgba(248, 250, 252, 0.65);
-        --hero-line: rgba(255, 255, 255, 0.12);
+        --hero-ink-2: #a1a1aa;
+        --hero-line: rgba(255, 255, 255, 0.1);
 
-        --metric-income-bg: #0f1c19;
-        --metric-expense-bg: #1f1217;
-        --metric-neutral-bg: #12151f;
+        --metric-income-bg: #0c1813;
+        --metric-expense-bg: #1a0d0e;
+        --metric-neutral-bg: #141414;
 
-        --chart-bar: rgba(255, 255, 255, 0.14);
+        --badge-bg: #1a1a1a;
+        --badge-ink: #e4e4e7;
 
-        --shadow-sm: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.45);
-        --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        --shadow-lg: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.08);
+        --border-focus: rgba(255, 255, 255, 0.3);
+        --accent-subtle: rgba(255, 255, 255, 0.08);
       }
 
       *,
@@ -149,32 +154,14 @@
 
       html,
       body {
+        margin: 0;
         background-color: var(--canvas);
-        /* Cuadriculado difuminado y sutil (Grid de 28px con línea muy suave) */
-        background-image: 
-          linear-gradient(var(--grid-line) 1px, transparent 1px),
-          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-        background-size: 28px 28px;
-        background-position: -1px -1px;
-        background-attachment: fixed;
         color: var(--ink);
         font-family: var(--font-main);
         font-size: var(--fs-base);
         line-height: var(--lh-text);
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-      }
-
-      /* Glow difuminado radial en el fondo tipo cuaderno fintech (Vignette suave) */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 65%),
-                    radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.4) 0%, transparent 80%);
-        backdrop-filter: blur(0.5px);
       }
 
       .topbar,
@@ -328,7 +315,7 @@
          ========================================================================== */
       .topbar {
         position: sticky;
-        top: var(--s-3);
+        top: 10px;
         z-index: 1000;
         display: flex;
         justify-content: center;
@@ -342,41 +329,44 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: var(--s-4);
-        width: min(1080px, 100%);
-        padding: var(--s-2) var(--s-2) var(--s-2) var(--s-4);
-        border: 1px solid var(--line);
-        border-radius: var(--r-btn);
-        background: var(--surface);
+        gap: var(--s-3);
+        width: min(1120px, 100%);
+        min-height: 58px;
+        padding: 8px 10px 8px 16px;
+        border: 1px solid var(--line-strong);
+        border-radius: 20px;
+        background: color-mix(in srgb, var(--surface) 96%, transparent);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         box-shadow: var(--shadow-sm);
       }
 
       .brand {
         display: flex;
         align-items: center;
-        gap: var(--s-2);
+        gap: 10px;
         text-decoration: none;
         color: var(--ink);
-        font-weight: 600;
-        font-size: var(--fs-md);
+        font-weight: 700;
+        font-size: 15px;
         letter-spacing: -0.01em;
         flex-shrink: 0;
       }
 
       .brand-dot {
-        width: 8px;
-        height: 8px;
-        background: var(--accent);
-        border-radius: 2px;
+        width: 10px;
+        height: 10px;
+        background: var(--ink);
+        border-radius: 50%;
       }
 
       .island-tabs {
         position: relative;
         display: flex;
         align-items: center;
-        gap: 2px;
-        padding: 2px;
-        border-radius: var(--r-sm);
+        gap: 4px;
+        padding: 4px;
+        border-radius: 12px;
         background: var(--surface-2);
       }
 
@@ -385,13 +375,13 @@
         z-index: 1;
         border: 0;
         background: transparent;
-        color: var(--ink-2);
-        padding: var(--s-1) var(--s-3);
-        border-radius: 6px;
-        font-size: var(--fs-sm);
-        font-weight: 500;
+        color: var(--ink-3);
+        padding: 8px 12px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 600;
         cursor: pointer;
-        transition: color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
+        transition: color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
       }
 
       .island-tab-btn:hover:not(.active) {
@@ -402,7 +392,6 @@
         color: var(--ink);
         background: var(--surface);
         box-shadow: var(--shadow-sm);
-        font-weight: 600;
       }
 
       .island-actions {
@@ -415,16 +404,16 @@
       .btn-quick-search {
         display: inline-flex;
         align-items: center;
-        gap: var(--s-2);
-        background: transparent;
+        gap: 8px;
+        background: var(--surface);
         border: 1px solid var(--line);
-        border-radius: var(--r-sm);
+        border-radius: 999px;
         color: var(--ink-2);
-        padding: 5px var(--s-3);
-        font-size: var(--fs-meta);
-        font-weight: 500;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 600;
         cursor: pointer;
-        transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+        transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
       }
 
       .btn-quick-search:hover {
@@ -438,8 +427,9 @@
         font-size: 11px;
         color: var(--ink-3);
         background: var(--surface-2);
-        padding: 1px 5px;
-        border-radius: var(--r-xs);
+        border: 1px solid var(--line);
+        padding: 1px 6px;
+        border-radius: 6px;
         line-height: 14px;
       }
 
@@ -447,31 +437,32 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
-        background: transparent;
+        width: 36px;
+        height: 36px;
+        background: var(--surface);
         border: 1px solid var(--line);
-        border-radius: var(--r-sm);
+        border-radius: 999px;
         color: var(--ink-2);
         cursor: pointer;
-        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
       }
 
       .btn-theme-toggle:hover {
         background: var(--surface-2);
+        border-color: var(--line-strong);
         color: var(--ink);
       }
 
       .btn-theme-toggle svg {
-        width: 15px;
-        height: 15px;
+        width: 16px;
+        height: 16px;
       }
 
       /* ==========================================================================
          Layout
          ========================================================================== */
       .main-app {
-        max-width: 1080px;
+        max-width: 1120px;
         margin: 0 auto;
         padding: 0 var(--s-6) var(--s-12);
       }
@@ -496,6 +487,391 @@
         }
       }
 
+      /* ==========================================================================
+         Dashboard Ref. 6 (Opción C): simple y cotidiana
+         ========================================================================== */
+      .dash-ref6 {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .dash-ref6-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .dash-ref6-title {
+        margin: 0;
+        font-size: 34px;
+        line-height: 1.05;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: var(--ink);
+      }
+
+      .dash-ref6-sub {
+        margin: 8px 0 0;
+        font-size: 14px;
+        color: var(--ink-3);
+      }
+
+      .dash-ref6-head-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .dash-ref6-period {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-2);
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+      }
+
+      .dash-ref6-head-actions .btn-hero-primary,
+      .dash-ref6-head-actions .btn-hero-secondary {
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: none;
+      }
+
+      .dash-ref6-head-actions .btn-hero-primary {
+        background: #222222 !important;
+        color: #ffffff !important;
+        border: 1px solid #222222;
+      }
+
+      .dash-ref6-head-actions .btn-hero-primary svg,
+      .dash-ref6-head-actions .btn-hero-primary span {
+        color: #ffffff;
+        stroke: #ffffff;
+      }
+
+      .dash-ref6-head-actions .btn-hero-secondary {
+        background: var(--surface) !important;
+        color: var(--ink-2) !important;
+        border: 1px solid var(--line);
+      }
+
+      .dash-ref6-head-actions .btn-hero-secondary svg,
+      .dash-ref6-head-actions .btn-hero-secondary span {
+        color: var(--ink-2);
+        stroke: var(--ink-2);
+      }
+
+      .dash-ref6-head-actions .btn-hero-primary:hover {
+        background: #111111 !important;
+        border-color: #111111;
+        color: #ffffff !important;
+      }
+
+      .dash-ref6-head-actions .btn-hero-primary:hover svg,
+      .dash-ref6-head-actions .btn-hero-primary:hover span {
+        color: #ffffff;
+        stroke: #ffffff;
+      }
+
+      .dash-ref6-head-actions .btn-hero-secondary:hover {
+        background: var(--surface-2) !important;
+        border-color: var(--line-strong);
+        color: var(--ink) !important;
+      }
+
+      .dash-ref6-head-actions .btn-hero-secondary:hover svg,
+      .dash-ref6-head-actions .btn-hero-secondary:hover span {
+        color: var(--ink);
+        stroke: var(--ink);
+      }
+
+      .dash-ref6-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .dash-ref6-col-main,
+      .dash-ref6-col-side {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-width: 0;
+      }
+
+      .dash-anchor-card {
+        background: var(--hero-bg);
+        color: var(--hero-ink);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 22px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        box-shadow: var(--shadow-md);
+        cursor: pointer;
+      }
+
+      .dash-anchor-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .dash-anchor-eyebrow {
+        font-size: 12px;
+        font-weight: 600;
+        color: #c7cbd3;
+        margin-bottom: 8px;
+      }
+
+      .dash-anchor-amount {
+        font-size: 36px;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+        color: #ffffff;
+      }
+
+      .dash-anchor-foot {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #b7beca;
+      }
+
+      .dash-anchor-badge {
+        font-size: 12px;
+        font-weight: 600;
+        color: #d8dde6;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        padding: 6px 10px;
+        white-space: nowrap;
+      }
+
+      .dash-anchor-balance-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 4px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .dash-anchor-balance-block {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .dash-anchor-balance-label {
+        font-size: 12px;
+        color: #b7beca;
+      }
+
+      .dash-anchor-balance-value {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: #ffffff;
+      }
+
+      .dash-anchor-sub {
+        font-size: 12px;
+        color: #b7beca;
+      }
+
+      .dash-anchor-sub strong {
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      .dash-anchor-kpis {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .dash-anchor-kpi {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .dash-anchor-kpi-label,
+      .dash-anchor-kpi-foot {
+        font-size: 11px;
+        color: #c3c9d4;
+      }
+
+      .dash-anchor-kpi-value {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: #ffffff;
+      }
+
+      .dash-anchor-kpi-value.income {
+        color: #86efac;
+      }
+
+      .dash-anchor-kpi-value.expense {
+        color: #fca5a5;
+      }
+
+      .dash-ref6-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .dash-ref6-section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .dash-ref6-section-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+      }
+
+      .dash-ref6-pay-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .dash-pay-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+        padding: 14px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        cursor: pointer;
+        transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+        font: inherit;
+        color: inherit;
+      }
+
+      .dash-pay-card:hover {
+        border-color: var(--line-strong);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .dash-pay-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .dash-pay-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        display: grid;
+        place-items: center;
+        font-size: 16px;
+      }
+
+      .dash-pay-state {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 5px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--surface-2);
+        color: var(--ink-2);
+      }
+
+      .dash-pay-state.warn {
+        color: #92400e;
+        background: #fff7ed;
+        border-color: #fed7aa;
+      }
+
+      :root[data-theme="dark"] .dash-pay-state.warn {
+        color: #fbbf24;
+        background: rgba(245, 158, 11, 0.12);
+        border-color: rgba(245, 158, 11, 0.25);
+      }
+
+      .dash-pay-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .dash-pay-meta {
+        font-size: 12px;
+        color: var(--ink-3);
+        line-height: 1.4;
+      }
+
+      .dash-ref6-list-card,
+      .dash-ref6-chart-card,
+      .dash-ref6-progress-card,
+      .dash-ref6-breakdown-card {
+        border-radius: var(--r-card);
+      }
+
+      @media (max-width: 980px) {
+        .dash-ref6-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .dash-ref6-title {
+          font-size: 28px;
+        }
+
+        .dash-ref6-head-actions {
+          width: 100%;
+        }
+
+        .dash-ref6-pay-grid,
+        .dash-anchor-kpis {
+          grid-template-columns: 1fr;
+        }
+
+        .dash-anchor-balance-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      /* Legacy dashboard (kept for reference; HTML replaced by Ref. 6) */
       .dash-layout-grid {
         display: grid;
         grid-template-columns: 1.3fr 1fr;
@@ -1758,15 +2134,15 @@
       }
 
       .btn-cancel {
-        background: transparent;
+        background: var(--surface);
         border: 1px solid var(--line);
         color: var(--ink-2);
-        padding: var(--s-2) var(--s-4);
-        border-radius: var(--r-sm);
+        padding: 8px 14px;
+        border-radius: 999px;
         font-size: var(--fs-sm);
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
-        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+        transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
       }
 
       .btn-cancel:hover {
@@ -1775,19 +2151,42 @@
       }
 
       .btn-submit {
-        background: var(--ink);
-        border: 1px solid var(--ink);
-        color: var(--ink-invert);
-        padding: var(--s-2) var(--s-4);
-        border-radius: var(--r-sm);
+        background: #222222;
+        border: 1px solid #222222;
+        color: #ffffff;
+        padding: 8px 14px;
+        border-radius: 999px;
         font-size: var(--fs-sm);
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
-        transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+        transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
       }
 
       .btn-submit:hover {
         opacity: 0.88;
+      }
+
+      :root[data-theme="dark"] .btn-submit,
+      :root[data-theme="dark"] .dash-ref6-head-actions .btn-hero-primary {
+        background: #f3f6fb;
+        border-color: #f3f6fb;
+        color: #000000 !important;
+      }
+
+      :root[data-theme="dark"] .btn-submit:hover,
+      :root[data-theme="dark"] .dash-ref6-head-actions .btn-hero-primary:hover {
+        background: #ffffff !important;
+        border-color: #ffffff;
+        color: #000000 !important;
+        opacity: 1;
+      }
+
+      :root[data-theme="dark"] .dash-ref6-head-actions .btn-hero-primary svg,
+      :root[data-theme="dark"] .dash-ref6-head-actions .btn-hero-primary span,
+      :root[data-theme="dark"] .dash-ref6-head-actions .btn-hero-primary:hover svg,
+      :root[data-theme="dark"] .dash-ref6-head-actions .btn-hero-primary:hover span {
+        color: #000000;
+        stroke: #000000;
       }
 
       .btn-submit:active {
@@ -2019,7 +2418,7 @@
         position: fixed;
         inset: 0;
         z-index: 3000;
-        background: rgba(8, 10, 15, 0.45);
+        background: rgba(0, 0, 0, 0.65);
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         display: flex;
@@ -2053,11 +2452,11 @@
       }
 
       :root[data-theme="dark"] .spotlight-card {
-        background: rgba(16, 18, 26, 0.88);
+        background: #0a0a0a !important;
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 30px rgba(59, 130, 246, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
       }
 
       .spotlight-input-wrap {
@@ -2157,7 +2556,7 @@
         background: var(--surface);
         border-color: var(--accent);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       }
 
       .spotlight-chip-icon {
@@ -2366,7 +2765,1630 @@
       .plan-corte-controls { display: flex; align-items: center; gap: var(--s-2); }
       .plan-corte-controls input { width: 90px; }
       .plan-empty-line { color: var(--ink-2); font-size: var(--fs-sm); padding: 4px 0 8px; margin: 0; }
-    </style>
+    
+  
+  
+  /* ==========================================================================
+     COMPROMISOS REFINED GRID & CARDS (REF. 6 FINTECH)
+     ========================================================================== */
+  .comp-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .comp-card-v2 {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    transition: transform 140ms ease, border-color 140ms ease;
+  }
+
+  .comp-card-v2:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.06);
+  }
+
+  .comp-card-v2.pausado {
+    opacity: 0.6;
+    background: #f8fafc;
+  }
+
+  :root[data-theme="dark"] .comp-card-v2 {
+    background: #0e0e0e;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  :root[data-theme="dark"] .comp-card-v2.pausado {
+    background: #131822;
+  }
+
+  .comp-card-v2-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .comp-card-v2-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .comp-card-v2-amount {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .comp-card-v2-meta {
+    font-size: 0.8rem;
+    color: var(--ink-3);
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .comp-card-v2-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  
+  
+  /* SPOTLIGHT COMMAND MODAL (CTRL+K) — OBSIDIAN RAYCAST PURE BLACK */
+  :root[data-theme="dark"] .spotlight-overlay {
+    background: rgba(0, 0, 0, 0.75) !important;
+  }
+
+  :root[data-theme="dark"] .spotlight-chip {
+    background: #141414 !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+    color: #ffffff !important;
+  }
+
+  :root[data-theme="dark"] .spotlight-chip:hover {
+    background: #1c1c1c !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  :root[data-theme="dark"] .spotlight-kbd {
+    background: #1c1c1c !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #a1a1aa !important;
+  }
+
+  :root[data-theme="dark"] .spotlight-foot {
+    border-top-color: rgba(255, 255, 255, 0.06) !important;
+    background: #080808 !important;
+    color: #71717a !important;
+  }
+
+  :root[data-theme="dark"] .spotlight-foot kbd {
+    background: #1c1c1c !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #a1a1aa !important;
+  }
+
+  /* OBSIDIAN INPUTS & FORM CONTROLS (PULIDO INTEGRAL, CERO FONDOS BLANCOS INVOLUNTARIOS) */
+  :root[data-theme="dark"] input[type="text"],
+  :root[data-theme="dark"] input[type="number"],
+  :root[data-theme="dark"] input[type="date"],
+  :root[data-theme="dark"] select,
+  :root[data-theme="dark"] textarea {
+    background-color: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    color-scheme: dark !important;
+  }
+
+  :root[data-theme="dark"] input[type="text"]:focus,
+  :root[data-theme="dark"] input[type="number"]:focus,
+  :root[data-theme="dark"] input[type="date"]:focus,
+  :root[data-theme="dark"] select:focus,
+  :root[data-theme="dark"] textarea:focus {
+    background-color: #141414 !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] .search-input-box input {
+    background: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+  }
+
+  :root[data-theme="dark"] .search-input-box input:hover,
+  :root[data-theme="dark"] .search-input-box input:focus {
+    background: #141414 !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+  }
+
+  :root[data-theme="dark"] .btn-sm-action.primary {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ffffff !important;
+  }
+
+  :root[data-theme="dark"] .btn-sm-action.primary:hover {
+    background: #e4e4e7 !important;
+  }
+
+  
+  /* ==========================================================================
+     DASHBOARD (INICIO) SIMETRÍA Y ALINEACIÓN DE COLUMNAS (REF. 6 FINTECH)
+     ========================================================================== */
+  #tab-dashboard .main {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  /* Altura equilibrada entre la tarjeta ancla izquierda y la tarjeta de gráfico derecha */
+  #tab-dashboard .anchor {
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  #tab-dashboard .card-chart-block {
+    min-height: 330px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  #tab-dashboard .chart {
+    height: 180px;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  /* Tarjeta de Próximos Pagos nivelada */
+  #tab-dashboard .up-section {
+    margin-top: 0;
+  }
+
+  /* Modo oscuro refinado para dark-card (Plan de ahorro) y cards del dashboard */
+  :root[data-theme="dark"] #tab-dashboard .dark-card {
+    background: #0e0e0e !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] #tab-dashboard .dark-card .ring span {
+    background: #0e0e0e !important;
+  }
+
+  :root[data-theme="dark"] #tab-dashboard .card {
+    background: #0a0a0a !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  
+  /* ==========================================================================
+     TOOLTIP Y ESTILOS PARA LA GRÁFICA REAL DE EVOLUCIÓN (OPCIÓN A)
+     ========================================================================== */
+  .chart-tooltip {
+    position: absolute;
+    z-index: 100;
+    pointer-events: none;
+    background: #111111;
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    transition: opacity 140ms ease, transform 140ms ease;
+    white-space: nowrap;
+  }
+
+  .chart-tooltip.show {
+    opacity: 1;
+    transform: translate(-50%, -110%);
+  }
+
+  :root[data-theme="dark"] .chart-tooltip {
+    background: #1c1c1c;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #f4f4f5;
+  }
+
+  .dash-chart-point {
+    cursor: pointer;
+    transition: r 140ms ease, stroke-width 140ms ease;
+  }
+
+  .dash-chart-point:hover {
+    r: 7 !important;
+    stroke-width: 3.5 !important;
+  }
+
+  /* ==========================================================================
+     RESUMEN PERIOD BAR & CLEAN DATE CAPSULE (APPLE / FINTECH REF. 6)
+     ========================================================================== */
+  .resumen-period-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .resumen-custom-dates {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeInCapsule 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes fadeInCapsule {
+    from { opacity: 0; transform: translateX(-4px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .res-date-capsule {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 3px 10px;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+    height: 36px;
+    box-sizing: border-box;
+  }
+
+  :root[data-theme="dark"] .res-date-capsule {
+    background: #0e0e0e;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .res-date-capsule input[type="date"] {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 2px !important;
+    height: auto !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: var(--ink) !important;
+    font-variant-numeric: tabular-nums !important;
+    cursor: pointer !important;
+    width: 120px !important;
+  }
+
+  .res-date-sep {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-3);
+    user-select: none;
+    padding: 0 2px;
+  }
+
+  .btn-res-apply {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    border: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 140ms ease;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.08);
+  }
+
+  .btn-res-apply:hover {
+    background: #2b2b2b;
+    transform: translateY(-0.5px);
+  }
+
+  :root[data-theme="dark"] .btn-res-apply {
+    background: #f3f6fb;
+    color: #000000;
+  }
+
+  :root[data-theme="dark"] .btn-res-apply:hover {
+    background: #ffffff;
+  }
+
+  /* ==========================================================================
+     OPCIÓN C (REF. 6) — EXACT MATCH FIDELITY
+     ========================================================================== */
+  .wrap { max-width: 1120px; margin: 0 auto; background: var(--surface); border-radius: 28px; padding: 22px; box-shadow: var(--shadow); }
+  .top-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .top-title h1 { margin: 0; font-size: 2.1rem; font-weight: 800; letter-spacing: -0.03em; }
+  .top-title p { margin: 4px 0 0; color: var(--ink-3); font-size: 0.9rem; }
+
+  .main { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; }
+  .left { display: grid; gap: 16px; align-content: start; }
+  .right { display: grid; gap: 16px; align-content: start; }
+  .card { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #fff; }
+  .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .head h2 { margin: 0; font-size: 1rem; font-weight: 750; letter-spacing: -0.01em; }
+  .sub { color: var(--ink-3); font-size: 0.82rem; }
+
+  /* Black anchor card */
+  .anchor { background: linear-gradient(145deg, #2b2b2b 0%, #1a1a1a 100%); color: #fff; border: 0; border-radius: 20px; padding: 20px; position: relative; overflow: hidden; cursor: pointer; }
+  .anchor::after { content:""; position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; background: rgba(255,255,255,0.06); }
+  .anchor .label { color: #d1d5db; font-size: 0.85rem; margin: 0 0 6px; }
+  .anchor .val { font-size: 2.4rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.03em; }
+  .anchor .meta { color: #cbd5e1; font-size: 0.86rem; margin: 0; }
+  .anchor .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; position: relative; z-index: 1; }
+  .mini { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; }
+  .mini .k { font-size: 0.72rem; color: #d1d5db; margin-bottom: 3px; }
+  .mini .v { font-size: 1rem; font-weight: 700; }
+  .logo-mark { position: absolute; right: 18px; bottom: 16px; font-weight: 800; color: rgba(255,255,255,0.7); font-size: 0.95rem; letter-spacing: 0.04em; }
+
+  /* Upcoming payments */
+  .up-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .up { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 14px; text-align: left; }
+  .up-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .up-ico { width: 36px; height: 36px; border-radius: 50%; background: #222; color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+  .up h3 { margin: 0; font-size: 0.95rem; }
+  .up p { margin: 2px 0 0; color: var(--ink-3); font-size: 0.78rem; }
+  .up .amt { font-size: 1.2rem; font-weight: 800; margin-top: 6px; }
+
+  /* Recent transaction list */
+  .list { list-style: none; margin: 0; padding: 0; }
+  .tx { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .tx:last-child { border-bottom: 0; }
+  .tx-ico { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-weight: 700; font-size: 0.8rem; }
+  .tx-main h3 { margin: 0 0 2px; font-size: 0.92rem; font-weight: 650; }
+  .tx-main p { margin: 0; font-size: 0.78rem; color: var(--ink-3); }
+  .tx-amt { font-weight: 750; }
+  .tx-amt.neg { color: var(--ink); } .tx-amt.pos { color: var(--green); }
+
+  /* Right: chart + progress */
+  .tog { display: inline-flex; gap: 2px; padding: 3px; background: #f1f4f8; border-radius: 10px; }
+  .tog button { border: 0; background: transparent; padding: 6px 10px; font-size: 0.78rem; font-weight: 600; color: var(--ink-3); border-radius: 8px; cursor: pointer; }
+  .tog button.active { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+  .big { font-size: 2rem; font-weight: 800; margin: 6px 0 2px; letter-spacing: -0.03em; }
+  .chart { width: 100%; height: 220px; display: block; margin-top: 8px; }
+  .axis { font-size: 11px; fill: #9aa3af; font-family: inherit; }
+  .grid { stroke: #edf1f6; stroke-width: 1; }
+  .line { fill: none; stroke: #111111; stroke-width: 2.5; }
+  .area { fill: rgba(17,17,17,0.06); }
+  .pt { fill: #fff; stroke: #111; stroke-width: 2.5; }
+  .dark-card { background: #222; color: #fff; border: 0; border-radius: 18px; padding: 18px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+  .dark-card h3 { margin: 0 0 4px; font-size: 1rem; }
+  .dark-card p { margin: 0; color: #d1d5db; font-size: 0.84rem; }
+  .ring { width: 88px; height: 88px; border-radius: 50%; background: conic-gradient(#7c3aed 0 45%, #334155 45% 100%); display: grid; place-items: center; }
+  .ring span { width: 60px; height: 60px; border-radius: 50%; background: #222; display: grid; place-items: center; font-weight: 800; font-size: 1rem; }
+
+
+  /* ==========================================================================
+     INPUTS & FORM CONTROLS — REF. 6 & FINTECH MODERN
+     ========================================================================== */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    font-family: var(--font-main);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink);
+    background: #f8fafc;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 10px 14px;
+    outline: none;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.03);
+  }
+
+  input[type="text"]:hover,
+  input[type="number"]:hover,
+  input[type="date"]:hover,
+  select:hover,
+  textarea:hover {
+    border-color: #cbd5e1;
+    background: #ffffff;
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  select:focus,
+  textarea:focus {
+    background: #ffffff;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 1px 2px rgba(17, 24, 39, 0.05);
+  }
+
+  .form-row label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-2);
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+  }
+
+  .search-input-box input {
+    background: #f1f4f8;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px 9px 36px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+    box-shadow: none;
+  }
+
+  .search-input-box input:hover {
+    background: #ffffff;
+    border-color: var(--line-strong);
+  }
+
+  .search-input-box input:focus {
+    background: #ffffff;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  .quick-period-pills {
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+    background: #f1f4f8;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+
+  .quick-pill-btn {
+    border: 0;
+    background: transparent;
+    color: var(--ink-3);
+    padding: 6px 12px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 140ms ease;
+  }
+
+  .quick-pill-btn:hover {
+    color: var(--ink);
+  }
+
+  .quick-pill-btn.active {
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.08);
+    font-weight: 700;
+  }
+
+  .pill-filters {
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+    background: #f1f4f8;
+    border-radius: 12px;
+  }
+
+  .pill-filter-btn {
+    border: 0;
+    background: transparent;
+    color: var(--ink-3);
+    padding: 6px 12px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .pill-filter-btn.active {
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.08);
+    font-weight: 700;
+  }
+
+
+  /* ==========================================================================
+     CLEAN TABLE & LIST UPGRADES — REF. 6 UNIFIED
+     ========================================================================== */
+  .clean-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 14px;
+  }
+
+  .clean-table th {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-4);
+    padding: 10px 14px;
+    border-bottom: 1.5px solid var(--line);
+    text-align: left;
+  }
+
+  .clean-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+
+  .clean-table tr:hover td {
+    background: #f8fafc;
+  }
+
+  .clean-table tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .comp-item, .comp-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px 18px;
+    transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.02);
+  }
+
+  .comp-item:hover, .comp-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(17, 24, 39, 0.05);
+  }
+
+  /* Botones principales con estilo pill moderno */
+  .btn-submit {
+    background: #111111;
+    border: 1px solid #111111;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-submit:hover {
+    background: #2b2b2b;
+    border-color: #2b2b2b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+  }
+
+
+  /* ==========================================================================
+     PERFECCIONAMIENTO TOTAL: DARK MODE, INPUTS CUSTOM & LAYOUTS REF. 6
+     ========================================================================== */
+
+  /* 1. MODO OSCURO INTEGRAL PARA TODOS LOS COMPONENTES REF. 6 */
+  :root[data-theme="dark"] .wrap {
+    background: #000000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  :root[data-theme="dark"] .card {
+    background: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] .up {
+    background: #0a0a0a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] .up-ico {
+    background: #1c1c1c !important;
+    color: #f3f6fb !important;
+  }
+
+  :root[data-theme="dark"] .tx {
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  :root[data-theme="dark"] .tx:hover,
+  :root[data-theme="dark"] .clean-table tr:hover td {
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  :root[data-theme="dark"] .clean-table th {
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--ink-3) !important;
+  }
+
+  :root[data-theme="dark"] .clean-table td {
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+    color: var(--ink) !important;
+  }
+
+  :root[data-theme="dark"] .comp-item,
+  :root[data-theme="dark"] .comp-card {
+    background: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] .comp-item:hover,
+  :root[data-theme="dark"] .comp-card:hover {
+    border-color: rgba(255, 255, 255, 0.16) !important;
+  }
+
+  :root[data-theme="dark"] .btn-submit {
+    background: #f3f6fb !important;
+    color: #000000 !important;
+    border-color: #f3f6fb !important;
+  }
+
+  :root[data-theme="dark"] .btn-submit:hover {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  :root[data-theme="dark"] .tog,
+  :root[data-theme="dark"] .quick-period-pills,
+  :root[data-theme="dark"] .pill-filters,
+  :root[data-theme="dark"] .filter-pills-bar,
+  :root[data-theme="dark"] .island-tabs {
+    background: #0a0a0a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] .tog button.active,
+  :root[data-theme="dark"] .quick-pill-btn.active,
+  :root[data-theme="dark"] .pill-filter-btn.active,
+  :root[data-theme="dark"] .island-tab-btn.active {
+    background: #222222 !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+  }
+
+  :root[data-theme="dark"] .topbar-island {
+    background: rgba(10, 10, 10, 0.88) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  :root[data-theme="dark"] .grid line {
+    stroke: rgba(255, 255, 255, 0.07) !important;
+  }
+
+  :root[data-theme="dark"] .line {
+    stroke: #60a5fa !important;
+  }
+
+  :root[data-theme="dark"] .area {
+    fill: rgba(96, 165, 250, 0.12) !important;
+  }
+
+  :root[data-theme="dark"] .pt {
+    fill: #0e0e0e !important;
+    stroke: #60a5fa !important;
+  }
+
+  /* 2. REFINAMIENTO DE INPUTS MODERNOS (Elimina el calendario plano y da look custom) */
+  .date-range-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f4f8;
+    padding: 4px 6px 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+
+  :root[data-theme="dark"] .date-range-group {
+    background: #0a0a0a;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .date-range-group input[type="date"] {
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  :root[data-theme="dark"] .date-range-group input[type="date"] {
+    background: #141414;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.4);
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px;
+    transition: filter 140ms ease;
+  }
+
+  :root[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.9);
+  }
+
+  .date-range-group .btn-cancel {
+    background: var(--blue);
+    border: 0;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 140ms ease;
+  }
+
+  .date-range-group .btn-cancel:hover {
+    opacity: 0.9;
+  }
+
+  /* 3. LAYOUT DE 2 COLUMNAS ESTILO REF. 6 PARA TODAS LAS VISTAS */
+  .grid-2col-ref6 {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .grid-2col-ref6 > .left,
+  .grid-2col-ref6 > .right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #tab-resumen .grid-2col-ref6 {
+    align-items: stretch;
+  }
+
+  #tab-resumen .grid-2col-ref6 > .left > .anchor,
+  #tab-resumen .grid-2col-ref6 > .right > .card {
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+
+  #tab-planificacion .grid-2col-ref6 {
+    align-items: start;
+  }
+
+  #tab-planificacion .grid-2col-ref6 > .left > .anchor {
+    height: auto;
+    min-height: 215px;
+  }
+
+  #tab-planificacion .grid-2col-ref6 .card {
+    height: auto;
+    border-radius: 18px;
+  }
+
+  /* Planificación ref. 6 cards & badges */
+  .plan-kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+
+  .plan-kpi-card {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 18px 20px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 140ms ease, border-color 140ms ease;
+  }
+
+  .plan-kpi-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-1px);
+  }
+
+  .plan-kpi-card.hero-anchor {
+    background: linear-gradient(145deg, #2b2b2b 0%, #1a1a1a 100%);
+    color: #ffffff;
+    border: 0;
+  }
+
+  .plan-kpi-card.hero-anchor .plan-kpi-title {
+    color: #d1d5db;
+  }
+
+  .plan-kpi-card.hero-anchor .plan-kpi-foot {
+    color: #94a3b8;
+  }
+
+  .plan-kpi-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+
+  .plan-kpi-val {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .plan-kpi-foot {
+    font-size: 0.76rem;
+    color: var(--ink-3);
+    line-height: 1.4;
+  }
+
+  /* Botones de acción refinados */
+  .btn-sm-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    transition: all 140ms ease;
+  }
+
+  .btn-sm-action:hover {
+    background: var(--surface-2);
+    border-color: var(--line-strong);
+  }
+
+  .btn-sm-action.danger {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.2);
+    background: rgba(220, 38, 38, 0.04);
+  }
+
+  .btn-sm-action.danger:hover {
+    background: rgba(220, 38, 38, 0.1);
+    border-color: #dc2626;
+  }
+
+  .btn-sm-action.primary {
+    background: #111111;
+    color: #ffffff;
+    border-color: #111111;
+  }
+
+  .btn-sm-action.primary:hover {
+    background: #2b2b2b;
+  }
+
+  /* Modo oscuro de las nuevas tarjetas */
+  :root[data-theme="dark"] .plan-kpi-card {
+    background: #0e0e0e;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  :root[data-theme="dark"] .plan-kpi-card.hero-anchor {
+    background: linear-gradient(145deg, #161616 0%, #0a0a0a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  :root[data-theme="dark"] .btn-sm-action {
+    background: #141414;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f3f6fb;
+  }
+
+  :root[data-theme="dark"] .btn-sm-action:hover {
+    background: #202020;
+  }
+
+  :root[data-theme="dark"] .btn-sm-action.primary {
+    background: #f3f6fb;
+    color: #000000;
+    border-color: #f3f6fb;
+  }
+
+
+  /* ==========================================================================
+     CUSTOM DROPDOWN (SELECT) Y DATEPICKER — APPLE & FINTECH 2026
+     ========================================================================== */
+  
+  /* Contenedor relativo de custom select */
+  .custom-select-wrap {
+    position: relative;
+    width: 100%;
+    user-select: none;
+  }
+
+  .custom-select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 11px 16px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .custom-select-trigger:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+  }
+
+  .custom-select-wrap.open .custom-select-trigger {
+    background: #ffffff;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  .custom-select-arrow {
+    width: 18px;
+    height: 18px;
+    color: var(--ink-3);
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .custom-select-wrap.open .custom-select-arrow {
+    transform: rotate(180deg);
+  }
+
+  .custom-select-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+    box-shadow: 0 16px 36px -6px rgba(17, 24, 39, 0.14), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 240px;
+    overflow-y: auto;
+    animation: menuAppear 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .custom-select-wrap.open .custom-select-menu {
+    display: flex;
+  }
+
+  @keyframes menuAppear {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .custom-select-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
+
+  .custom-select-option:hover {
+    background: #f1f4f8;
+  }
+
+  .custom-select-option.selected {
+    background: #eff6ff;
+    color: var(--blue);
+    font-weight: 700;
+  }
+
+  /* CUSTOM CALENDAR PICKER OVERLAY */
+  .custom-datepicker-wrap {
+    position: relative;
+    flex: 1;
+  }
+
+  .custom-datepicker-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 11px 16px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .custom-datepicker-trigger:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+  }
+
+  .custom-datepicker-wrap.open .custom-datepicker-trigger {
+    background: #ffffff;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  .custom-datepicker-popup {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 220;
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    box-shadow: 0 20px 45px -8px rgba(17, 24, 39, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    padding: 16px;
+    width: 290px;
+    display: none;
+    animation: menuAppear 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .custom-datepicker-wrap.open .custom-datepicker-popup {
+    display: block;
+  }
+
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .cal-title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-transform: capitalize;
+  }
+
+  .cal-nav-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .cal-nav-btn:hover {
+    background: #f1f4f8;
+    color: var(--ink);
+  }
+
+  .cal-grid-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .cal-day-header {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink-4);
+    padding-bottom: 4px;
+  }
+
+  .cal-grid-cells {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .cal-cell {
+    height: 32px;
+    border-radius: 8px;
+    border: 0;
+    background: transparent;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 120ms ease;
+  }
+
+  .cal-cell:hover:not(.empty) {
+    background: #eff6ff;
+    color: var(--blue);
+  }
+
+  .cal-cell.today {
+    border: 1.5px solid var(--blue);
+  }
+
+  .cal-cell.selected {
+    background: var(--blue) !important;
+    color: #ffffff !important;
+    font-weight: 800;
+  }
+
+  .cal-cell.empty {
+    cursor: default;
+    opacity: 0;
+  }
+
+  /* DARK MODE PARA CUSTOM SELECT Y CUSTOM DATEPICKER */
+  :root[data-theme="dark"] .custom-select-trigger,
+  :root[data-theme="dark"] .custom-datepicker-trigger {
+    background: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f3f6fb !important;
+  }
+
+  :root[data-theme="dark"] .custom-select-menu,
+  :root[data-theme="dark"] .custom-datepicker-popup {
+    background: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  :root[data-theme="dark"] .custom-select-option:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  :root[data-theme="dark"] .custom-select-option.selected {
+    background: rgba(96, 165, 250, 0.18) !important;
+    color: #93c5fd !important;
+  }
+
+  :root[data-theme="dark"] .cal-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  :root[data-theme="dark"] .cal-cell:hover:not(.empty) {
+    background: rgba(96, 165, 250, 0.2) !important;
+    color: #93c5fd !important;
+  }
+
+
+  /* ==========================================================================
+     ESTILIZADO UNIVERSAL DE INPUTS Y SELECTS (CERO CONTROLES NATIVOS VIEJOS)
+     ========================================================================== */
+
+  /* Selects nativos estilizados como Dropdowns modernos */
+  select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: var(--surface) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 16px 16px !important;
+    padding: 10px 38px 10px 16px !important;
+    border: 1.5px solid var(--line-strong) !important;
+    border-radius: 12px !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    color: var(--ink) !important;
+    cursor: pointer !important;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04) !important;
+  }
+
+  select:hover {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 6px rgba(17, 24, 39, 0.08) !important;
+  }
+
+  select:focus {
+    border-color: var(--blue) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18) !important;
+  }
+
+  select option {
+    background-color: #ffffff;
+    color: #111111;
+    font-size: 0.92rem;
+    padding: 10px 14px;
+    font-weight: 500;
+  }
+
+  :root[data-theme="dark"] select {
+    background-color: #0e0e0e !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f3f6fb !important;
+  }
+
+  :root[data-theme="dark"] select option {
+    background-color: #0e0e0e;
+    color: #f3f6fb;
+  }
+
+  /* Inputs de fecha nativos estilizados como botones píldora modernos */
+  input[type="date"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    background-color: var(--surface) !important;
+    border: 1.5px solid var(--line-strong) !important;
+    border-radius: 12px !important;
+    padding: 9px 14px !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    color: var(--ink) !important;
+    cursor: pointer !important;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04) !important;
+  }
+
+  input[type="date"]:hover {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 6px rgba(17, 24, 39, 0.08) !important;
+  }
+
+  input[type="date"]:focus {
+    border-color: var(--blue) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18) !important;
+  }
+
+  /* Ocultar el icono feo de calendario de Windows y poner un icono SVG nítido */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 16px 16px !important;
+    cursor: pointer !important;
+    opacity: 0.85 !important;
+    transition: transform 140ms ease !important;
+    padding: 2px !important;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    transform: scale(1.15) !important;
+    opacity: 1 !important;
+  }
+
+  :root[data-theme="dark"] input[type="date"] {
+    background-color: #0e0e0e !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f3f6fb !important;
+    color-scheme: dark !important;
+  }
+
+
+  /* ==========================================================================
+     KITE FLOATING DATEPICKER MODAL (100% CUSTOM HTML/CSS/JS)
+     ========================================================================== */
+  #kite-datepicker-overlay {
+    position: fixed;
+    z-index: 99999;
+    display: none;
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    box-shadow: 0 20px 45px -8px rgba(17, 24, 39, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 18px;
+    width: 295px;
+    animation: kiteCalZoom 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes kiteCalZoom {
+    from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  :root[data-theme="dark"] #kite-datepicker-overlay {
+    background: #0e0e0e;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .k-cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .k-cal-title {
+    font-weight: 800;
+    font-size: 0.98rem;
+    color: var(--ink);
+    text-transform: capitalize;
+  }
+
+  .k-cal-nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .k-cal-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: #f8fafc;
+    color: var(--ink-2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 120ms ease;
+  }
+
+  .k-cal-btn:hover {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+  }
+
+  :root[data-theme="dark"] .k-cal-btn {
+    background: #1c1c1c;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f3f6fb;
+  }
+
+  .k-cal-grid-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .k-cal-day-label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ink-4);
+    text-transform: uppercase;
+  }
+
+  .k-cal-grid-cells {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .k-cal-cell {
+    height: 34px;
+    border-radius: 10px;
+    border: 0;
+    background: transparent;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 120ms ease;
+  }
+
+  .k-cal-cell:hover:not(.empty) {
+    background: #eff6ff;
+    color: var(--blue);
+  }
+
+  .k-cal-cell.today {
+    border: 1.5px solid var(--blue);
+  }
+
+  
+  /* ==========================================================================
+     NOTION-STYLE RANGE DATEPICKER (AIRBNB / LINEAR REFINED)
+     ========================================================================== */
+  .k-cal-cell.range-start {
+    background: var(--blue) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  .k-cal-cell.range-end {
+    background: var(--blue) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+
+  .k-cal-cell.range-between {
+    background: #e0edff !important;
+    color: var(--blue) !important;
+    border-radius: 0 !important;
+    font-weight: 700 !important;
+  }
+
+  :root[data-theme="dark"] .k-cal-cell.range-between {
+    background: rgba(59, 130, 246, 0.25) !important;
+    color: #93c5fd !important;
+  }
+
+  .k-cal-cell.range-start.range-end {
+    border-radius: 10px !important;
+  }
+
+  .k-cal-range-hint {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+    text-align: center;
+    background: #f8fafc;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+
+  :root[data-theme="dark"] .k-cal-range-hint {
+    background: #151c27;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .k-cal-cell.selected {
+    background: var(--blue) !important;
+    color: #ffffff !important;
+    font-weight: 800;
+  }
+
+  .k-cal-cell.empty {
+    cursor: default;
+    opacity: 0;
+  }
+
+  .k-cal-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+
+  .k-cal-foot-btn {
+    border: 0;
+    background: transparent;
+    color: var(--blue);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .k-cal-foot-btn:hover {
+    background: #eff6ff;
+  }
+
+  :root[data-theme="dark"] .k-cal-cell:hover:not(.empty) {
+    background: rgba(96, 165, 250, 0.2);
+    color: #93c5fd;
+  }
+
+
+  /* ==========================================================================
+     UNIVERSAL CUSTOM SELECT DROPDOWN MENU & POPUP FIXES
+     ========================================================================== */
+  
+  /* DROPDOWN FLOTANTE UNIVERSAL PARA SELECTS */
+  #kite-select-overlay {
+    position: fixed;
+    z-index: 100000;
+    display: none;
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+    box-shadow: 0 20px 45px -8px rgba(17, 24, 39, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 6px;
+    max-height: 250px;
+    overflow-y: auto;
+    animation: kiteMenuZoom 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes kiteMenuZoom {
+    from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  :root[data-theme="dark"] #kite-select-overlay {
+    background: #0e0e0e;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .k-select-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
+
+  .k-select-opt:hover {
+    background: #f1f4f8;
+  }
+
+  .k-select-opt.selected {
+    background: #eff6ff;
+    color: var(--blue);
+    font-weight: 700;
+  }
+
+  :root[data-theme="dark"] .k-select-opt:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  :root[data-theme="dark"] .k-select-opt.selected {
+    background: rgba(96, 165, 250, 0.18);
+    color: #93c5fd;
+  }
+
+  /* Evitar que modales corten popups flotantes */
+  .modal-card {
+    overflow: visible !important;
+  }
+
+</style>
   </head>
   <body>
     <!-- ===================================================================
@@ -2452,176 +4474,164 @@
       <!-- CONTENIDO PRINCIPAL -->
       <main class="main-app">
         <!-- VISTA 1: DASHBOARD -->
+        <!-- VISTA 1: INICIO (REF. 6 EXACT MATCH) -->
         <section class="tab-content active" id="tab-dashboard" role="tabpanel">
-          <div class="dash-layout-grid">
-            <!-- FILA 1 - IZQUIERDA: TARJETA HERO OSCURA + TRÍO PASTEL -->
-            <div class="dash-area-top-left">
-              <!-- 1. TARJETA PROTAGONISTA OSCURA (#17151F) -->
-              <div class="hero-dark-card">
-                <div class="hero-dark-top">
-                  <div class="hero-dark-title-wrap">
-                    <span class="hero-dark-eyebrow">Balance registrado</span>
-                    <span class="hero-dark-period" id="dash-periodo">Octubre 2026</span>
-                  </div>
-                  <div class="hero-cycle-badge">
-                    <span class="hero-cycle-dot"></span>
-                    <span id="dash-dia-mes">Día 1 de 31</span>
-                  </div>
-                </div>
-
-                <div class="hero-dark-amount-row">
-                  <div>
-                    <div class="hero-amount" id="dash-balance">+ $ 0</div>
-                    <div class="hero-dark-sub" id="dash-hero-sub">
-                      Ingresos <strong>+ $ 0</strong> menos gastos <strong>− $ 0</strong>
-                    </div>
-                  </div>
-
-                  <div class="hero-actions">
-                    <button class="btn-hero-primary" id="btn-hero-gasto" type="button">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
-                      <span>Gasto</span>
-                    </button>
-                    <button class="btn-hero-secondary" id="btn-hero-ingreso" type="button">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="12" y1="19" x2="12" y2="5"></line>
-                        <polyline points="5 12 12 5 19 12"></polyline>
-                      </svg>
-                      <span>Ingreso</span>
-                    </button>
-                  </div>
-                </div>
+          <main class="wrap">
+            <div class="top-title">
+              <div>
+                <h1>Inicio</h1>
+                <p>Tu dinero, tus compromisos y tus metas — simple y claro.</p>
               </div>
-
-              <!-- 2. TRÍO DE MÉTRICAS -->
-              <div class="pastel-cards-grid">
-                <!-- Ingresos -->
-                <div class="pastel-card green">
-                  <div class="pastel-card-top">
-                    <span class="pastel-card-title">Ingresos</span>
-                  </div>
-                  <div class="pastel-card-amount" id="dash-ingresos-total">+ $ 0</div>
-                  <div class="pastel-card-foot" id="dash-ingresos-foot">0 registros</div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span id="dash-periodo" style="font-size:0.88rem;color:var(--ink-3);font-weight:600">Noviembre 2026</span>
+                <div class="tog" role="group" aria-label="Período">
+                  <button type="button">Semana</button>
+                  <button class="active" type="button">Quincena</button>
+                  <button type="button">Mes</button>
                 </div>
-
-                <!-- Gastos -->
-                <div class="pastel-card peach">
-                  <div class="pastel-card-top">
-                    <span class="pastel-card-title">Gastos</span>
-                  </div>
-                  <div class="pastel-card-amount" id="dash-gastos-total">− $ 0</div>
-                  <div class="pastel-card-foot" id="dash-gastos-foot">0 registros</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- FILA 1 - DERECHA: MOVIMIENTOS RECIENTES (Alineada en altura con el Trío Pastel) -->
-            <div class="dash-area-top-right">
-              <div class="transactions-card">
-                <div class="tx-header">
-                  <h3 class="tx-title">Movimientos recientes</h3>
-                  <button class="tx-view-all" id="btn-ver-historial-link" type="button">
-                    Ver historial &rarr;
+                <div style="display:flex;gap:6px">
+                  <button class="btn-hero-secondary" id="btn-hero-ingreso" type="button" style="padding:6px 12px;font-size:0.8rem">
+                    ↑ Ingreso
+                  </button>
+                  <button class="btn-hero-primary" id="btn-hero-gasto" type="button" style="padding:6px 12px;font-size:0.8rem">
+                    + Gasto
                   </button>
                 </div>
-                <div class="tx-list-clean" id="dash-recent-list">
-                  <!-- Inyectado por JS -->
-                </div>
               </div>
             </div>
 
-            <!-- FILA 2 - IZQUIERDA: GRÁFICA PRINCIPAL INTERACTIVA -->
-            <div class="dash-area-bottom-left">
-              <div class="chart-panel">
-                <div class="chart-header">
-                  <div>
-                    <h3 class="chart-title">Gasto por semana</h3>
-                    <p class="chart-sub" id="dash-chart-sub">Mes en curso</p>
+            <div class="main">
+              <div class="left">
+                <section class="anchor" id="dash-libre-card" role="button" tabindex="0" onclick="switchTab('planificacion')">
+                  <p class="label" id="libre">Libre real de la quincena</p>
+                  <p class="val num" id="dash-libre-real">$ 1.250.000</p>
+                  <p class="meta" id="dash-libre-foot">Disponible después de gastos, apartados y compromisos pendientes · Corte 15</p>
+                  <div class="row" role="list">
+                    <div class="mini" role="listitem">
+                      <div class="k">Ingresos</div>
+                      <div class="v num" id="dash-ingresos-total">+ $ 3.200.000</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Gastos</div>
+                      <div class="v num" id="dash-gastos-total">− $ 980.000</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Pendientes</div>
+                      <div class="v num" id="dash-balance">− $ 970.000</div>
+                    </div>
                   </div>
-                  <div class="chart-mode-switch">
-                    <button class="mode-switch-btn active" id="btn-mode-bars" type="button">Barras</button>
-                    <button class="mode-switch-btn" id="btn-mode-curve" type="button">Curva</button>
-                  </div>
-                </div>
+                  <div class="logo-mark">KITE</div>
+                </section>
 
-                <div class="chart-interactive-stage">
-                  <!-- MODO 1: BARRAS -->
-                  <div class="chart-bars-wrap" id="dash-chart-bars">
-                    <!-- Inyectado por JS -->
+                <section class="up-section">
+                  <div class="head">
+                    <h2>Próximos pagos</h2>
+                    <span class="sub" id="dash-dia-mes">En los próximos 7 días</span>
                   </div>
+                  <div class="up-grid" id="dash-up-grid">
+                    <!-- Inyectado dinámicamente con compromisos reales -->
+                  </div>
+                </section>
 
-                  <!-- MODO 2: CURVA -->
-                  <div class="chart-curve-svg-wrap" id="dash-chart-curve">
-                    <svg class="curve-svg" viewBox="0 0 540 180" preserveAspectRatio="none" id="curve-svg-el">
-                      <!-- Inyectado por JS -->
+                <section class="card">
+                  <div class="head">
+                    <h2>Compromisos y movimientos</h2>
+                    <button class="tx-view-all" id="btn-ver-historial-link" type="button" onclick="switchTab('historial')" style="border:0;background:transparent;cursor:pointer;color:var(--blue);font-size:0.82rem;font-weight:600">Ver historial →</button>
+                  </div>
+                  <ul class="list" id="dash-recent-list">
+                    <li class="tx" onclick="switchTab('historial')">
+                      <div class="tx-ico" style="background:#eef2ff;color:#3730a3">I</div>
+                      <div class="tx-main"><h3>Internet hogar</h3><p>22 may · Mensual</p></div>
+                      <div class="tx-amt neg num">− $ 75.000</div>
+                    </li>
+                    <li class="tx" onclick="switchTab('historial')">
+                      <div class="tx-ico" style="background:#ecfdf5;color:#065f46">G</div>
+                      <div class="tx-main"><h3>Gimnasio</h3><p>28 may · Mensual</p></div>
+                      <div class="tx-amt neg num">− $ 89.000</div>
+                    </li>
+                    <li class="tx" onclick="switchTab('historial')">
+                      <div class="tx-ico" style="background:#fff7ed;color:#9a3412">M</div>
+                      <div class="tx-main"><h3>Mercado</h3><p>12 may · Gasto registrado</p></div>
+                      <div class="tx-amt neg num">− $ 210.000</div>
+                    </li>
+                    <li class="tx" onclick="switchTab('historial')">
+                      <div class="tx-ico" style="background:#ecfeff;color:#155e75">S</div>
+                      <div class="tx-main"><h3>Salario</h3><p>15 may · Ingreso</p></div>
+                      <div class="tx-amt pos num">+ $ 2.800.000</div>
+                    </li>
+                  </ul>
+                </section>
+              </div>
+
+              <div class="right">
+                <section class="card card-chart-block">
+                  <div class="head">
+                    <div><h2>Libre estimado este período</h2></div>
+                    <div class="tog" role="group" aria-label="Rango">
+                      <button type="button">Semana</button>
+                      <button class="active" type="button">Quincena</button>
+                      <button type="button">Mes</button>
+                    </div>
+                  </div>
+                  <div class="big num" id="dash-chart-hero-amt">$ 0</div>
+                  <div class="sub" id="dash-chart-sub">Evolución semanal según tus movimientos registrados</div>
+                  <div class="dash-chart-container" style="position: relative; width: 100%;">
+                    <div id="chart-floating-tooltip" class="chart-tooltip"></div>
+                    <svg id="dash-real-chart-svg" class="chart" viewBox="0 0 460 190" role="img" aria-label="Línea de evolución de gastos y disponible por semana">
+                      <!-- Renderizado dinámicamente con datos reales por JS -->
                     </svg>
                   </div>
+                </section>
 
-                  <!-- Tooltip -->
-                  <div class="chart-tooltip-floating" id="chart-floating-tooltip"></div>
-                </div>
+                <section class="dark-card" id="dash-meta-card" role="button" tabindex="0" onclick="switchTab('metas')" style="cursor:pointer">
+                  <div>
+                    <h3 id="dash-meta-title">Plan de ahorro · Meta activa</h3>
+                    <p id="dash-meta-nombre">Cargando...</p>
+                    <p style="margin-top:6px" id="dash-meta-montos-wrap">
+                      <span class="num" style="font-weight:700" id="dash-meta-ahorrado">$ 0</span> de 
+                      <span class="num" id="dash-meta-objetivo">$ 0</span> · faltan 
+                      <span class="num" id="dash-meta-faltante">$ 0</span>
+                    </p>
+                    <p style="margin-top:6px;color:#10b981;font-weight:600" id="dash-meta-estado">Estado: al día</p>
+                  </div>
+                  <div class="ring" id="dash-meta-ring-wrap" role="img" aria-label="Progreso de meta">
+                    <span id="dash-meta-pct">0%</span>
+                  </div>
+                </section>
 
-                <p class="chart-foot" id="dash-chart-foot">&mdash;</p>
+                <section class="card">
+                  <div class="head"><h2>Desglose rápido</h2></div>
+                  <div style="display:grid;gap:10px;font-size:0.9rem">
+                    <div style="display:flex;justify-content:space-between">
+                      <span style="color:var(--ink-3)">Libre de la quincena</span>
+                      <strong class="num" id="dash-desglose-quincena">$ 1.350.000</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between">
+                      <span style="color:var(--ink-3)">Atrasados anteriores</span>
+                      <strong class="num" style="color:#dc2626" id="dash-desglose-atrasados">− $ 100.000</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between">
+                      <span style="color:var(--ink-3)">Apartados a metas</span>
+                      <strong class="num" id="dash-desglose-apartados">− $ 0</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)">
+                      <span style="font-weight:700">Libre real</span>
+                      <strong class="num" id="dash-desglose-real">$ 1.250.000</strong>
+                    </div>
+                  </div>
+                  <p class="sub" style="margin:10px 0 0" id="dash-promedio">Estimado según lo registrado. No es saldo bancario.</p>
+                </section>
               </div>
             </div>
-
-            <!-- FILA 2 - DERECHA -->
-            <div class="dash-area-bottom-right">
-              <!-- Mes en curso -->
-              <div class="progress-dark-widget" id="progress-widget-box">
-                <div class="progress-dark-info">
-                  <span class="progress-dark-title">Mes en curso</span>
-                  <span class="progress-dark-status" id="dash-dia-status">1 de 31 días</span>
-                  <span class="progress-dark-sub" id="dash-dia-sub">Quedan 30 días</span>
-                </div>
-                <div class="progress-dark-ring-box">
-                  <svg class="progress-svg" viewBox="0 0 56 56">
-                    <circle cx="28" cy="28" r="23" fill="none" stroke="var(--line-strong)" stroke-width="4" />
-                    <circle
-                      id="dash-dia-ring"
-                      cx="28"
-                      cy="28"
-                      r="23"
-                      fill="none"
-                      stroke="var(--accent)"
-                      stroke-width="4"
-                      stroke-dasharray="144.51"
-                      stroke-dashoffset="144.51"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                  <div class="progress-ring-text" id="dash-dia-pct">0%</div>
-                </div>
-              </div>
-
-              <!-- Libre real de la quincena (feature 003): estimado según lo registrado -->
-              <div class="pastel-card blue plan-dash-card" id="dash-libre-card" role="button" tabindex="0" title="Ver Planificación">
-                <div class="pastel-card-top">
-                  <span class="pastel-card-title">Libre real</span>
-                </div>
-                <div class="pastel-card-amount" id="dash-libre-real">$ 0</div>
-                <div class="pastel-card-foot" id="dash-libre-foot">de la quincena · estimado</div>
-              </div>
-
-              <!-- Promedio diario -->
-              <div class="celeste-card">
-                <div class="celeste-header">Promedio diario</div>
-                <div class="celeste-body" id="dash-promedio">
-                  Aún no hay movimientos registrados en el período.
-                </div>
-              </div>
-            </div>
-          </div>
+          </main>
         </section>
+        
 
         <!-- VISTA 2: HISTORIAL -->
         <section class="tab-content" id="tab-historial" role="tabpanel">
-          <div class="white-panel">
-            <div class="panel-header-clean">
-              <h2 class="panel-title-clean">Movimientos</h2>
+          <div class="wrap">
+            <div class="top-title">
+              <div><h1>Historial</h1><p>Registro detallado de todos tus ingresos y gastos.</p></div>
               <button class="btn-submit" id="btn-historial-nuevo" type="button">
                 + Nuevo movimiento
               </button>
@@ -2680,153 +4690,322 @@
           </div>
         </section>
 
-        <!-- VISTA 3: RESUMEN -->
+        <!-- VISTA 3: RESUMEN (RE-ARQUITECTURA EQUILIBRADA REF. 6) -->
         <section class="tab-content" id="tab-resumen" role="tabpanel">
-          <div class="white-panel">
-            <div class="panel-header-clean">
-              <h2 class="panel-title-clean">Resumen del período</h2>
-              <span class="panel-note" id="resumen-rango">Todo el historial</span>
+          <div class="wrap">
+            <div class="top-title" style="align-items: center; margin-bottom: 22px;">
+              <div>
+                <h1>Resumen</h1>
+                <p>Balance financiero, métricas de consumo y distribución del ciclo.</p>
+              </div>
+              <!-- SELECTOR DE PERÍODO FINTECH NIVEL NOTION / AIRBNB (100% EN UNA SOLA LÍNEA) -->
+              <div class="resumen-period-bar">
+                <div class="quick-period-pills" role="tablist" aria-label="Filtro de período del resumen">
+                  <button class="quick-pill-btn active" data-res-range="este-mes" type="button">Este mes</button>
+                  <button class="quick-pill-btn" data-res-range="mes-anterior" type="button">Mes anterior</button>
+                  <button class="quick-pill-btn" data-res-range="todo" type="button">Todo</button>
+                  <button class="quick-pill-btn" data-res-range="custom" id="btn-res-range-custom" type="button" title="Seleccionar rango de fechas interactivo">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; opacity:0.85;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span id="btn-res-range-label">Personalizado</span>
+                  </button>
+                </div>
+
+                <!-- Inputs semánticos ocultos para el backend de Tauri (get_summary, get_history) -->
+                <input type="hidden" id="resumen-desde" />
+                <input type="hidden" id="resumen-hasta" />
+                <button id="btn-resumen-filtrar" type="button" style="display:none;"></button>
+              </div>
             </div>
 
-            <div class="period-row">
-              <div class="quick-period-pills">
-                <button class="quick-pill-btn active" data-res-range="este-mes" type="button">Este mes</button>
-                <button class="quick-pill-btn" data-res-range="mes-anterior" type="button">Mes anterior</button>
-                <button class="quick-pill-btn" data-res-range="todo" type="button">Todo el tiempo</button>
+            <!-- FILA 1: TARJETAS PRINCIPALES 2 COLUMNAS (ALINEADAS Y SIMÉTRICAS) -->
+            <div class="grid-2col-ref6" style="margin-bottom: 20px;">
+              <div class="left">
+                <!-- Anchor Card: Balance Neto -->
+                <section class="anchor" style="min-height: 220px; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <p class="label">Balance neto del período</p>
+                    <p class="val num" id="resumen-balance">+ $ 0</p>
+                    <p class="meta" id="resumen-rango">Cargando...</p>
+                  </div>
+                  <div class="row" role="list">
+                    <div class="mini" role="listitem">
+                      <div class="k">Ingresos</div>
+                      <div class="v num" id="resumen-ingresos" style="color:var(--income)">+ $ 0</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Gastos</div>
+                      <div class="v num" id="resumen-gastos" style="color:var(--expense)">− $ 0</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Actividad</div>
+                      <div class="v num" id="resumen-ingresos-foot">0 regs</div>
+                    </div>
+                  </div>
+                  <div class="logo-mark">KITE RESUMEN</div>
+                </section>
               </div>
 
-              <div class="date-range-group">
-                <span>Desde</span>
-                <input type="date" id="resumen-desde" aria-label="Fecha desde del resumen" />
-                <span>Hasta</span>
-                <input type="date" id="resumen-hasta" aria-label="Fecha hasta del resumen" />
-                <button class="btn-cancel" id="btn-resumen-filtrar" type="button">Actualizar</button>
+              <div class="right">
+                <!-- Card de Estadísticas y Desglose Nivelado -->
+                <section class="card" style="min-height: 220px; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div class="head">
+                    <div>
+                      <h2>Desglose y Métricas</h2>
+                      <span class="sub" id="resumen-gastos-foot">Calculado en tiempo real</span>
+                    </div>
+                    <span class="dash-anchor-badge" id="resumen-tasa-ahorro" style="color: var(--ink); background: var(--surface-2); border: 1px solid var(--line);">Tasa ahorro: —</span>
+                  </div>
+                  <div style="display:grid; gap:10px; font-size:0.92rem; margin-top:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="color:var(--ink-3);">Gasto diario promedio</span>
+                      <strong class="num" id="resumen-promedio-diario" style="color:var(--ink);">$ 0 / día</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="color:var(--ink-3);">Mayor categoría</span>
+                      <strong id="resumen-top-categoria" style="color:var(--ink); font-weight:600;">—</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid var(--line);">
+                      <span style="font-weight:700;">Resultado final</span>
+                      <strong class="num" id="resumen-diferencia-final" style="font-weight:800;">$ 0</strong>
+                    </div>
+                  </div>
+                </section>
               </div>
             </div>
 
-            <div class="pastel-cards-grid">
-              <div class="pastel-card green">
-                <span class="pastel-card-title">Ingresos</span>
-                <div class="pastel-card-amount" id="resumen-ingresos">+ $ 0</div>
-                <div class="pastel-card-foot" id="resumen-ingresos-foot">0 registros</div>
+            <!-- FILA 2: DISTRIBUCIÓN POR CATEGORÍAS (APORTE REAL DE VALOR) -->
+            <section class="card" style="margin-top: 4px;">
+              <div class="head">
+                <div>
+                  <h2>Distribución de Gastos por Categoría</h2>
+                  <span class="sub">Dónde se fue tu dinero en este rango</span>
+                </div>
+                <span class="panel-note" id="resumen-cat-total-label">100% de consumos</span>
               </div>
-              <div class="pastel-card peach">
-                <span class="pastel-card-title">Gastos</span>
-                <div class="pastel-card-amount" id="resumen-gastos">− $ 0</div>
-                <div class="pastel-card-foot" id="resumen-gastos-foot">0 registros</div>
+              <div id="resumen-categorias-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 10px;">
+                <!-- Rellenado dinámicamente por JS -->
               </div>
-              <div class="pastel-card blue">
-                <span class="pastel-card-title">Balance registrado</span>
-                <div class="pastel-card-amount" id="resumen-balance">+ $ 0</div>
-                <div class="pastel-card-foot">Ingresos menos gastos</div>
-              </div>
-            </div>
+            </section>
           </div>
         </section>
 
-        <!-- VISTA 4: COMPROMISOS -->
+        <!-- VISTA 4: COMPROMISOS (LAYOUT FINTECH REF. 6 SIMÉTRICO Y COMPLETO) -->
         <section class="tab-content" id="tab-compromisos" role="tabpanel">
-          <div class="white-panel">
-            <div class="panel-header-clean">
-              <h2 class="panel-title-clean">Compromisos recurrentes</h2>
+          <div class="wrap">
+            <div class="top-title" style="align-items: center; margin-bottom: 22px;">
+              <div>
+                <h1>Compromisos</h1>
+                <p>Pagos fijos recurrentes, suscripciones y control de vencimientos.</p>
+              </div>
               <button class="btn-submit" id="btn-nuevo-compromiso" type="button">+ Nuevo compromiso</button>
             </div>
 
-            <div id="comp-vencimientos-panel">
-              <!-- Vencen hoy / atrasados / próximos -->
-              <div id="comp-venc-hoy" class="comp-group"></div>
-              <div id="comp-venc-atrasados" class="comp-group"></div>
-              <div id="comp-venc-proximos" class="comp-group"></div>
+            <!-- FILA 1: TARJETAS SUPERIORES 2 COLUMNAS (SIMÉTRICAS) -->
+            <div class="grid-2col-ref6" style="margin-bottom: 22px;">
+              <div class="left">
+                <!-- Anchor Card: Resumen de Compromisos Activos -->
+                <section class="anchor" style="min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <p class="label">Total Compromisos Activos</p>
+                    <p class="val num" id="comp-kpi-total-monto">$ 0</p>
+                    <p class="meta" id="comp-kpi-sub">Carga mensual fija proyectada</p>
+                  </div>
+                  <div class="row" role="list">
+                    <div class="mini" role="listitem">
+                      <div class="k">Activos</div>
+                      <div class="v num" id="comp-kpi-activos">0</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Pausados</div>
+                      <div class="v num" id="comp-kpi-pausados" style="color:var(--ink-3)">0</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Pendientes hoy</div>
+                      <div class="v num" id="comp-kpi-alertas" style="color:#f59e0b">0</div>
+                    </div>
+                  </div>
+                  <div class="logo-mark">KITE COMP</div>
+                </section>
+              </div>
+
+              <div class="right">
+                <!-- Card de Vencimientos Inmediatos y Alertas -->
+                <section class="card" style="min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div class="head">
+                    <div>
+                      <h2>Vencimientos y Alertas</h2>
+                      <span class="sub">Vencen hoy, atrasados o en los próximos 7 días</span>
+                    </div>
+                    <span class="dash-anchor-badge" id="comp-badge-urgente" style="display:none; color:#dc2626; background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.2);">0 urgentes</span>
+                  </div>
+                  <div id="comp-vencimientos-panel" style="margin-top: 6px;">
+                    <div id="comp-venc-atrasados" class="comp-group"></div>
+                    <div id="comp-venc-hoy" class="comp-group"></div>
+                    <div id="comp-venc-proximos" class="comp-group"></div>
+                    <div id="comp-venc-al-dia" style="padding: 14px 0; color: var(--ink-3); font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
+                      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+                      Todos tus compromisos están al día. Sin pagos vencidos.
+                    </div>
+                  </div>
+                </section>
+              </div>
             </div>
 
-            <div class="comp-list" id="comp-lista">
-              <!-- JS: tarjetas de gestión -->
-            </div>
+            <!-- FILA 2: LISTADO COMPLETO DE COMPROMISOS (GRID REFINADO) -->
+            <section class="card" style="margin-top: 4px;">
+              <div class="head">
+                <div>
+                  <h2>Mis Compromisos y Suscripciones</h2>
+                  <span class="sub">Administra montos, recurrencia, pausas o ediciones</span>
+                </div>
+              </div>
+              <div class="comp-cards-grid" id="comp-lista" style="margin-top: 14px;">
+                <!-- JS: tarjetas de gestión refinadas -->
+              </div>
+            </section>
           </div>
         </section>
 
         <!-- VISTA 5: PLANIFICACIÓN (feature 003) -->
         <section class="tab-content" id="tab-planificacion" role="tabpanel">
-          <div class="white-panel">
-            <div class="panel-header-clean">
-              <h2 class="panel-title-clean">Planificación</h2>
-              <span class="panel-note">Estimado según lo registrado</span>
-            </div>
-
-            <div class="period-row">
-              <div class="quick-period-pills">
-                <button class="quick-pill-btn" id="btn-plan-anterior" type="button">&lsaquo; Anterior</button>
-                <button class="quick-pill-btn" id="btn-plan-hoy" type="button">Hoy</button>
-                <button class="quick-pill-btn" id="btn-plan-siguiente" type="button">Siguiente &rsaquo;</button>
+          <div class="wrap">
+            <div class="top-title">
+              <div>
+                <h1>Planificación</h1>
+                <p>Tu dinero libre real quincenal y proyección de compromisos.</p>
               </div>
-              <span class="panel-note" id="plan-rango">&mdash;</span>
-            </div>
-
-            <div class="pastel-cards-grid">
-              <div class="pastel-card green">
-                <span class="pastel-card-title">Libre de la quincena</span>
-                <div class="pastel-card-amount" id="plan-libre-quincena">+ $ 0</div>
-                <div class="pastel-card-foot">Ingresos menos gastos, compromisos y apartados del período</div>
-              </div>
-              <div class="pastel-card blue">
-                <span class="pastel-card-title">Libre real</span>
-                <div class="pastel-card-amount" id="plan-libre-real">+ $ 0</div>
-                <div class="pastel-card-foot">Descuenta además los atrasados de quincenas anteriores</div>
-              </div>
-            </div>
-
-            <div class="comp-group" id="plan-desglose">
-              <div class="comp-group-title">Desglose</div>
-              <div class="comp-item">
-                <div class="comp-item-main">
-                  <div class="comp-item-concepto">Ingresos del período</div>
+              <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div class="quick-period-pills">
+                  <button class="quick-pill-btn" id="btn-plan-anterior" type="button">&lsaquo; Anterior</button>
+                  <button class="quick-pill-btn active" id="btn-plan-hoy" type="button">Hoy</button>
+                  <button class="quick-pill-btn" id="btn-plan-siguiente" type="button">Siguiente &rsaquo;</button>
                 </div>
-                <div class="comp-item-monto" id="plan-ingresos">+ $ 0</div>
-              </div>
-              <div class="comp-item">
-                <div class="comp-item-main">
-                  <div class="comp-item-concepto">Gastos del período</div>
-                </div>
-                <div class="comp-item-monto" id="plan-gastos">− $ 0</div>
-              </div>
-              <div class="comp-item">
-                <div class="comp-item-main">
-                  <div class="comp-item-concepto">Apartados del período</div>
-                </div>
-                <div class="comp-item-monto" id="plan-apartados">− $ 0</div>
-              </div>
-              <div id="plan-pendientes"></div>
-              <div id="plan-atrasados"></div>
-            </div>
-
-            <div class="comp-group">
-              <div class="comp-group-title">Día de corte de la quincena</div>
-              <div class="form-row plan-corte-row">
-                <label for="plan-corte-input">Día de corte (1 a 28)</label>
-                <div class="plan-corte-controls">
-                  <input type="number" id="plan-corte-input" min="1" max="28" step="1" aria-label="Día de corte, entre 1 y 28" />
-                  <button class="btn-submit" id="btn-plan-guardar-corte" type="button">Guardar</button>
+                <div class="date-range-group" style="padding: 6px 14px;">
+                  <span id="plan-rango" style="color:var(--ink); font-weight:700;">&mdash;</span>
                 </div>
               </div>
-              <p class="plan-empty-line">Primera quincena: del 1 al corte. Segunda: del corte+1 al fin de mes.</p>
             </div>
 
-            <div class="comp-group">
-              <div class="comp-group-title">Simulador de impacto (escenario, no se guarda)</div>
-              <p class="plan-empty-line">Evaluá cómo afectaría una nueva deuda a tu dinero libre, compromisos y metas sin registrar nada.</p>
-              <button class="btn-submit" id="btn-abrir-simulador-deuda" type="button" style="margin-top:8px;">Simular nueva deuda</button>
+            <div class="grid-2col-ref6">
+              <!-- Columna Izquierda: Proyecciones Clave (Libre Real) + Ajuste Quincenal -->
+              <div class="left">
+                <!-- Anchor Card con el Libre Real Protagonista -->
+                <section class="anchor">
+                  <p class="label">Dinero Libre Real (Quincena)</p>
+                  <p class="val num" id="plan-libre-real">+ $ 0</p>
+                  <p class="meta">Descuenta gastos registrados y atrasados previos</p>
+                  <div class="row" role="list">
+                    <div class="mini" role="listitem">
+                      <div class="k">Libre período</div>
+                      <div class="v num" id="plan-libre-quincena">+ $ 0</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Ingresos est.</div>
+                      <div class="v num" id="plan-ingresos" style="color:var(--income)">+ $ 0</div>
+                    </div>
+                    <div class="mini" role="listitem">
+                      <div class="k">Gastos est.</div>
+                      <div class="v num" id="plan-gastos" style="color:var(--expense)">− $ 0</div>
+                    </div>
+                  </div>
+                  <div class="logo-mark">KITE PLAN</div>
+                </section>
+
+                <!-- Panel de Corte Quincenal y Configuración -->
+                <section class="card">
+                  <div class="head">
+                    <div>
+                      <h2>Configuración de Quincena</h2>
+                      <span class="sub">Personaliza tu día de corte habitual</span>
+                    </div>
+                  </div>
+                  <div class="plan-corte-controls" style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+                    <label for="plan-corte-input" style="font-size:0.85rem; font-weight:600; color:var(--ink-2); margin:0;">Día de corte:</label>
+                    <input type="number" id="plan-corte-input" min="1" max="28" step="1" aria-label="Día de corte, entre 1 y 28" style="width: 75px; text-align:center; padding: 7px 10px;" />
+                    <button class="btn-sm-action primary" id="btn-plan-guardar-corte" type="button">Guardar corte</button>
+                  </div>
+                  <p class="sub" style="margin: 10px 0 0; line-height: 1.4;">
+                    1ª quincena: día 1 al corte. 2ª quincena: corte + 1 al final de mes.
+                  </p>
+                </section>
+
+                <!-- Simulador de Nuevas Deudas / Decisiones -->
+                <section class="card" style="border-style:dashed; border-color:var(--line-strong);">
+                  <div class="head">
+                    <div>
+                      <h2>Simulador de Impacto</h2>
+                      <span class="sub">Evalúa un nuevo crédito o cuota sin alterar tus datos</span>
+                    </div>
+                  </div>
+                  <p class="sub" style="margin: 4px 0 14px; line-height: 1.4;">
+                    Proyecta cómo afectaría una nueva cuota a tu disponible quincenal antes de adquirirla.
+                  </p>
+                  <button class="btn-sm-action primary" id="btn-abrir-simulador-deuda" type="button" style="width: 100%; justify-content: center; padding: 9px 16px;">
+                    + Simular nueva cuota o deuda
+                  </button>
+                </section>
+              </div>
+
+              <!-- Columna Derecha: Desglose Analítico + Compromisos del período -->
+              <div class="right">
+                <!-- Desglose Quincenal Detallado (Espejo simétrico de la tarjeta ancla) -->
+                <section class="card" id="plan-card-desglose-top" style="min-height: 215px; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div class="head">
+                    <div>
+                      <h2>Desglose del período</h2>
+                      <span class="sub">Flujos calculados para este ciclo</span>
+                    </div>
+                  </div>
+                  <div style="display:grid; gap:10px; font-size:0.92rem; margin-top:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="color:var(--ink-3);">Ingresos calculados</span>
+                      <strong class="num" id="plan-desglose-ingresos-mirror" style="color:var(--income);">+ $ 0</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="color:var(--ink-3);">Gastos calculados</span>
+                      <strong class="num" id="plan-desglose-gastos-mirror" style="color:var(--expense);">− $ 0</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="color:var(--ink-3);">Apartados a metas</span>
+                      <strong class="num" id="plan-apartados" style="color:var(--ink);">− $ 0</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid var(--line);">
+                      <span style="font-weight:700;">Balance proyectado</span>
+                      <strong class="num" style="color:var(--blue); font-weight:800;">En curso</strong>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Compromisos y Atrasados -->
+                <section class="card">
+                  <div class="head">
+                    <div>
+                      <h2>Compromisos pendientes del período</h2>
+                      <span class="sub">Pagos fijos aún no registrados</span>
+                    </div>
+                  </div>
+                  <div id="plan-pendientes" style="margin-top:6px;"></div>
+                </section>
+
+                <section class="card">
+                  <div class="head">
+                    <div>
+                      <h2 style="color:#dc2626;">Atrasados de quincenas anteriores</h2>
+                      <span class="sub">Impactan directamente tu libre real</span>
+                    </div>
+                  </div>
+                  <div id="plan-atrasados" style="margin-top:6px;"></div>
+                </section>
+              </div>
             </div>
           </div>
         </section>
 
         <!-- VISTA 6: METAS DE AHORRO (feature 005) -->
         <section class="tab-content" id="tab-metas" role="tabpanel">
-          <div class="white-panel">
-            <div class="panel-header-clean">
-              <div>
-                <h2 class="panel-title-clean">Metas de ahorro</h2>
-                <span class="panel-note">Apartá dinero para tus objetivos. Los apartados no se cuentan como gastos.</span>
-              </div>
+          <div class="wrap">
+            <div class="top-title">
+              <div><h1>Metas de ahorro</h1><p>Aparta dinero para tus objetivos. Los apartados no se cuentan como gastos.</p></div>
               <button class="btn-submit" id="btn-nueva-meta" type="button">+ Nueva meta</button>
             </div>
 
@@ -3294,6 +5473,39 @@
       </div>
     </div>
 
+    
+    <!-- KITE CUSTOM DATEPICKER POPUP (SOPORTA FECHA ÚNICA Y RANGO NOTION) -->
+    <div id="kite-datepicker-overlay">
+      <div id="k-cal-range-hint-el" class="k-cal-range-hint" style="display:none;">
+        Selecciona la fecha de inicio
+      </div>
+      <div class="k-cal-head">
+        <span class="k-cal-title" id="k-cal-title">Noviembre 2026</span>
+        <div class="k-cal-nav">
+          <button class="k-cal-btn" id="k-cal-prev" type="button">&lsaquo;</button>
+          <button class="k-cal-btn" id="k-cal-next" type="button">&rsaquo;</button>
+        </div>
+      </div>
+      <div class="k-cal-grid-days">
+        <div class="k-cal-day-label">Do</div>
+        <div class="k-cal-day-label">Lu</div>
+        <div class="k-cal-day-label">Ma</div>
+        <div class="k-cal-day-label">Mi</div>
+        <div class="k-cal-day-label">Ju</div>
+        <div class="k-cal-day-label">Vi</div>
+        <div class="k-cal-day-label">Sa</div>
+      </div>
+      <div class="k-cal-grid-cells" id="k-cal-cells"></div>
+      <div class="k-cal-foot">
+        <button class="k-cal-foot-btn" id="k-cal-clear" type="button">Borrar</button>
+        <button class="k-cal-foot-btn" id="k-cal-today" type="button">Hoy</button>
+      </div>
+    </div>
+
+    
+    <!-- KITE CUSTOM SELECT OVERLAY MENU -->
+    <div id="kite-select-overlay"></div>
+
     <!-- TOAST -->
     <div class="toast" id="toast-el"></div>
 
@@ -3301,7 +5513,15 @@
          SCRIPTS: CONTROLADORES, MODELO Y NAVEGACIÓN
          =================================================================== -->
     <script>
-      const $ = (id) => document.getElementById(id);
+      const _dummyElements = new Map();
+      const $ = (id) => {
+        const el = document.getElementById(id);
+        if (el) return el;
+        if (!_dummyElements.has(id)) {
+          _dummyElements.set(id, document.createElement("div"));
+        }
+        return _dummyElements.get(id);
+      };
 
       const MESES = [
         "enero", "febrero", "marzo", "abril", "mayo", "junio",
@@ -3624,47 +5844,98 @@
       }
 
       function renderCurva(semanas, top) {
-        const svg = $("curve-svg-el");
+        const svg = $("dash-real-chart-svg");
         if (!svg) return;
 
-        const left = 46;
-        const right = 520;
-        const topY = 20;
-        const baseY = 146;
-        const n = semanas.length;
-        const yDe = (valor) => baseY - (top > 0 ? (valor / top) * (baseY - topY) : 0);
+        const left = 48;
+        const right = 430;
+        const topY = 28;
+        const baseY = 145;
+        const n = semanas.length || 4;
+        const maxVal = top > 0 ? top : 100000;
+        const yDe = (valor) => baseY - (valor / maxVal) * (baseY - topY);
 
         const pts = semanas.map((s, i) => {
-          const x = n === 1 ? (left + right) / 2 : left + (i * (right - left)) / (n - 1);
-          return [Math.round(x * 10) / 10, Math.round(yDe(s.gasto) * 10) / 10];
+          const x = n <= 1 ? (left + right) / 2 : left + (i * (right - left)) / (n - 1);
+          const y = yDe(s.gasto || 0);
+          return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
         });
 
         let markup = "";
 
-        // Grilla horizontal + etiquetas del eje Y
-        [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
-          const y = yDe(top * f);
-          const valor = top * f;
-          markup += `<line x1="${left}" y1="${y}" x2="${right}" y2="${y}" class="curve-grid-line" />`;
-          markup += `<text x="${left - 6}" y="${y + 3.5}" class="curve-axis-label" text-anchor="end">$${formatCompact(valor)}</text>`;
+        // 1. Líneas de grilla horizontales
+        [0, 0.33, 0.66, 1].forEach((f) => {
+          const y = Math.round(baseY - f * (baseY - topY));
+          const val = Math.round(maxVal * f);
+          markup += `<line x1="${left}" y1="${y}" x2="${right}" y2="${y}" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 3" opacity="0.8" />`;
+          if (f > 0) {
+            markup += `<text x="${left - 8}" y="${y + 3.5}" font-size="10" fill="var(--ink-3)" text-anchor="end" font-weight="600">$${formatCompact(val)}</text>`;
+          }
         });
 
-        // Área bajo la curva
+        // 2. Área y Curva Suave (Garantizada Visible con stroke nítido)
         if (pts.length > 1) {
-          const area = `${smoothPath([...pts, [right, baseY], [left, baseY]])} Z`;
-          markup += `<path d="${area}" fill="var(--accent)" fill-opacity="0.07" stroke="none" />`;
-          markup += `<path d="${smoothPath(pts)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />`;
+          const splineD = smoothPath(pts);
+          const areaPath = `${splineD} L ${pts[pts.length - 1][0]} ${baseY} L ${pts[0][0]} ${baseY} Z`;
+          
+          // Gradiente sutil y línea visible de alto contraste
+          markup += `<path d="${areaPath}" fill="var(--chart-area)" stroke="none" />`;
+          markup += `<path d="${splineD}" fill="none" stroke="var(--chart-line)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />`;
         }
 
-        // Etiquetas del eje X y puntos interactivos
+        // 3. Eje X y Puntos interactivos con Tooltips
         pts.forEach(([x, y], i) => {
           const s = semanas[i];
           const activa = s.actual;
-          markup += `<circle class="curve-point-dot" cx="${x}" cy="${y}" r="${activa ? 5 : 4}" fill="var(--surface)" stroke="${activa ? "var(--accent)" : "var(--ink-3)"}" stroke-width="2" data-point="${i}" />`;
-          markup += `<text x="${x}" y="164" class="curve-axis-label" text-anchor="middle" ${activa ? 'fill="var(--accent)"' : ""}>${s.label}</text>`;
+          if (activa) {
+            // Línea indicadora vertical de la semana en curso
+            markup += `<line x1="${x}" y1="${topY}" x2="${x}" y2="${baseY}" stroke="var(--chart-line)" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.4" />`;
+          }
+
+          // Punto interactivo
+          markup += `
+            <circle class="dash-chart-point" cx="${x}" cy="${y}" r="${activa ? 6.5 : 4.5}" 
+              fill="${activa ? "var(--chart-line)" : "var(--surface)"}" 
+              stroke="${activa ? "var(--canvas)" : "var(--chart-line)"}" 
+              stroke-width="2.5" 
+              data-idx="${i}" />
+          `;
+          markup += `
+            <text x="${x}" y="${baseY + 22}" font-size="11" font-weight="${activa ? "700" : "500"}" 
+              fill="${activa ? "var(--ink)" : "var(--ink-3)"}" text-anchor="middle">
+              ${s.label}
+            </text>
+          `;
         });
 
         svg.innerHTML = markup;
+
+        // Tooltip interactivo al pasar el ratón
+        const tooltip = $("chart-floating-tooltip");
+        const container = svg.closest(".dash-chart-container");
+
+        svg.querySelectorAll(".dash-chart-point").forEach((dot) => {
+          dot.addEventListener("mouseenter", (e) => {
+            const idx = Number(dot.dataset.idx);
+            const s = semanas[idx];
+            if (!s || !tooltip || !container) return;
+
+            const cx = parseFloat(dot.getAttribute("cx"));
+            const cy = parseFloat(dot.getAttribute("cy"));
+            const rect = container.getBoundingClientRect();
+            const pctX = (cx / 460) * rect.width;
+            const pctY = (cy / 190) * rect.height;
+
+            tooltip.innerHTML = `<strong>${s.label}</strong> (${s.rango})<br>${s.gasto > 0 ? "Gasto: " + formatMoney(s.gasto) : "Sin gastos"}${s.actual ? " · en curso" : ""}`;
+            tooltip.style.left = `${pctX}px`;
+            tooltip.style.top = `${pctY}px`;
+            tooltip.classList.add("show");
+          });
+
+          dot.addEventListener("mouseleave", () => {
+            if (tooltip) tooltip.classList.remove("show");
+          });
+        });
 
         svg.querySelectorAll(".curve-point-dot").forEach((dot) => {
           dot.addEventListener("mouseenter", () => {
@@ -3847,20 +6118,105 @@
           console.error("No se pudo cargar el dashboard", e);
         }
 
-        // Tarjeta compacta de dinero libre (feature 003): quincena en curso.
-        // Es un estimado según lo registrado; si falla, queda en $ 0 con «—».
+        // 1. Datos reales de Planificación Quincenal (Desglose rápido y Libre Real)
         try {
           const plan = await invoke("get_planificacion");
           if (plan) {
-            tweenFigure($("dash-libre-real"), Number(plan.libre_real_centavos) || 0, formatSigned);
-            $("dash-libre-foot").textContent = "de la quincena · estimado";
+            const libreReal = Number(plan.libre_real_centavos) || 0;
+            const libreQuincena = Number(plan.libre_quincena_centavos) || 0;
+            const atrasados = Number(plan.atrasados_centavos) || 0;
+            const apartados = Number(plan.apartados_periodo_centavos) || 0;
+
+            tweenFigure($("dash-libre-real"), libreReal, formatSigned);
+            $("dash-libre-foot").textContent = `Corte ${planCorte || 15} · ${fmtFechaCorta(plan.rango.desde)} a ${fmtFechaCorta(plan.rango.hasta)}`;
+
+            // Actualizar Desglose Rápido en la tarjeta derecha
+            if ($("dash-desglose-quincena")) $("dash-desglose-quincena").textContent = formatSigned(libreQuincena);
+            if ($("dash-desglose-atrasados")) $("dash-desglose-atrasados").textContent = formatSigned(-atrasados);
+            if ($("dash-desglose-apartados")) $("dash-desglose-apartados").textContent = formatSigned(-apartados);
+            if ($("dash-desglose-real")) $("dash-desglose-real").textContent = formatSigned(libreReal);
+            if ($("dash-chart-hero-amt")) $("dash-chart-hero-amt").textContent = formatMoney(Math.abs(libreReal));
           } else {
             $("dash-libre-real").textContent = formatMoney(0);
             $("dash-libre-foot").textContent = "—";
           }
         } catch (e) {
+          console.error("Error cargando planificacion en dashboard", e);
           $("dash-libre-real").textContent = formatMoney(0);
-          $("dash-libre-foot").textContent = "—";
+        }
+
+        // 2. Compromisos Reales en Próximos Pagos (Vencimientos reales)
+        try {
+          const v = await invoke("get_vencimientos");
+          const proximosGrid = $("dash-up-grid");
+          if (proximosGrid) {
+            const items = [...(v.hoy || []), ...(v.atrasados || []), ...(v.proximos || [])];
+            if (!items.length) {
+              proximosGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; padding: 14px 16px; border-radius: 14px; background: var(--surface-2); border: 1px dashed var(--line); font-size: 0.84rem; color: var(--ink-3); display: flex; align-items: center; justify-content: space-between;">
+                  <span>Sin compromisos próximos en los próximos 7 días</span>
+                  <button class="btn-cancel" type="button" onclick="switchTab('compromisos')" style="font-size:0.76rem; padding: 4px 10px;">Ver todos</button>
+                </div>
+              `;
+            } else {
+              proximosGrid.innerHTML = items.slice(0, 2).map(item => {
+                const c = item.compromiso;
+                const letra = (c.concepto || "C").charAt(0).toUpperCase();
+                const textoFecha = item.dias > 0 
+                  ? `Atrasado ${item.dias}d` 
+                  : item.dias === 0 
+                    ? "Vence hoy" 
+                    : `Vence ${fmtFechaCorta(item.fecha)}`;
+                return `
+                  <div class="up" role="button" tabindex="0" onclick="switchTab('compromisos')" style="cursor:pointer">
+                    <div class="up-top">
+                      <div class="up-ico">${escapeHtml(letra)}</div>
+                      <div>
+                        <h3>${escapeHtml(c.concepto)}</h3>
+                        <p style="color: ${item.dias >= 0 ? '#f59e0b' : 'var(--ink-3)'}; font-weight: ${item.dias >= 0 ? '700' : '400'};">${textoFecha}</p>
+                      </div>
+                    </div>
+                    <div class="amt num">${formatMoney(c.monto_centavos)}</div>
+                  </div>
+                `;
+              }).join("");
+            }
+          }
+        } catch (e) {
+          console.error("Error cargando vencimientos en dashboard", e);
+        }
+
+        // 3. Meta Real en Tarjeta de Plan de Ahorro
+        try {
+          const metas = await invoke("list_metas");
+          const activas = (metas || []).filter(m => m.meta.estado === "activa");
+          if (!activas.length) {
+            $("dash-meta-nombre").textContent = "Sin metas de ahorro activas";
+            $("dash-meta-montos-wrap").style.display = "none";
+            $("dash-meta-estado").textContent = "Crea una meta con «+ Nueva meta» para apartar dinero";
+            $("dash-meta-estado").style.color = "var(--ink-3)";
+            $("dash-meta-pct").textContent = "0%";
+            $("dash-meta-ring-wrap").style.background = "conic-gradient(var(--line) 0% 100%)";
+          } else {
+            const item = activas[0];
+            const m = item.meta;
+            const acumulado = Number(item.acumulado_centavos) || 0;
+            const objetivo = Number(m.monto_objetivo_centavos) || 0;
+            const faltante = Math.max(0, objetivo - acumulado);
+            const pct = objetivo > 0 ? Math.min(100, Math.round((acumulado / objetivo) * 100)) : 0;
+
+            $("dash-meta-nombre").textContent = `${m.nombre} — ${pct}% completado`;
+            $("dash-meta-montos-wrap").style.display = "block";
+            $("dash-meta-ahorrado").textContent = formatMoney(acumulado);
+            $("dash-meta-objetivo").textContent = formatMoney(objetivo);
+            $("dash-meta-faltante").textContent = formatMoney(faltante);
+            $("dash-meta-pct").textContent = `${pct}%`;
+            $("dash-meta-ring-wrap").style.background = `conic-gradient(#10b981 0% ${pct}%, var(--line) ${pct}% 100%)`;
+            $("dash-meta-estado").textContent = pct >= 100 ? "¡Meta completada!" : "Estado: en progreso";
+            $("dash-meta-estado").style.color = pct >= 100 ? "#10b981" : "var(--blue)";
+          }
+        } catch (e) {
+          console.error("Error cargando metas en dashboard", e);
         }
       }
 
@@ -4149,13 +6505,34 @@
         });
       });
 
-      // Píldoras de rango rápido en Resumen
+      // Píldoras de período en Resumen con Range Datepicker Interactivo estilo Notion
       document.querySelectorAll(".quick-pill-btn[data-res-range]").forEach(btn => {
         btn.addEventListener("click", () => {
-          document.querySelectorAll(".quick-pill-btn[data-res-range]").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
           const range = btn.dataset.resRange;
           const hoy = new Date();
+
+          if (range === "custom") {
+            // Abrir selector de rango interactivo anclado al botón
+            openCustomRangePicker(btn, (startDate, endDate) => {
+              $("resumen-desde").value = startDate;
+              $("resumen-hasta").value = endDate;
+              document.querySelectorAll(".quick-pill-btn[data-res-range]").forEach(b => b.classList.remove("active"));
+              btn.classList.add("active");
+              
+              const sParts = startDate.split("-").map(Number);
+              const eParts = endDate.split("-").map(Number);
+              const sStr = `${sParts[2]} ${MESES_CORTOS[sParts[1]-1]}`;
+              const eStr = `${eParts[2]} ${MESES_CORTOS[eParts[1]-1]}`;
+              $("btn-res-range-label").textContent = `${sStr} – ${eStr}`;
+              cargarResumen();
+            });
+            return;
+          }
+
+          // Si el usuario elige un preset estándar, restaurar etiqueta y marcar activo
+          document.querySelectorAll(".quick-pill-btn[data-res-range]").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          $("btn-res-range-label").textContent = "Personalizado";
 
           if (range === "este-mes") {
             const y = hoy.getFullYear();
@@ -4349,7 +6726,7 @@
         }
       });
 
-      // RESUMEN SQLITE
+      // RESUMEN SQLITE (ENRIQUECIDO CON MÉTRICAS, CATEGORÍAS Y EQUILIBRIO DE PESOS)
       async function cargarResumen() {
         try {
           const desde = $("resumen-desde").value || null;
@@ -4361,17 +6738,113 @@
 
           const ingresos = Number(r && r.ingresos_centavos) || 0;
           const gastos = Number(r && r.gastos_centavos) || 0;
-          const balance = Number(r && r.diferencia_centavos) || ingresos - gastos;
+          const balance = Number(r && r.diferencia_centavos) || (ingresos - gastos);
           const lista = Array.isArray(historial) ? historial : [];
           const ingresosCount = lista.filter((x) => x.tipo === "ingreso").length;
-          const gastosCount = lista.filter((x) => x.tipo === "gasto").length;
+          const gastosList = lista.filter((x) => x.tipo === "gasto");
+          const gastosCount = gastosList.length;
 
           $("resumen-ingresos").textContent = formatSigned(ingresos);
           $("resumen-gastos").textContent = formatSigned(-gastos);
           $("resumen-balance").textContent = formatSigned(balance);
-          $("resumen-ingresos-foot").textContent = plural(ingresosCount, "registro", "registros");
-          $("resumen-gastos-foot").textContent = plural(gastosCount, "registro", "registros");
+          $("resumen-ingresos-foot").textContent = `${ingresosCount + gastosCount} ops`;
+          $("resumen-gastos-foot").textContent = plural(gastosCount, "gasto registrado", "gastos registrados");
           $("resumen-rango").textContent = rangoTexto(desde, hasta);
+
+          // Cifra en Resultado Final de la tarjeta derecha
+          if ($("resumen-diferencia-final")) {
+            $("resumen-diferencia-final").textContent = formatSigned(balance);
+            $("resumen-diferencia-final").style.color = balance >= 0 ? "var(--income)" : "var(--expense)";
+          }
+
+          // Tasa de ahorro
+          if ($("resumen-tasa-ahorro")) {
+            if (ingresos > 0) {
+              const tasa = Math.max(0, Math.round(((ingresos - gastos) / ingresos) * 100));
+              $("resumen-tasa-ahorro").textContent = `Tasa ahorro: ${tasa}%`;
+            } else {
+              $("resumen-tasa-ahorro").textContent = `Balance directo`;
+            }
+          }
+
+          // Gasto diario promedio
+          if ($("resumen-promedio-diario")) {
+            let diasCalculados = 30;
+            if (desde && hasta) {
+              const d1 = new Date(desde);
+              const d2 = new Date(hasta);
+              const diffMs = Math.abs(d2 - d1);
+              diasCalculados = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24)) + 1);
+            } else {
+              diasCalculados = new Date().getDate();
+            }
+            const diario = gastos > 0 ? Math.round(gastos / diasCalculados) : 0;
+            $("resumen-promedio-diario").textContent = `${formatMoney(diario)} / día`;
+          }
+
+          // Agrupación y render de Categorías
+          const catMap = new Map();
+          gastosList.forEach((g) => {
+            let cat = (g.categoria || "").trim();
+            if (!cat) {
+              const c = (g.concepto || "").toLowerCase();
+              if (c.includes("alim") || c.includes("comida") || c.includes("mercado") || c.includes("cena")) cat = "Alimentación";
+              else if (c.includes("arriendo") || c.includes("alquiler") || c.includes("internet") || c.includes("servicios")) cat = "Vivienda & Servicios";
+              else if (c.includes("transporte") || c.includes("gas") || c.includes("taxi") || c.includes("uber")) cat = "Transporte";
+              else if (c.includes("netflix") || c.includes("ocio") || c.includes("cine") || c.includes("café")) cat = "Ocio & Suscripciones";
+              else cat = "Otros Gastos";
+            }
+            catMap.set(cat, (catMap.get(cat) || 0) + Number(g.monto_centavos || 0));
+          });
+
+          // Mayor categoría
+          if ($("resumen-top-categoria")) {
+            if (catMap.size > 0) {
+              let topCat = "";
+              let maxMonto = 0;
+              for (const [cName, cMonto] of catMap.entries()) {
+                if (cMonto > maxMonto) {
+                  maxMonto = cMonto;
+                  topCat = cName;
+                }
+              }
+              const pct = gastos > 0 ? Math.round((maxMonto / gastos) * 100) : 0;
+              $("resumen-top-categoria").textContent = `${topCat} (${pct}%)`;
+            } else {
+              $("resumen-top-categoria").textContent = "Sin gastos";
+            }
+          }
+
+          // Render del grid de categorías
+          if ($("resumen-categorias-grid")) {
+            if (catMap.size === 0) {
+              $("resumen-categorias-grid").innerHTML = `
+                <div style="grid-column: 1 / -1; padding: 18px 0; color: var(--ink-3); text-align: center; font-size: 0.9rem;">
+                  No hay gastos registrados en este período para desglosar por categoría.
+                </div>
+              `;
+            } else {
+              const sorted = Array.from(catMap.entries()).sort((a, b) => b[1] - a[1]);
+              $("resumen-categorias-grid").innerHTML = sorted.map(([nombre, monto]) => {
+                const pct = gastos > 0 ? Math.round((monto / gastos) * 100) : 0;
+                return `
+                  <div style="background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                      <span style="font-weight: 700; font-size: 0.88rem; color: var(--ink);">${escapeHtml(nombre)}</span>
+                      <span class="num" style="font-size: 0.8rem; font-weight: 700; color: var(--ink-2);">${pct}%</span>
+                    </div>
+                    <div style="font-size: 1.15rem; font-weight: 800; color: var(--ink);" class="num">
+                      ${formatMoney(monto)}
+                    </div>
+                    <div style="height: 5px; background: var(--line); border-radius: 999px; overflow: hidden; margin-top: 10px;">
+                      <div style="height: 100%; width: ${pct}%; background: var(--ink); border-radius: 999px;"></div>
+                    </div>
+                  </div>
+                `;
+              }).join("");
+            }
+          }
+
         } catch (e) {
           console.error("No se pudo cargar el resumen", e);
         }
@@ -4520,6 +6993,19 @@
         badge.textContent = pendientes;
         badge.style.display = pendientes > 0 ? "inline-block" : "none";
 
+        // Badges y estado en la tarjeta superior derecha
+        if ($("comp-kpi-alertas")) {
+          $("comp-kpi-alertas").textContent = pendientes;
+        }
+        if ($("comp-badge-urgente")) {
+          $("comp-badge-urgente").textContent = `${pendientes} urgente${pendientes === 1 ? "" : "s"}`;
+          $("comp-badge-urgente").style.display = pendientes > 0 ? "inline-block" : "none";
+        }
+        const totalVenc = (v.atrasados?.length || 0) + (v.hoy?.length || 0) + (v.proximos?.length || 0);
+        if ($("comp-venc-al-dia")) {
+          $("comp-venc-al-dia").style.display = totalVenc === 0 ? "flex" : "none";
+        }
+
         renderGrupoVencimientos("comp-venc-hoy", "Vencen hoy", v.hoy || [], "hoy");
         renderGrupoVencimientos("comp-venc-atrasados", "Atrasados", v.atrasados || [], "atrasado");
         renderGrupoVencimientos("comp-venc-proximos", "Próximos (7 días)", v.proximos || [], "proximo");
@@ -4565,39 +7051,54 @@
           return;
         }
         const lista = $("comp-lista");
+        
+        // Calcular estadísticas para la tarjeta de resumen (KPIs)
+        const listaArray = Array.isArray(items) ? items : [];
+        const activos = listaArray.filter(i => i.compromiso.estado !== "pausado");
+        const pausados = listaArray.filter(i => i.compromiso.estado === "pausado");
+        const totalMontoCentavos = activos.reduce((acc, curr) => acc + (curr.compromiso.monto_centavos || 0), 0);
+
+        if ($("comp-kpi-total-monto")) $("comp-kpi-total-monto").textContent = formatMoney(totalMontoCentavos);
+        if ($("comp-kpi-activos")) $("comp-kpi-activos").textContent = activos.length;
+        if ($("comp-kpi-pausados")) $("comp-kpi-pausados").textContent = pausados.length;
+
         if (!items.length) {
           lista.innerHTML = `
-            <div class="comp-group-title">Mis compromisos</div>
-            <p style="color:var(--ink-2);padding:12px 0;">
-              No tenés compromisos aún. Creá uno con «+ Nuevo compromiso» para recibir recordatorios de pago.
-            </p>`;
+            <div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--ink-2); background: var(--surface-2); border-radius: 16px;">
+              <p style="font-size: 1rem; font-weight: 600; margin-bottom: 6px;">No tenés compromisos registrados aún</p>
+              <p style="font-size: 0.85rem; color: var(--ink-3);">Creá tu primer pago fijo (alquiler, servicios, suscripciones) con «+ Nuevo compromiso» para recibir alertas automáticas.</p>
+            </div>`;
           return;
         }
+
         const tarjetas = items.map(item => {
           const c = item.compromiso;
           const pausado = c.estado === "pausado";
           const prox = item.proximo
-            ? `Próximo: ${fmtFechaCorta(item.proximo.fecha)}`
-            : (pausado ? "Pausado" : "Sin vencimientos pendientes");
+            ? `Próximo vencimiento: ${fmtFechaCorta(item.proximo.fecha)}`
+            : (pausado ? "Estado: En pausa" : "Sin vencimientos pendientes");
           return `
-            <div class="comp-card ${pausado ? "pausado" : ""}">
-              <div class="comp-card-info">
-                <div class="comp-card-title">${escapeHtml(c.concepto)}</div>
-                <div class="comp-card-meta">
-                  ${formatMoney(c.monto_centavos)} · ${etiquetaFrecuencia(c)} · ${etiquetaDuracion(c)}<br>
-                  ${prox}
+            <div class="comp-card-v2 ${pausado ? "pausado" : ""}">
+              <div class="comp-card-v2-top">
+                <div>
+                  <div class="comp-card-v2-title">${escapeHtml(c.concepto)}</div>
+                  <div class="comp-card-v2-meta">
+                    <span>${etiquetaFrecuencia(c)} · ${etiquetaDuracion(c)}</span>
+                    <span style="font-weight: 600; color: ${pausado ? 'var(--ink-3)' : 'var(--blue)'};">${prox}</span>
+                  </div>
                 </div>
+                <div class="comp-card-v2-amount">${formatMoney(c.monto_centavos)}</div>
               </div>
-              <div class="comp-card-actions">
-                <button class="btn-secondary" type="button" onclick="togglePausaCompromiso('${c.id}', ${pausado ? "false" : "true"})">
+              <div class="comp-card-v2-actions">
+                <button class="btn-sm-action" type="button" onclick="togglePausaCompromiso('${c.id}', ${pausado ? "false" : "true"})">
                   ${pausado ? "Reactivar" : "Pausar"}
                 </button>
-                <button class="btn-secondary" type="button" onclick="abrirEditarCompromiso('${c.id}')">Editar</button>
-                <button class="btn-danger" type="button" onclick="eliminarCompromiso('${c.id}')">Eliminar</button>
+                <button class="btn-sm-action" type="button" onclick="abrirEditarCompromiso('${c.id}')">Editar</button>
+                <button class="btn-sm-action danger" type="button" onclick="eliminarCompromiso('${c.id}')">Eliminar</button>
               </div>
             </div>`;
         }).join("");
-        lista.innerHTML = `<div class="comp-group-title">Mis compromisos</div>${tarjetas}`;
+        lista.innerHTML = tarjetas;
       }
 
       function actualizarVisibilidadFrecuencia() {
@@ -4823,8 +7324,12 @@
         $("plan-rango").textContent = `${fmtFechaCorta(plan.rango.desde)} — ${fmtFechaCorta(plan.rango.hasta)}`;
         tweenFigure($("plan-libre-quincena"), Number(plan.libre_quincena_centavos) || 0, formatSigned);
         tweenFigure($("plan-libre-real"), Number(plan.libre_real_centavos) || 0, formatSigned);
-        $("plan-ingresos").textContent = formatSigned(Number(plan.ingresos_centavos) || 0);
-        $("plan-gastos").textContent = formatSigned(-(Number(plan.gastos_centavos) || 0));
+        const valIngresos = formatSigned(Number(plan.ingresos_centavos) || 0);
+        const valGastos = formatSigned(-(Number(plan.gastos_centavos) || 0));
+        $("plan-ingresos").textContent = valIngresos;
+        $("plan-gastos").textContent = valGastos;
+        if ($("plan-desglose-ingresos-mirror")) $("plan-desglose-ingresos-mirror").textContent = valIngresos;
+        if ($("plan-desglose-gastos-mirror")) $("plan-desglose-gastos-mirror").textContent = valGastos;
         $("plan-apartados").textContent = formatSigned(-(Number(plan.apartados_periodo_centavos) || 0));
         $("plan-pendientes").innerHTML = listaPlanCompromisos(
           "Compromisos del período (sin pagar)", plan.pendientes_periodo || [], "");
@@ -5329,6 +7834,458 @@
           renderDashboard();
         } catch (err) {
           toast(typeof err === "string" ? err : "No se pudo guardar el apartado");
+        }
+      });
+
+      
+      // =======================================================================
+      // LOGICA DEL CUSTOM SELECT & CUSTOM DATEPICKER
+      // =======================================================================
+      const customCatWrap = $("custom-cat-wrap");
+      const customCatTrigger = $("custom-cat-trigger");
+      const customCatMenu = $("custom-cat-menu");
+      const customCatLabel = $("custom-cat-label");
+      const realSelect = $("modal-reg-categoria");
+
+      if (customCatTrigger) {
+        customCatTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          customCatWrap.classList.toggle("open");
+        });
+
+        document.querySelectorAll("#custom-cat-menu .custom-select-option").forEach((opt) => {
+          opt.addEventListener("click", () => {
+            const val = opt.dataset.value;
+            realSelect.value = val;
+            customCatLabel.textContent = opt.textContent;
+            document.querySelectorAll("#custom-cat-menu .custom-select-option").forEach(o => o.classList.remove("selected"));
+            opt.classList.add("selected");
+            customCatWrap.classList.remove("open");
+          });
+        });
+      }
+
+      // Custom Calendar Logic
+      const dpWrap = $("custom-dp-wrap");
+      const dpTrigger = $("custom-dp-trigger");
+      const dpDisplay = $("custom-dp-display");
+      const realDate = $("modal-reg-fecha");
+      let calCurrentDate = new Date();
+
+      if (dpTrigger) {
+        dpTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dpWrap.classList.toggle("open");
+          renderCustomCalendar();
+        });
+
+        $("cal-prev").addEventListener("click", (e) => {
+          e.stopPropagation();
+          calCurrentDate.setMonth(calCurrentDate.getMonth() - 1);
+          renderCustomCalendar();
+        });
+
+        $("cal-next").addEventListener("click", (e) => {
+          e.stopPropagation();
+          calCurrentDate.setMonth(calCurrentDate.getMonth() + 1);
+          renderCustomCalendar();
+        });
+      }
+
+      function renderCustomCalendar() {
+        const y = calCurrentDate.getFullYear();
+        const m = calCurrentDate.getMonth();
+        $("cal-title").textContent = `${MESES[m]} ${y}`;
+
+        const firstDay = new Date(y, m, 1).getDay();
+        const daysInMonth = new Date(y, m + 1, 0).getDate();
+        const selectedStr = realDate.value || todayStr();
+
+        let cellsHtml = "";
+        for (let i = 0; i < firstDay; i++) {
+          cellsHtml += `<div class="cal-cell empty"></div>`;
+        }
+
+        const hoy = new Date();
+        const hoyIso = todayStr();
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dateIso = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          const isToday = dateIso === hoyIso;
+          const isSelected = dateIso === selectedStr;
+
+          cellsHtml += `
+            <button class="cal-cell ${isToday ? "today" : ""} ${isSelected ? "selected" : ""}" type="button" data-date="${dateIso}">
+              ${d}
+            </button>
+          `;
+        }
+
+        $("cal-grid-cells").innerHTML = cellsHtml;
+
+        document.querySelectorAll("#cal-grid-cells .cal-cell:not(.empty)").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const picked = btn.dataset.date;
+            realDate.value = picked;
+            const parts = picked.split("-");
+            dpDisplay.textContent = `${parts[2]} ${MESES_CORTOS[Number(parts[1]) - 1]} ${parts[0]}`;
+            dpWrap.classList.remove("open");
+            $("chip-date-today").classList.toggle("active", picked === hoyIso);
+            $("chip-date-yesterday").classList.remove("active");
+          });
+        });
+      }
+
+      // Sincronizar botones Hoy / Ayer con el custom display
+      $("chip-date-today").addEventListener("click", () => {
+        const iso = todayStr();
+        const parts = iso.split("-");
+        dpDisplay.textContent = `${parts[2]} ${MESES_CORTOS[Number(parts[1]) - 1]} ${parts[0]}`;
+      });
+
+      $("chip-date-yesterday").addEventListener("click", () => {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        const parts = iso.split("-");
+        dpDisplay.textContent = `${parts[2]} ${MESES_CORTOS[Number(parts[1]) - 1]} ${parts[0]}`;
+      });
+
+      // Cerrar popups al hacer click afuera
+      document.addEventListener("click", (e) => {
+        if (customCatWrap && !customCatWrap.contains(e.target)) {
+          customCatWrap.classList.remove("open");
+        }
+        if (dpWrap && !dpWrap.contains(e.target)) {
+          dpWrap.classList.remove("open");
+        }
+      });
+
+      
+      // =======================================================================
+      // INTERCEPTOR UNIVERSAL DE DATEPICKER (MODO FECHA ÚNICA + RANGO NOTION)
+      // =======================================================================
+      let activeDateInput = null;
+      let kCalDate = new Date();
+      let kCalMode = "single"; // "single" | "range"
+      let rangeStartDate = null;
+      let rangeEndDate = null;
+      let rangeHoverDate = null;
+      let rangeCallback = null;
+
+      function openCustomDatePicker(inputEl) {
+        kCalMode = "single";
+        activeDateInput = inputEl;
+        $("k-cal-range-hint-el").style.display = "none";
+        $("k-cal-foot").style.display = "flex";
+
+        const currentVal = inputEl.value;
+        if (currentVal && /^\d{4}-\d{2}-\d{2}$/.test(currentVal)) {
+          const parts = currentVal.split("-");
+          kCalDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        } else {
+          kCalDate = new Date();
+        }
+
+        renderKCalGrid();
+
+        const overlay = $("kite-datepicker-overlay");
+        overlay.style.display = "block";
+        positionFloatingOverlay(overlay, inputEl, 295, 330);
+      }
+
+      function openCustomRangePicker(anchorEl, onSelectRange) {
+        kCalMode = "range";
+        activeDateInput = null;
+        rangeStartDate = null;
+        rangeEndDate = null;
+        rangeHoverDate = null;
+        rangeCallback = onSelectRange;
+
+        const hintEl = $("k-cal-range-hint-el");
+        hintEl.style.display = "block";
+        hintEl.textContent = "1. Haz clic en la fecha de inicio";
+        $("k-cal-foot").style.display = "none";
+
+        kCalDate = new Date();
+        renderKCalGrid();
+
+        const overlay = $("kite-datepicker-overlay");
+        overlay.style.display = "block";
+        positionFloatingOverlay(overlay, anchorEl, 295, 360);
+      }
+
+      function closeCustomDatePicker() {
+        $("kite-datepicker-overlay").style.display = "none";
+        activeDateInput = null;
+        rangeStartDate = null;
+        rangeEndDate = null;
+        rangeHoverDate = null;
+        rangeCallback = null;
+      }
+
+      function updateCalendarRangeStyles() {
+        if (kCalMode !== "range") return;
+
+        const effectiveEnd = rangeEndDate || (rangeStartDate ? rangeHoverDate : null);
+
+        document.querySelectorAll("#k-cal-cells .k-cal-cell:not(.empty)").forEach((btn) => {
+          const iso = btn.dataset.date;
+          btn.classList.remove("range-start", "range-end", "range-between");
+
+          const isStart = rangeStartDate && iso === rangeStartDate;
+          const isEnd = effectiveEnd && iso === effectiveEnd;
+          let isBetween = false;
+
+          if (rangeStartDate && effectiveEnd) {
+            const start = rangeStartDate < effectiveEnd ? rangeStartDate : effectiveEnd;
+            const end = rangeStartDate < effectiveEnd ? effectiveEnd : rangeStartDate;
+            if (iso > start && iso < end) {
+              isBetween = true;
+            }
+          }
+
+          if (isStart) btn.classList.add("range-start");
+          if (isEnd) btn.classList.add("range-end");
+          if (isBetween) btn.classList.add("range-between");
+        });
+      }
+
+      function renderKCalGrid() {
+        const y = kCalDate.getFullYear();
+        const m = kCalDate.getMonth();
+        $("k-cal-title").textContent = `${MESES[m]} ${y}`;
+
+        const firstDay = new Date(y, m, 1).getDay();
+        const daysInMonth = new Date(y, m + 1, 0).getDate();
+        const hoyIso = todayStr();
+
+        let cellsHtml = "";
+        for (let i = 0; i < firstDay; i++) {
+          cellsHtml += `<div class="k-cal-cell empty"></div>`;
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const iso = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          const isToday = iso === hoyIso;
+          let extraClass = "";
+
+          if (kCalMode === "single") {
+            const selectedVal = activeDateInput ? activeDateInput.value : "";
+            if (iso === selectedVal) extraClass = "selected";
+          } else {
+            const effectiveEnd = rangeEndDate || (rangeStartDate ? rangeHoverDate : null);
+            const isStart = rangeStartDate && iso === rangeStartDate;
+            const isEnd = effectiveEnd && iso === effectiveEnd;
+            let isBetween = false;
+
+            if (rangeStartDate && effectiveEnd) {
+              const start = rangeStartDate < effectiveEnd ? rangeStartDate : effectiveEnd;
+              const end = rangeStartDate < effectiveEnd ? effectiveEnd : rangeStartDate;
+              if (iso > start && iso < end) {
+                isBetween = true;
+              }
+            }
+
+            if (isStart) extraClass += " range-start";
+            if (isEnd) extraClass += " range-end";
+            if (isBetween) extraClass += " range-between";
+          }
+
+          cellsHtml += `
+            <button class="k-cal-cell ${isToday ? "today" : ""} ${extraClass}" type="button" data-date="${iso}">
+              ${d}
+            </button>
+          `;
+        }
+
+        $("k-cal-cells").innerHTML = cellsHtml;
+
+        // Listeners interactivos estables
+        document.querySelectorAll("#k-cal-cells .k-cal-cell:not(.empty)").forEach((btn) => {
+          const date = btn.dataset.date;
+
+          btn.addEventListener("mouseenter", () => {
+            if (kCalMode === "range" && rangeStartDate && !rangeEndDate) {
+              rangeHoverDate = date;
+              updateCalendarRangeStyles();
+            }
+          });
+
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (kCalMode === "single") {
+              if (activeDateInput) {
+                activeDateInput.value = date;
+                activeDateInput.dispatchEvent(new Event("change", { bubbles: true }));
+                activeDateInput.dispatchEvent(new Event("input", { bubbles: true }));
+              }
+              closeCustomDatePicker();
+              return;
+            }
+
+            // MODO RANGO NOTION: Clic 1 = Inicio, Clic 2 = Fin
+            if (!rangeStartDate || (rangeStartDate && rangeEndDate)) {
+              // Primer clic: fijar inicio
+              rangeStartDate = date;
+              rangeEndDate = null;
+              rangeHoverDate = date;
+              const hintEl = $("k-cal-range-hint-el");
+              if (hintEl) hintEl.textContent = `Inicio: ${date} → Elige fecha de fin`;
+              updateCalendarRangeStyles();
+            } else {
+              // Segundo clic: fijar fin y cerrar
+              let start = rangeStartDate;
+              let end = date;
+              if (start > end) {
+                const tmp = start;
+                start = end;
+                end = tmp;
+              }
+              rangeEndDate = end;
+              const cb = rangeCallback;
+              closeCustomDatePicker();
+              if (cb) {
+                cb(start, end);
+              }
+            }
+          });
+        });
+      }
+
+      $("k-cal-prev").addEventListener("click", (e) => {
+        e.stopPropagation();
+        kCalDate.setMonth(kCalDate.getMonth() - 1);
+        renderKCalGrid();
+      });
+
+      $("k-cal-next").addEventListener("click", (e) => {
+        e.stopPropagation();
+        kCalDate.setMonth(kCalDate.getMonth() + 1);
+        renderKCalGrid();
+      });
+
+      $("k-cal-today").addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (activeDateInput) {
+          activeDateInput.value = todayStr();
+          activeDateInput.dispatchEvent(new Event("change", { bubbles: true }));
+          activeDateInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        closeCustomDatePicker();
+      });
+
+      $("k-cal-clear").addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (activeDateInput) {
+          activeDateInput.value = "";
+          activeDateInput.dispatchEvent(new Event("change", { bubbles: true }));
+          activeDateInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        closeCustomDatePicker();
+      });
+
+      // Interceptar clic en cualquier input de fecha para abrir el modal flotante
+      document.addEventListener("click", (e) => {
+        const input = e.target.closest("input[type='date']");
+        if (input) {
+          e.preventDefault();
+          e.stopPropagation();
+          openCustomDatePicker(input);
+          return;
+        }
+
+        const overlay = $("kite-datepicker-overlay");
+        if (overlay && !overlay.contains(e.target) && !e.target.closest("#btn-res-range-custom")) {
+          closeCustomDatePicker();
+        }
+      });
+
+      
+      // =======================================================================
+      // MOTOR UNIVERSAL DE SELECTS Y CALENDARIOS FLOTANTES (CERO DESFASES)
+      // =======================================================================
+      
+      // 1. CALENDARIO FLOTANTE INTELIGENTE (Posicionamiento arriba/abajo sin desborde)
+      function positionFloatingOverlay(overlayEl, anchorEl, width = 295, height = 330) {
+        const rect = anchorEl.getBoundingClientRect();
+        const viewportW = window.innerWidth;
+        const viewportH = window.innerHeight;
+
+        // Decidir si abrir arriba o abajo según espacio disponible
+        const spaceBelow = viewportH - rect.bottom;
+        const openAbove = spaceBelow < height && rect.top > height;
+
+        let top = openAbove ? (rect.top - height - 6) : (rect.bottom + 6);
+        let left = rect.left;
+
+        // Asegurar que no se desborde por la derecha
+        if (left + width > viewportW - 16) {
+          left = viewportW - width - 16;
+        }
+        if (left < 16) left = 16;
+
+        overlayEl.style.top = `${Math.max(10, Math.round(top))}px`;
+        overlayEl.style.left = `${Math.round(left)}px`;
+        overlayEl.style.width = `${width}px`;
+      }
+
+      // 2. INTERCEPTOR UNIVERSAL DE SELECTS (Aplica a TODOS los selects de la app)
+      let activeSelectEl = null;
+
+      function openCustomSelectMenu(selectEl) {
+        activeSelectEl = selectEl;
+        const overlay = $("kite-select-overlay");
+        const options = Array.from(selectEl.options);
+
+        overlay.innerHTML = options.map((opt) => {
+          const isSelected = opt.value === selectEl.value;
+          return `
+            <div class="k-select-opt ${isSelected ? "selected" : ""}" data-val="${opt.value}">
+              ${opt.textContent}
+            </div>
+          `;
+        }).join("");
+
+        overlay.style.display = "block";
+        const w = Math.max(220, Math.round(selectEl.getBoundingClientRect().width));
+        positionFloatingOverlay(overlay, selectEl, w, Math.min(250, options.length * 42 + 20));
+
+        overlay.querySelectorAll(".k-select-opt").forEach((item) => {
+          item.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (activeSelectEl) {
+              activeSelectEl.value = item.dataset.val;
+              activeSelectEl.dispatchEvent(new Event("change", { bubbles: true }));
+              activeSelectEl.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+            closeCustomSelectMenu();
+          });
+        });
+      }
+
+      function closeCustomSelectMenu() {
+        const overlay = $("kite-select-overlay");
+        if (overlay) overlay.style.display = "none";
+        activeSelectEl = null;
+      }
+
+      // Event listener global para todos los selects
+      document.addEventListener("mousedown", (e) => {
+        const sel = e.target.closest("select");
+        if (sel) {
+          e.preventDefault();
+          e.stopPropagation();
+          openCustomSelectMenu(sel);
+          return;
+        }
+
+        const selOverlay = $("kite-select-overlay");
+        if (selOverlay && !selOverlay.contains(e.target)) {
+          closeCustomSelectMenu();
         }
       });
 
