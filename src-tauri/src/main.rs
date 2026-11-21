@@ -91,6 +91,7 @@ fn main() {
             kite::app::get_planificacion,
             kite::app::set_dia_corte,
             kite::app::get_dia_corte,
+            kite::app::simular_impacto_deuda,
             kite::app::list_metas,
             kite::app::add_meta,
             kite::app::update_meta,

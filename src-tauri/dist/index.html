@@ -2810,6 +2810,12 @@
               </div>
               <p class="plan-empty-line">Primera quincena: del 1 al corte. Segunda: del corte+1 al fin de mes.</p>
             </div>
+
+            <div class="comp-group">
+              <div class="comp-group-title">Simulador de impacto (escenario, no se guarda)</div>
+              <p class="plan-empty-line">Evaluá cómo afectaría una nueva deuda a tu dinero libre, compromisos y metas sin registrar nada.</p>
+              <button class="btn-submit" id="btn-abrir-simulador-deuda" type="button" style="margin-top:8px;">Simular nueva deuda</button>
+            </div>
           </div>
         </section>
 
@@ -3189,6 +3195,87 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- MODAL: SIMULADOR DE IMPACTO DE NUEVAS DEUDAS (feature 006) -->
+    <div class="modal-overlay" id="modal-simulador-deuda" aria-hidden="true">
+      <div class="modal-card" style="width: min(760px, 96vw);" role="dialog" aria-modal="true" aria-labelledby="simulador-title">
+        <div class="modal-head">
+          <div>
+            <h3 class="modal-title" id="simulador-title">Simular impacto de nueva deuda</h3>
+            <span class="panel-note">Escenario simulado — no se guarda ni modifica tus datos</span>
+          </div>
+          <button class="modal-close" id="btn-cerrar-simulador" type="button">✕</button>
+        </div>
+        <div class="modal-body" style="max-height: 75vh; overflow: auto;">
+          <form id="form-simulador-deuda">
+            <div class="form-row">
+              <label for="sim-concepto">Concepto (opcional)</label>
+              <input type="text" id="sim-concepto" maxlength="200" placeholder="Ej. Préstamo personal" />
+            </div>
+            <div class="form-row">
+              <label for="sim-monto">Monto por cuota (COP)</label>
+              <input type="number" id="sim-monto" min="1" step="1" required />
+            </div>
+            <div class="form-row">
+              <label for="sim-frecuencia">Frecuencia</label>
+              <select id="sim-frecuencia" required>
+                <option value="mensual">Mensual</option>
+                <option value="quincenal">Quincenal</option>
+              </select>
+            </div>
+            <div class="form-row" id="sim-row-dia-mes">
+              <label for="sim-dia-mes">Día del mes (mensual, 1 a 31)</label>
+              <input type="number" id="sim-dia-mes" min="1" max="31" step="1" value="10" />
+            </div>
+            <div class="form-row" id="sim-row-quincena" style="display:none;">
+              <label for="sim-quincena">Quincena</label>
+              <select id="sim-quincena">
+                <option value="primera">Primera (día 15)</option>
+                <option value="segunda">Segunda (fin de mes)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="sim-primer-vencimiento">Fecha del primer vencimiento</label>
+              <input type="date" id="sim-primer-vencimiento" required />
+              <p class="plan-empty-line" id="sim-ayuda-primer-vencimiento">Debe coincidir con la frecuencia elegida.</p>
+            </div>
+            <div class="form-row">
+              <label for="sim-duracion">Duración</label>
+              <select id="sim-duracion" required>
+                <option value="cuotas">Cuotas (N)</option>
+                <option value="fecha_fin">Fecha fin</option>
+                <option value="indefinida">Indefinida</option>
+              </select>
+            </div>
+            <div class="form-row" id="sim-row-cuotas">
+              <label for="sim-cuotas">Cantidad de cuotas</label>
+              <input type="number" id="sim-cuotas" min="1" step="1" value="12" />
+            </div>
+            <div class="form-row" id="sim-row-fecha-fin" style="display:none;">
+              <label for="sim-fecha-fin">Fecha fin</label>
+              <input type="date" id="sim-fecha-fin" />
+            </div>
+            <div class="form-row" id="sim-row-horizonte" style="display:none;">
+              <label for="sim-quincenas-proyeccion">Quincenas a proyectar (indefinida)</label>
+              <input type="number" id="sim-quincenas-proyeccion" min="1" max="120" step="1" value="12" />
+              <p class="plan-empty-line">Máximo 120 quincenas.</p>
+            </div>
+            <p class="plan-empty-line">Si el primer vencimiento está en el pasado, el escenario se proyecta desde la quincena actual (se omiten vencimientos pasados y se indica el supuesto).</p>
+            <div class="modal-actions" style="margin-top: 12px;">
+              <button type="button" class="btn-cancel" id="btn-limpiar-simulador">Limpiar</button>
+              <button type="submit" class="btn-submit">Simular</button>
+            </div>
+          </form>
+
+          <div id="simulador-resultado" style="display:none; margin-top: 18px;">
+            <div class="comp-group-title">Resultado del escenario simulado</div>
+            <p class="plan-empty-line" id="simulador-resumen"></p>
+            <div id="simulador-quincenas"></div>
+            <div id="simulador-metas" style="margin-top: 12px;"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -4809,6 +4896,194 @@
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           switchTab("planificacion");
+        }
+      });
+
+      // =======================================================================
+      // SIMULADOR DE IMPACTO DE NUEVAS DEUDAS (feature 006)
+      // =======================================================================
+      function simUltimoDiaMes(y, mIndex) {
+        return new Date(y, mIndex + 1, 0).getDate();
+      }
+
+      function simSyncCamposDeuda() {
+        const frec = $("sim-frecuencia").value;
+        $("sim-row-dia-mes").style.display = frec === "mensual" ? "" : "none";
+        $("sim-row-quincena").style.display = frec === "quincenal" ? "" : "none";
+        const dur = $("sim-duracion").value;
+        $("sim-row-cuotas").style.display = dur === "cuotas" ? "" : "none";
+        $("sim-row-fecha-fin").style.display = dur === "fecha_fin" ? "" : "none";
+        $("sim-row-horizonte").style.display = dur === "indefinida" ? "" : "none";
+        simAjustarPrimerVencimiento();
+      }
+
+      function simAjustarPrimerVencimiento() {
+        const pv = $("sim-primer-vencimiento").value;
+        if (!pv) return;
+        const [y, m, _d] = pv.split("-").map(Number);
+        const mIndex = m - 1;
+        const frec = $("sim-frecuencia").value;
+        let dia;
+        if (frec === "mensual") {
+          const regla = Math.max(1, Math.min(31, parseInt($("sim-dia-mes").value || "1", 10)));
+          dia = Math.min(regla, simUltimoDiaMes(y, mIndex));
+        } else {
+          const q = $("sim-quincena").value;
+          dia = q === "primera" ? 15 : simUltimoDiaMes(y, mIndex);
+        }
+        $("sim-primer-vencimiento").value = fechaISO(y, mIndex, dia);
+        const ayuda = $("sim-ayuda-primer-vencimiento");
+        if (frec === "mensual") {
+          ayuda.textContent = "Se ajusta al día indicado (o al último día del mes si no existe).";
+        } else {
+          ayuda.textContent = "Primera quincena: día 15. Segunda: último día del mes.";
+        }
+      }
+
+      function abrirSimuladorDeuda() {
+        $("form-simulador-deuda").reset();
+        $("sim-primer-vencimiento").value = todayStr();
+        $("sim-frecuencia").value = "mensual";
+        $("sim-dia-mes").value = "10";
+        $("sim-quincena").value = "primera";
+        $("sim-duracion").value = "cuotas";
+        $("sim-cuotas").value = "12";
+        $("sim-quincenas-proyeccion").value = "12";
+        $("simulador-resultado").style.display = "none";
+        $("simulador-quincenas").innerHTML = "";
+        $("simulador-metas").innerHTML = "";
+        $("simulador-resumen").textContent = "";
+        simSyncCamposDeuda();
+        $("modal-simulador-deuda").classList.add("open");
+        $("modal-simulador-deuda").setAttribute("aria-hidden", "false");
+      }
+
+      function cerrarSimuladorDeuda() {
+        $("modal-simulador-deuda").classList.remove("open");
+        $("modal-simulador-deuda").setAttribute("aria-hidden", "true");
+      }
+
+      function limpiarSimuladorDeuda() {
+        abrirSimuladorDeuda();
+      }
+
+      function renderResultadoSimulacion(res) {
+        const cont = $("simulador-resultado");
+        const resumen = $("simulador-resumen");
+        const quincenasEl = $("simulador-quincenas");
+        const metasEl = $("simulador-metas");
+
+        const cal = res.calendario || { vencimientos: [], inicio_ajustado_a_quincena_actual: false, quincenas_horizonte: 0 };
+        const qs = res.quincenas || [];
+        const metas = res.metas || [];
+
+        const partes = [];
+        partes.push(`Escenario simulado (no se guarda). Cuotas simuladas: ${cal.vencimientos.length}. Quincenas en horizonte: ${cal.quincenas_horizonte || qs.length || 0}.`);
+        if (cal.inicio_ajustado_a_quincena_actual) {
+          partes.push("Supuesto aplicado: el primer vencimiento era anterior a la quincena actual, por lo que la proyección comienza desde la quincena actual (vencimientos pasados omitidos).");
+        }
+        if (qs.length === 0) {
+          partes.push("No hay vencimientos simulados dentro del horizonte analizado.");
+        }
+        resumen.textContent = partes.join(" ");
+
+        if (qs.length === 0) {
+          quincenasEl.innerHTML = "";
+        } else {
+          quincenasEl.innerHTML = qs.map(q => {
+            const r = q.rango;
+            const base = q.base;
+            const simQ = Number(q.libre_quincena_simulado_centavos) || 0;
+            const simR = Number(q.libre_real_simulado_centavos) || 0;
+            const deltaQ = simQ - (Number(base.libre_quincena_centavos) || 0);
+            const deltaR = simR - (Number(base.libre_real_centavos) || 0);
+            const riesgo = simQ < 0 || simR < 0 || q.conflicto_compromisos;
+            const vencsSim = (q.vencimientos_simulados || []).map(v =>
+              `<div class="plan-empty-line">Cuota simulada ${v.numero_cuota}: ${fmtFechaCorta(v.fecha)} · ${formatMoney(v.monto_centavos)}</div>`
+            ).join("");
+            const pend = (base.pendientes_periodo || []).map(p =>
+              `<div class="plan-empty-line">Compromiso: ${escapeHtml(p.concepto)} (${fmtFechaCorta(p.fecha)}) · ${formatMoney(p.monto_centavos)}</div>`
+            ).join("");
+            const alerta = q.conflicto_compromisos
+              ? `<div class="plan-empty-line" style="color:#b91c1c;font-weight:600;">Conflicto/alerta: la cuota simulada compite con compromisos del período o el libre simulado no alcanza para cubrirlos.</div>`
+              : "";
+            const riesgoTxt = (simQ < 0 || simR < 0)
+              ? `<div class="plan-empty-line" style="color:#b91c1c;font-weight:600;">Período en riesgo: el libre simulado queda en negativo.</div>`
+              : "";
+            return `
+              <div class="comp-group" style="margin-top:10px;${riesgo ? "border-left:3px solid #dc2626;padding-left:10px;" : ""}">
+                <div class="comp-group-title">Quincena ${fmtFechaCorta(r.desde)} — ${fmtFechaCorta(r.hasta)} (escenario simulado)</div>
+                <div class="comp-item"><div class="comp-item-main"><div class="comp-item-concepto">Libre quincena (base real)</div></div><div class="comp-item-monto">${formatSigned(Number(base.libre_quincena_centavos)||0)}</div></div>
+                <div class="comp-item"><div class="comp-item-main"><div class="comp-item-concepto">Libre quincena (simulado)</div></div><div class="comp-item-monto">${formatSigned(simQ)} <span class="plan-empty-line">(Δ ${formatSigned(deltaQ)})</span></div></div>
+                <div class="comp-item"><div class="comp-item-main"><div class="comp-item-concepto">Libre real (base)</div></div><div class="comp-item-monto">${formatSigned(Number(base.libre_real_centavos)||0)}</div></div>
+                <div class="comp-item"><div class="comp-item-main"><div class="comp-item-concepto">Libre real (simulado)</div></div><div class="comp-item-monto">${formatSigned(simR)} <span class="plan-empty-line">(Δ ${formatSigned(deltaR)})</span></div></div>
+                <div class="comp-item"><div class="comp-item-main"><div class="comp-item-concepto">Total deuda simulada del período</div></div><div class="comp-item-monto">− ${formatMoney(Number(q.total_simulado_centavos)||0)}</div></div>
+                ${vencsSim}
+                ${pend}
+                ${alerta}
+                ${riesgoTxt}
+              </div>`;
+          }).join("");
+        }
+
+        if (metas.length === 0) {
+          metasEl.innerHTML = `<div class="comp-group" style="margin-top:10px;"><div class="comp-group-title">Impacto en metas (escenario simulado)</div><p class="plan-empty-line">No hay metas activas.</p></div>`;
+        } else {
+          const filas = metas.map(m => {
+            const falta = formatMoney(Number(m.faltante_centavos) || 0);
+            const refLibre = m.libre_simulado_referencia_centavos == null ? "—" : formatSigned(Number(m.libre_simulado_referencia_centavos));
+            let ritmo = "Sin indicador de ritmo (sin fecha objetivo o sin ritmo calculable).";
+            if (m.ritmo_afectado === true) ritmo = "Ritmo afectado/en riesgo en el escenario simulado.";
+            else if (m.ritmo_afectado === false) ritmo = "El ritmo podría sostenerse según el libre simulado analizado.";
+            const fechaObj = m.fecha_objetivo ? ` · Objetivo: ${fmtFechaCorta(m.fecha_objetivo)}` : "";
+            return `
+              <div class="comp-item">
+                <div class="comp-item-main">
+                  <div class="comp-item-concepto">${escapeHtml(m.nombre || "Meta")}${fechaObj}</div>
+                  <div class="comp-item-detalle">Faltante: ${falta} · Libre simulado de referencia: ${refLibre}</div>
+                  <div class="comp-item-detalle">${ritmo}</div>
+                </div>
+              </div>`;
+          }).join("");
+          metasEl.innerHTML = `<div class="comp-group" style="margin-top:10px;"><div class="comp-group-title">Impacto en metas activas (escenario simulado)</div>${filas}</div>`;
+        }
+
+        cont.style.display = "block";
+      }
+
+      $("btn-abrir-simulador-deuda").addEventListener("click", abrirSimuladorDeuda);
+      $("btn-cerrar-simulador").addEventListener("click", cerrarSimuladorDeuda);
+      $("btn-limpiar-simulador").addEventListener("click", limpiarSimuladorDeuda);
+      $("modal-simulador-deuda").addEventListener("click", (e) => {
+        if (e.target.id === "modal-simulador-deuda") cerrarSimuladorDeuda();
+      });
+      $("sim-frecuencia").addEventListener("change", simSyncCamposDeuda);
+      $("sim-duracion").addEventListener("change", simSyncCamposDeuda);
+      $("sim-dia-mes").addEventListener("change", simAjustarPrimerVencimiento);
+      $("sim-quincena").addEventListener("change", simAjustarPrimerVencimiento);
+
+      $("form-simulador-deuda").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const frec = $("sim-frecuencia").value;
+        simAjustarPrimerVencimiento();
+        const dur = $("sim-duracion").value;
+        const payload = {
+          concepto: $("sim-concepto").value.trim() || null,
+          monto_cuota_centavos: parseInt($("sim-monto").value, 10),
+          frecuencia: frec,
+          dia_mes: frec === "mensual" ? parseInt($("sim-dia-mes").value, 10) : null,
+          quincena: frec === "quincenal" ? $("sim-quincena").value : null,
+          primer_vencimiento: $("sim-primer-vencimiento").value,
+          duracion_tipo: dur,
+          cuotas: dur === "cuotas" ? parseInt($("sim-cuotas").value, 10) : null,
+          fecha_fin: dur === "fecha_fin" ? ($("sim-fecha-fin").value || null) : null,
+          quincenas_proyeccion: dur === "indefinida" ? parseInt($("sim-quincenas-proyeccion").value, 10) : null,
+        };
+        try {
+          const res = await invoke("simular_impacto_deuda", { input: payload });
+          renderResultadoSimulacion(res);
+        } catch (err) {
+          toast(typeof err === "string" ? err : "No se pudo simular el impacto");
         }
       });
 

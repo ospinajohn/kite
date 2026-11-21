@@ -2,8 +2,12 @@ use crate::compromisos::port::CompromisosPort;
 use crate::config::ConfigPort;
 use crate::metas::port::MetasPort;
 use crate::metas::{domain::EstadoMeta, service::recalcular_estado_meta};
-use crate::models::{Movement, MovementOrigin, MovementType};
+use crate::models::{Frecuencia, Movement, MovementOrigin, MovementType, Quincena};
 use crate::parser::port::{ParsedProposal, ParserPort};
+use crate::simulacion_deuda::{
+    simular_impacto, DeudaSimulada, DuracionSimulacion, ResultadoSimulacion,
+};
+use serde::Deserialize;
 use crate::storage::port::StoragePort;
 use crate::ui::port::AppCommand;
 use chrono::NaiveDate;
@@ -922,4 +926,92 @@ mod tests {
             assert_eq!(err, "El día de corte debe estar entre 1 y 28");
         }
     }
+}
+
+// --- Simulador de impacto de nuevas deudas (feature 006) ---
+
+#[derive(Debug, Deserialize)]
+pub struct SimularImpactoDeudaInput {
+    pub concepto: Option<String>,
+    pub monto_cuota_centavos: i64,
+    pub frecuencia: String,
+    pub dia_mes: Option<u8>,
+    pub quincena: Option<String>,
+    pub primer_vencimiento: String,
+    pub duracion_tipo: String,
+    pub cuotas: Option<u32>,
+    pub fecha_fin: Option<String>,
+    pub quincenas_proyeccion: Option<u32>,
+}
+
+#[tauri::command]
+pub async fn simular_impacto_deuda(
+    state: tauri::State<'_, AppState>,
+    input: SimularImpactoDeudaInput,
+) -> Result<ResultadoSimulacion, String> {
+    let primer_vencimiento = NaiveDate::parse_from_str(&input.primer_vencimiento, "%Y-%m-%d")
+        .map_err(|_| "La fecha del primer vencimiento no es válida (YYYY-MM-DD)".to_string())?;
+
+    let frecuencia = match input.frecuencia.as_str() {
+        "mensual" => {
+            let dia = input
+                .dia_mes
+                .ok_or("Debés indicar el día del mes para frecuencia mensual")?;
+            Frecuencia::Mensual(dia)
+        }
+        "quincenal" => {
+            let q = match input.quincena.as_deref() {
+                Some("primera") => Quincena::Primera,
+                Some("segunda") => Quincena::Segunda,
+                _ => return Err("Debés indicar la quincena (primera o segunda)".to_string()),
+            };
+            Frecuencia::Quincenal(q)
+        }
+        _ => return Err("Frecuencia no válida".to_string()),
+    };
+
+    let duracion = match input.duracion_tipo.as_str() {
+        "cuotas" => {
+            let n = input.cuotas.ok_or("Debés indicar la cantidad de cuotas")?;
+            DuracionSimulacion::Cuotas(n)
+        }
+        "fecha_fin" => {
+            let f = input.fecha_fin.ok_or("Debés indicar la fecha fin")?;
+            let f = NaiveDate::parse_from_str(&f, "%Y-%m-%d")
+                .map_err(|_| "La fecha fin no es válida (YYYY-MM-DD)".to_string())?;
+            DuracionSimulacion::FechaFin(f)
+        }
+        "indefinida" => DuracionSimulacion::Indefinida,
+        _ => return Err("Duración no válida".to_string()),
+    };
+
+    let deuda = DeudaSimulada {
+        concepto: input
+            .concepto
+            .map(|c| c.trim().to_string())
+            .filter(|c| !c.is_empty()),
+        monto_cuota_centavos: input.monto_cuota_centavos,
+        frecuencia,
+        primer_vencimiento,
+        duracion,
+        quincenas_proyeccion: input.quincenas_proyeccion,
+    };
+
+    let corte = match state.config().get("dia_corte").map_err(|e| e.to_string())? {
+        Some(valor) => valor
+            .parse::<u32>()
+            .map_err(|_| format!("El día de corte configurado no es válido: {valor}"))?,
+        None => 15,
+    };
+    let hoy = chrono::Local::now().date_naive();
+
+    simular_impacto(
+        state.storage().as_ref(),
+        state.compromisos().as_ref(),
+        state.metas().as_ref(),
+        &deuda,
+        hoy,
+        corte,
+    )
+    .map_err(|e| e.to_string())
 }

@@ -11,6 +11,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 - **Compromisos recurrentes** (arriendo, suscripciones, cuotas) con recordatorios y notificación de Windows
 - **Planificación por quincena**: día de corte configurable, «Libre de la quincena» y «Libre real» (estimados según lo registrado)
 - **Ahorro y metas**: metas con monto objetivo, progreso, fecha/ritmo opcional y apartados (tipo propio, no cuentan como gasto/ingreso y restan del libre estimado)
+- **Simulador de impacto de nuevas deudas**: escenario «qué pasaría si» (sin guardar) que muestra efecto sobre el libre quincenal/real, conflictos con compromisos e impacto en metas
 - Persistencia local en SQLite (offline, sin servicios externos)
 - Un solo usuario, sin autenticación
 
@@ -36,7 +37,7 @@ Aplicación de escritorio local para Windows que permite registrar ingresos y ga
 4. **Historial**: Ver movimientos ordenados por fecha, filtrar por rango.
 5. **Resumen**: Ver totales de ingresos, gastos y balance registrado.
 6. **Compromisos**: En la pestaña **Compromisos**, crear compromisos recurrentes (mensual o quincenal) con duración indefinida, fecha fin o N cuotas. Al abrir la app, los que vencen hoy generan una notificación de Windows; los atrasados y próximos (7 días) se listan con badge en la pestaña. «Registrar pago» propone el gasto con monto base corregible; se guarda solo tras confirmar.
-7. **Planificación**: En la pestaña **Planificación**, ver «Libre de la quincena» y «Libre real» con desglose (ingresos, gastos, apartados y compromisos pendientes/atrasados). Navegá quincenas con ‹ Anterior / Hoy / Siguiente › y configurá tu día de corte (1–28). El Dashboard muestra una tarjeta compacta con el «Libre real» de la quincena en curso.
+7. **Planificación**: En la pestaña **Planificación**, ver «Libre de la quincena» y «Libre real» con desglose (ingresos, gastos, apartados y compromisos pendientes/atrasados). Navegá quincenas con ‹ Anterior / Hoy / Siguiente › y configurá tu día de corte (1–28). Desde Planificación podés abrir el **simulador de impacto** de una nueva deuda (escenario sin guardar) para ver su efecto sobre el libre, los compromisos y las metas. El Dashboard muestra una tarjeta compacta con el «Libre real» de la quincena en curso.
 8. **Metas**: En la pestaña **Metas**, crear metas de ahorro (monto objetivo y fecha opcional), apartar dinero a una meta (aparte del gasto/ingreso, resta del libre estimado), ver progreso/ritmo y archivar o reactivar metas sin devolver los apartados. Los apartados se ven en el historial como «Apartado».
 
 ## Interfaz
