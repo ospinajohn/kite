@@ -99,7 +99,7 @@ Como usuario, quiero describir la deuda que estoy evaluando con datos claros, pa
 
 - Persistir escenarios, comparar varios escenarios guardados o compartir simulaciones: fuera de esta versión (C1).
 - Crear, confirmar o modificar compromisos/deudas reales desde el simulador: fuera de esta versión.
-- Considerar préstamos por cobrar / ingresos esperados de la feature 004 (pospuesta): fuera, salvo decisión futura.
+- Considerar préstamos por cobrar / ingresos esperados de la feature 004 (eliminada): fuera.
 - Tasas de interés, costo financiero total, tabla de amortización bancaria o proyección de inflación: fuera.
 - Recomendación automática definitiva «te conviene / no te conviene»: fuera; se muestran datos e indicadores para que el usuario decida.
 - Modificar Resumen, Balance registrado (001), lógica de compromisos (002), Planificación real (003) o metas/apartados (005).

@@ -1,7 +1,7 @@
 # Feature: Ahorro y metas
 
-Spec del producto: `specs/005-ahorro-metas/spec.md`. La 004 (préstamos) quedó POSPUESTA por
-decisión del líder (2026-11-12); esta es la feature siguiente.
+Spec del producto: `specs/005-ahorro-metas/spec.md`. La 004 (préstamos) fue eliminada por
+decisión del líder (2026-11-21); esta es la feature siguiente.
 
 ## Specs
 

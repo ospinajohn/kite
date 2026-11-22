@@ -9,10 +9,13 @@ queda **al final de esta lista**, a decisión del líder.
 | 001 | Núcleo de registro y consulta de movimientos (MVP) | `001-registro-consulta-movimientos/` | Implementado (E1–E5); E6 de empaquetado diferido al final |
 | 002 | Compromisos recurrentes + recordatorios de pago | `002-compromisos-recurrentes/` | Implementado (modelo, storage, app, UI, notificaciones); pendiente validación manual |
 | 003 | Planificación por quincena y dinero libre | `003-planificacion-quincenal/` | Implementado (config, cálculo, comando, UI); pendiente validación manual |
-| 004 | Gestión de préstamos por cobrar (tarjetas pendientes) | — | POSPUESTO por decisión del líder (2026-11-12): no interesa por ahora; se retoma si cambia la prioridad |
 | 005 | Ahorro y metas | `005-ahorro-metas/` | Implementado (migración 004, metas/apartados, planificación, UI); pendiente validación manual y revisiones nativas diferidas |
 | 006 | Evaluación del impacto de nuevas deudas | `006-evaluacion-impacto-deudas/` | Implementado (simulador sin persistencia: calendario, escenario por quincena, conflictos con compromisos e impacto en metas; UI desde Planificación); pendiente validación manual |
 | 007 | Cierre MVP: empaquetado y release v1.0.0 | tasks E6 de 001 | Diferido al final |
+
+La feature **004** (gestión de préstamos por cobrar) fue **eliminada** por decisión del líder
+(2026-11-21): no forma parte del producto. Los números 005-007 se conservan para no romper las
+referencias existentes en specs, migraciones y commits.
 
 ## Ideas sin fecha (del contexto original, requieren spec propio)
 
