@@ -117,7 +117,7 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
   - `handle_new_expense/income`: valida → `Movement::new` → `storage.save()` → `notifier.show_movement_saved`
   - `handle_parse_message`: `parser.parse()` → `Some` → `notifier.show_proposal` / `None` → error
   - `handle_confirm_proposal`: `Movement::new` desde proposal → `storage.save()` → `notifier.show_movement_saved`
-- [ ] T032 **E2** Run quickstart ESC-01, 02, 03, 08, 09 manual + integration tests
+- [X] T032 **E2** Run quickstart ESC-01, 02, 03, 08, 09 manual + integration tests — V 2026-11-21 (líder)
 - [X] T032a **E2** Add benchmark: `tests/bench/registration_bench.rs` — mide tiempo formulario (apertura → guardado) y pasos; aserta < 30s / ≤3 pasos (SC-001)
 - [X] T032b **E2** Add parser accuracy logging: en `RegexParser::parse` y `AppCommand::handle_confirm_proposal`, log `(propuesta, confirmada_sin_cambios)`; aserta ≥70% en test de integración (SC-007)
 
@@ -145,7 +145,7 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
   - Sin rango → `invoke('get_history')` → muestra todo; con rango → filtra
   - Click fila → detalle read-only (puede ser modal simple)
 - [X] T037 **E3** Update `AppCommand::handle_open_history` / `handle_history_range_changed` → `storage.query()` → `notifier.show_history()`
-- [ ] T038 **E3** Run quickstart ESC-05 manual + integration tests
+- [X] T038 **E3** Run quickstart ESC-05 manual + integration tests — V 2026-11-21 (líder)
 
 **Checkpoint**: ESC-05 pasa; historial < 1s con 500 items; orden fecha desc + creado_en desc
 
@@ -177,7 +177,7 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
   - `notifier.ask_confirmation("Eliminar", "¿Eliminar 'Concepto' ($Monto)?")`
   - Si true → `storage.delete(id)` → `notifier.show_history` refreshed
 - [X] T044 **E4** Conectar `HistoryView` click derecho / botón → abre `EditDialog` o llama delete
-- [ ] T045 **E4** Run quickstart ESC-06 manual + integration tests
+- [X] T045 **E4** Run quickstart ESC-06 manual + integration tests — V 2026-11-21 (líder)
 
 **Checkpoint**: ESC-06 pasa; editar < 1 min; resumen refleja cambios inmediato; confirmación bloquea delete accidental
 
@@ -203,7 +203,7 @@ description: "Task list for Núcleo de registro y consulta de movimientos"
   - Sin rango → totales acumulados; con rango → recalcula
   - Texto **nunca** "dinero libre", "saldo disponible", "saldo bancario"
 - [X] T049 **E5** Update `AppCommand::handle_open_summary` / `handle_summary_range_changed` → `storage.summary()` → `notifier.show_summary()`
-- [ ] T050 **E5** Run quickstart ESC-07 manual + integration tests
+- [X] T050 **E5** Run quickstart ESC-07 manual + integration tests — V 2026-11-21 (líder)
 
 **Checkpoint**: ESC-07 pasa; totales exactos vs suma manual; label oficial "Balance registrado"
 
@@ -287,3 +287,9 @@ Phase 8 (E6: Packaging + Full validation) ← depende E1–E5
 - **No implementar** búsqueda (FR-007 POSPUESTO), backup exportar/restaurar (FR-012 POSPUESTO), multi-moneda, auth, sync — fuera de v1.
 - **Pendientes pre-impl**: simplificación datos (sin categorías/cuenta/notas) — confirmar con líder antes de E2/E3 UI.
 - **Stack fijo**: Tauri v2 + Rust + HTML/JS vanilla (WebView2) + rusqlite + regex (research.md §1). No reevaluar en tasks.
+
+## Validación manual (líder)
+
+- 2026-11-21: ESC-01 a ESC-09 ejecutados por el líder — resultado OK. ESC-04 (persistencia entre sesiones) verificado en el mismo recorrido.
+- ESC-10 (préstamo informal): **no aplica**, descartado por el líder.
+- La validación continúa de forma orgánica con uso personal de la app; cualquier fallo encontrado se registra como tarea nueva.

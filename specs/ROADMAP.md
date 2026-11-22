@@ -6,7 +6,7 @@ queda **al final de esta lista**, a decisión del líder.
 
 | # | Feature | Spec | Estado |
 | --- | --- | --- | --- |
-| 001 | Núcleo de registro y consulta de movimientos (MVP) | `001-registro-consulta-movimientos/` | Implementado (E1–E5); E6 de empaquetado diferido al final |
+| 001 | Núcleo de registro y consulta de movimientos (MVP) | `001-registro-consulta-movimientos/` | Implementado (E1–E5); ESC-01..09 validados manualmente (2026-11-21), ESC-10 no aplica; E6 de empaquetado diferido al final |
 | 002 | Compromisos recurrentes + recordatorios de pago | `002-compromisos-recurrentes/` | Implementado (modelo, storage, app, UI, notificaciones); pendiente validación manual |
 | 003 | Planificación por quincena y dinero libre | `003-planificacion-quincenal/` | Implementado (config, cálculo, comando, UI); pendiente validación manual |
 | 005 | Ahorro y metas | `005-ahorro-metas/` | Implementado (migración 004, metas/apartados, planificación, UI); pendiente validación manual y revisiones nativas diferidas |
