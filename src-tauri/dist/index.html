@@ -6034,6 +6034,7 @@
                 step="1"
                 required
               />
+              <p class="monto-preview" id="edit-tx-preview" aria-live="polite">&mdash;</p>
             </div>
 
             <div class="form-row">
@@ -6247,6 +6248,7 @@
                 step="1"
                 required
               />
+              <p class="monto-preview" id="comp-monto-preview" aria-live="polite">&mdash;</p>
             </div>
             <div class="form-row">
               <label for="comp-frecuencia">Frecuencia</label>
@@ -6344,6 +6346,7 @@
             <div class="form-row">
               <label for="pago-monto">Monto (COP)</label>
               <input type="number" id="pago-monto" min="1" step="1" required />
+              <p class="monto-preview" id="pago-monto-preview" aria-live="polite">&mdash;</p>
               <small id="pago-periodo-label" style="color: var(--ink-2)"></small>
             </div>
             <div class="form-row">
@@ -6391,6 +6394,7 @@
                 step="1"
                 required
               />
+              <p class="monto-preview" id="meta-monto-preview" aria-live="polite">&mdash;</p>
             </div>
             <div class="form-row">
               <label for="meta-fecha">Fecha objetivo (opcional)</label>
@@ -6430,6 +6434,7 @@
                 step="1"
                 required
               />
+              <p class="monto-preview" id="apartado-monto-preview" aria-live="polite">&mdash;</p>
             </div>
             <div class="form-row" id="apartado-concepto-row" style="display: none">
               <label for="apartado-concepto">Concepto</label>
@@ -6539,6 +6544,7 @@
             <div class="form-row">
               <label for="sim-monto">Monto por cuota (COP)</label>
               <input type="number" id="sim-monto" min="1" step="1" required />
+              <p class="monto-preview" id="sim-monto-preview" aria-live="polite">&mdash;</p>
             </div>
             <div class="form-row">
               <label for="sim-frecuencia">Frecuencia</label>
@@ -6719,6 +6725,40 @@
       // Cifra sin signo: $ 1.840.000
       function formatMoney(valor) {
         return `$ ${formatNumber(valor)}`;
+      }
+
+      const actualizadoresPreviewMonetario = {};
+
+      function conectarPreviewMonetario(inputId, previewId, mode = 'neutral') {
+        const input = $(inputId);
+        if (!input) return;
+        let preview = $(previewId);
+        if (!preview) {
+          preview = document.createElement('p');
+          preview.id = previewId;
+          preview.className = 'monto-preview';
+          preview.setAttribute('aria-live', 'polite');
+          preview.innerHTML = '&mdash;';
+          input.insertAdjacentElement('afterend', preview);
+        }
+
+        const actualizar = () => {
+          const n = parseInt(input.value, 10);
+          if (!Number.isFinite(n) || n <= 0) {
+            preview.textContent = '—';
+            preview.classList.remove('income', 'expense');
+            return;
+          }
+          const resolvedMode = typeof mode === 'function' ? mode() : mode;
+          const prefix = resolvedMode === 'income' ? '+ ' : resolvedMode === 'expense' ? '− ' : '';
+          preview.textContent = `${prefix}${formatMoney(n)}`;
+          preview.classList.toggle('income', resolvedMode === 'income');
+          preview.classList.toggle('expense', resolvedMode === 'expense');
+        };
+
+        input.addEventListener('input', actualizar);
+        actualizadoresPreviewMonetario[inputId] = actualizar;
+        actualizar();
       }
 
       // Cifra con signo explícito: + $ 3.500.000 / − $ 1.840.000
@@ -7550,6 +7590,15 @@
 
       $('modal-reg-monto').addEventListener('input', actualizarPreviewMonto);
 
+      conectarPreviewMonetario('edit-tx-monto', 'edit-tx-preview', () => {
+        return $('edit-tx-tipo').value === 'ingreso' ? 'income' : 'expense';
+      });
+      conectarPreviewMonetario('comp-monto', 'comp-monto-preview');
+      conectarPreviewMonetario('pago-monto', 'pago-monto-preview');
+      conectarPreviewMonetario('meta-monto', 'meta-monto-preview');
+      conectarPreviewMonetario('apartado-monto', 'apartado-monto-preview');
+      conectarPreviewMonetario('sim-monto', 'sim-monto-preview');
+
       function openModalRegistro(tipo = 'gasto') {
         setModalTipo(tipo);
         $('modal-reg-fecha').value = todayStr();
@@ -7945,6 +7994,7 @@
           $('edit-tx-tipo-display').style.color = isIncome ? 'var(--income)' : 'var(--expense)';
         }
         $('edit-tx-monto').value = m.monto_centavos;
+        actualizadoresPreviewMonetario['edit-tx-monto']();
         $('edit-tx-concepto').value = m.concepto;
         $('edit-tx-fecha').value = m.fecha;
         if ($('edit-tx-origen-display')) {
@@ -8440,6 +8490,7 @@
         $('comp-id').value = '';
         $('comp-concepto').value = '';
         $('comp-monto').value = '';
+        actualizadoresPreviewMonetario['comp-monto']();
         $('comp-frecuencia').value = 'mensual';
         $('comp-dia').value = String(new Date().getDate());
         $('comp-quincena').value = 'primera';
@@ -8461,6 +8512,7 @@
         $('comp-id').value = id;
         $('comp-concepto').value = c.concepto;
         $('comp-monto').value = c.monto_centavos;
+        actualizadoresPreviewMonetario['comp-monto']();
         if (c.frecuencia.mensual !== undefined) {
           $('comp-frecuencia').value = 'mensual';
           $('comp-dia').value = c.frecuencia.mensual;
@@ -8564,6 +8616,7 @@
         $('pago-periodo').value = periodo;
         $('pago-concepto').textContent = concepto;
         $('pago-monto').value = montoBase;
+        actualizadoresPreviewMonetario['pago-monto']();
         $('pago-periodo-label').textContent = `Período: ${periodo}`;
         $('pago-fecha').value = todayStr();
         $('modal-pago-compromiso').classList.add('open');
@@ -8811,6 +8864,7 @@
 
       function abrirSimuladorDeuda() {
         $('form-simulador-deuda').reset();
+        actualizadoresPreviewMonetario['sim-monto']();
         $('sim-primer-vencimiento').value = todayStr();
         $('sim-frecuencia').value = 'mensual';
         $('sim-dia-mes').value = '10';
@@ -9193,6 +9247,7 @@
         $('modal-meta-title').textContent = meta ? 'Editar meta' : 'Nueva meta';
         $('meta-nombre').value = meta ? meta.nombre : '';
         $('meta-monto').value = meta ? meta.monto_objetivo_centavos : '';
+        actualizadoresPreviewMonetario['meta-monto']();
         $('meta-fecha').value = meta && meta.fecha_objetivo ? meta.fecha_objetivo : '';
         $('modal-meta').classList.add('open');
         document.body.classList.add('modal-open');
@@ -9252,6 +9307,7 @@
         $('apartado-meta-nombre').textContent = metaNombre;
         $('modal-apartado-title').textContent = 'Apartar a meta';
         $('apartado-monto').value = '';
+        actualizadoresPreviewMonetario['apartado-monto']();
         $('apartado-fecha').value = todayStr();
         $('apartado-concepto-row').style.display = 'none';
         $('btn-guardar-apartado').textContent = 'Apartar';
